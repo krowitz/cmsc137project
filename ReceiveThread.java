@@ -1,6 +1,7 @@
 import java.io.*;
 import java.net.*;
-import proto.*;
+import proto.PlayerProtos.Player;
+import proto.TcpPacketProtos.TcpPacket;
 
 public class ReceiveThread extends Thread {
 	private BufferedReader reader;
@@ -8,10 +9,12 @@ public class ReceiveThread extends Thread {
 	private ChatClient client;
 	private DataInputStream in;
     private InputStream inFromServer;
+	private boolean status;
 
 	public ReceiveThread(Socket server, ChatClient client) {
 		this.server = server;
 		this.client = client;
+		this.status = true;
 
 		try {
 			inFromServer = server.getInputStream();
@@ -25,15 +28,22 @@ public class ReceiveThread extends Thread {
 		}
 	}
 
+	public boolean getStatus(){
+		return this.status;
+	}
+
 	public void run() {
-        TcpPacketProtos.TcpPacket.ChatPacket chatPacket = null;
+        TcpPacket.ChatPacket chatPacket = null;
         int nRead;
         byte[] data;
         byte[] temp;
         ByteArrayOutputStream buffer;
 
-		while (true) {
+		while (client.isRunning()) {
 			try {
+				// TcpPacket reply = TcpPacket.parseFrom(inFromServer);
+
+        		// System.out.println("Server replied with a TCP Packet Type " + reply.getType());
                 buffer = new ByteArrayOutputStream();
                 data = new byte[1024];
             
@@ -43,7 +53,7 @@ public class ReceiveThread extends Thread {
 
                 temp = buffer.toByteArray();
 
-                chatPacket = TcpPacketProtos.TcpPacket.ChatPacket.parseFrom(temp);
+                chatPacket = TcpPacket.ChatPacket.parseFrom(temp);
                 
 				String response = chatPacket.getMessage();
 				
@@ -58,9 +68,12 @@ public class ReceiveThread extends Thread {
 				}
 			} catch (Exception e) {
 				// System.out.println("Error reading from server");
-				e.printStackTrace();
+				// e.printStackTrace();
 				break;
 			}
 		}
+		this.status = false;
+
+
 	}
 }

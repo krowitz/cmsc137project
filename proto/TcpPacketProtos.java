@@ -8,10 +8,10 @@ public final class TcpPacketProtos {
   public static void registerAllExtensions(
       com.google.protobuf.ExtensionRegistry registry) {
   }
-  public interface TcpPacketOrBuilder
-      extends com.google.protobuf.MessageOrBuilder {
+  public interface TcpPacketOrBuilder extends
+      // @@protoc_insertion_point(interface_extends:TcpPacket)
+      com.google.protobuf.MessageOrBuilder {
 
-    // required .TcpPacket.PacketType type = 1;
     /**
      * <code>required .TcpPacket.PacketType type = 1;</code>
      */
@@ -25,8 +25,9 @@ public final class TcpPacketProtos {
    * Protobuf type {@code TcpPacket}
    */
   public static final class TcpPacket extends
-      com.google.protobuf.GeneratedMessage
-      implements TcpPacketOrBuilder {
+      com.google.protobuf.GeneratedMessage implements
+      // @@protoc_insertion_point(message_implements:TcpPacket)
+      TcpPacketOrBuilder {
     // Use TcpPacket.newBuilder() to construct.
     private TcpPacket(com.google.protobuf.GeneratedMessage.Builder<?> builder) {
       super(builder);
@@ -136,13 +137,29 @@ public final class TcpPacketProtos {
        */
       CONNECT(1, 1),
       /**
-       * <code>PLAYER_LIST = 2;</code>
+       * <code>CREATE_LOBBY = 2;</code>
        */
-      PLAYER_LIST(2, 2),
+      CREATE_LOBBY(2, 2),
       /**
        * <code>CHAT = 3;</code>
        */
       CHAT(3, 3),
+      /**
+       * <code>PLAYER_LIST = 4;</code>
+       */
+      PLAYER_LIST(4, 4),
+      /**
+       * <code>ERR_LDNE = 5;</code>
+       */
+      ERR_LDNE(5, 5),
+      /**
+       * <code>ERR_LFULL = 6;</code>
+       */
+      ERR_LFULL(6, 6),
+      /**
+       * <code>ERR = 7;</code>
+       */
+      ERR(7, 7),
       ;
 
       /**
@@ -154,13 +171,29 @@ public final class TcpPacketProtos {
        */
       public static final int CONNECT_VALUE = 1;
       /**
-       * <code>PLAYER_LIST = 2;</code>
+       * <code>CREATE_LOBBY = 2;</code>
        */
-      public static final int PLAYER_LIST_VALUE = 2;
+      public static final int CREATE_LOBBY_VALUE = 2;
       /**
        * <code>CHAT = 3;</code>
        */
       public static final int CHAT_VALUE = 3;
+      /**
+       * <code>PLAYER_LIST = 4;</code>
+       */
+      public static final int PLAYER_LIST_VALUE = 4;
+      /**
+       * <code>ERR_LDNE = 5;</code>
+       */
+      public static final int ERR_LDNE_VALUE = 5;
+      /**
+       * <code>ERR_LFULL = 6;</code>
+       */
+      public static final int ERR_LFULL_VALUE = 6;
+      /**
+       * <code>ERR = 7;</code>
+       */
+      public static final int ERR_VALUE = 7;
 
 
       public final int getNumber() { return value; }
@@ -169,8 +202,12 @@ public final class TcpPacketProtos {
         switch (value) {
           case 0: return DISCONNECT;
           case 1: return CONNECT;
-          case 2: return PLAYER_LIST;
+          case 2: return CREATE_LOBBY;
           case 3: return CHAT;
+          case 4: return PLAYER_LIST;
+          case 5: return ERR_LDNE;
+          case 6: return ERR_LFULL;
+          case 7: return ERR;
           default: return null;
         }
       }
@@ -222,10 +259,10 @@ public final class TcpPacketProtos {
       // @@protoc_insertion_point(enum_scope:TcpPacket.PacketType)
     }
 
-    public interface DisconnectPacketOrBuilder
-        extends com.google.protobuf.MessageOrBuilder {
+    public interface DisconnectPacketOrBuilder extends
+        // @@protoc_insertion_point(interface_extends:TcpPacket.DisconnectPacket)
+        com.google.protobuf.MessageOrBuilder {
 
-      // required .TcpPacket.PacketType type = 1;
       /**
        * <code>required .TcpPacket.PacketType type = 1;</code>
        */
@@ -235,7 +272,6 @@ public final class TcpPacketProtos {
        */
       proto.TcpPacketProtos.TcpPacket.PacketType getType();
 
-      // optional .Player player = 2;
       /**
        * <code>optional .Player player = 2;</code>
        */
@@ -249,7 +285,6 @@ public final class TcpPacketProtos {
        */
       proto.PlayerProtos.PlayerOrBuilder getPlayerOrBuilder();
 
-      // optional .TcpPacket.DisconnectPacket.Update update = 3;
       /**
        * <code>optional .TcpPacket.DisconnectPacket.Update update = 3;</code>
        */
@@ -263,8 +298,9 @@ public final class TcpPacketProtos {
      * Protobuf type {@code TcpPacket.DisconnectPacket}
      */
     public static final class DisconnectPacket extends
-        com.google.protobuf.GeneratedMessage
-        implements DisconnectPacketOrBuilder {
+        com.google.protobuf.GeneratedMessage implements
+        // @@protoc_insertion_point(message_implements:TcpPacket.DisconnectPacket)
+        DisconnectPacketOrBuilder {
       // Use DisconnectPacket.newBuilder() to construct.
       private DisconnectPacket(com.google.protobuf.GeneratedMessage.Builder<?> builder) {
         super(builder);
@@ -467,7 +503,6 @@ public final class TcpPacketProtos {
       }
 
       private int bitField0_;
-      // required .TcpPacket.PacketType type = 1;
       public static final int TYPE_FIELD_NUMBER = 1;
       private proto.TcpPacketProtos.TcpPacket.PacketType type_;
       /**
@@ -483,7 +518,6 @@ public final class TcpPacketProtos {
         return type_;
       }
 
-      // optional .Player player = 2;
       public static final int PLAYER_FIELD_NUMBER = 2;
       private proto.PlayerProtos.Player player_;
       /**
@@ -505,7 +539,6 @@ public final class TcpPacketProtos {
         return player_;
       }
 
-      // optional .TcpPacket.DisconnectPacket.Update update = 3;
       public static final int UPDATE_FIELD_NUMBER = 3;
       private proto.TcpPacketProtos.TcpPacket.DisconnectPacket.Update update_;
       /**
@@ -529,7 +562,8 @@ public final class TcpPacketProtos {
       private byte memoizedIsInitialized = -1;
       public final boolean isInitialized() {
         byte isInitialized = memoizedIsInitialized;
-        if (isInitialized != -1) return isInitialized == 1;
+        if (isInitialized == 1) return true;
+        if (isInitialized == 0) return false;
 
         if (!hasType()) {
           memoizedIsInitialized = 0;
@@ -660,8 +694,9 @@ public final class TcpPacketProtos {
        * Protobuf type {@code TcpPacket.DisconnectPacket}
        */
       public static final class Builder extends
-          com.google.protobuf.GeneratedMessage.Builder<Builder>
-         implements proto.TcpPacketProtos.TcpPacket.DisconnectPacketOrBuilder {
+          com.google.protobuf.GeneratedMessage.Builder<Builder> implements
+          // @@protoc_insertion_point(builder_implements:TcpPacket.DisconnectPacket)
+          proto.TcpPacketProtos.TcpPacket.DisconnectPacketOrBuilder {
         public static final com.google.protobuf.Descriptors.Descriptor
             getDescriptor() {
           return proto.TcpPacketProtos.internal_static_TcpPacket_DisconnectPacket_descriptor;
@@ -811,7 +846,6 @@ public final class TcpPacketProtos {
         }
         private int bitField0_;
 
-        // required .TcpPacket.PacketType type = 1;
         private proto.TcpPacketProtos.TcpPacket.PacketType type_ = proto.TcpPacketProtos.TcpPacket.PacketType.DISCONNECT;
         /**
          * <code>required .TcpPacket.PacketType type = 1;</code>
@@ -847,7 +881,6 @@ public final class TcpPacketProtos {
           return this;
         }
 
-        // optional .Player player = 2;
         private proto.PlayerProtos.Player player_ = proto.PlayerProtos.Player.getDefaultInstance();
         private com.google.protobuf.SingleFieldBuilder<
             proto.PlayerProtos.Player, proto.PlayerProtos.Player.Builder, proto.PlayerProtos.PlayerOrBuilder> playerBuilder_;
@@ -956,7 +989,7 @@ public final class TcpPacketProtos {
           if (playerBuilder_ == null) {
             playerBuilder_ = new com.google.protobuf.SingleFieldBuilder<
                 proto.PlayerProtos.Player, proto.PlayerProtos.Player.Builder, proto.PlayerProtos.PlayerOrBuilder>(
-                    player_,
+                    getPlayer(),
                     getParentForChildren(),
                     isClean());
             player_ = null;
@@ -964,7 +997,6 @@ public final class TcpPacketProtos {
           return playerBuilder_;
         }
 
-        // optional .TcpPacket.DisconnectPacket.Update update = 3;
         private proto.TcpPacketProtos.TcpPacket.DisconnectPacket.Update update_ = proto.TcpPacketProtos.TcpPacket.DisconnectPacket.Update.NORMAL;
         /**
          * <code>optional .TcpPacket.DisconnectPacket.Update update = 3;</code>
@@ -1011,10 +1043,10 @@ public final class TcpPacketProtos {
       // @@protoc_insertion_point(class_scope:TcpPacket.DisconnectPacket)
     }
 
-    public interface ConnectPacketOrBuilder
-        extends com.google.protobuf.MessageOrBuilder {
+    public interface ConnectPacketOrBuilder extends
+        // @@protoc_insertion_point(interface_extends:TcpPacket.ConnectPacket)
+        com.google.protobuf.MessageOrBuilder {
 
-      // required .TcpPacket.PacketType type = 1;
       /**
        * <code>required .TcpPacket.PacketType type = 1;</code>
        */
@@ -1024,7 +1056,6 @@ public final class TcpPacketProtos {
        */
       proto.TcpPacketProtos.TcpPacket.PacketType getType();
 
-      // required .Player player = 2;
       /**
        * <code>required .Player player = 2;</code>
        */
@@ -1038,7 +1069,6 @@ public final class TcpPacketProtos {
        */
       proto.PlayerProtos.PlayerOrBuilder getPlayerOrBuilder();
 
-      // optional string lobby_id = 3;
       /**
        * <code>optional string lobby_id = 3;</code>
        */
@@ -1053,7 +1083,6 @@ public final class TcpPacketProtos {
       com.google.protobuf.ByteString
           getLobbyIdBytes();
 
-      // optional .TcpPacket.ConnectPacket.Update update = 4;
       /**
        * <code>optional .TcpPacket.ConnectPacket.Update update = 4;</code>
        */
@@ -1067,8 +1096,9 @@ public final class TcpPacketProtos {
      * Protobuf type {@code TcpPacket.ConnectPacket}
      */
     public static final class ConnectPacket extends
-        com.google.protobuf.GeneratedMessage
-        implements ConnectPacketOrBuilder {
+        com.google.protobuf.GeneratedMessage implements
+        // @@protoc_insertion_point(message_implements:TcpPacket.ConnectPacket)
+        ConnectPacketOrBuilder {
       // Use ConnectPacket.newBuilder() to construct.
       private ConnectPacket(com.google.protobuf.GeneratedMessage.Builder<?> builder) {
         super(builder);
@@ -1139,8 +1169,9 @@ public final class TcpPacketProtos {
                 break;
               }
               case 26: {
+                com.google.protobuf.ByteString bs = input.readBytes();
                 bitField0_ |= 0x00000004;
-                lobbyId_ = input.readBytes();
+                lobbyId_ = bs;
                 break;
               }
               case 32: {
@@ -1276,7 +1307,6 @@ public final class TcpPacketProtos {
       }
 
       private int bitField0_;
-      // required .TcpPacket.PacketType type = 1;
       public static final int TYPE_FIELD_NUMBER = 1;
       private proto.TcpPacketProtos.TcpPacket.PacketType type_;
       /**
@@ -1292,7 +1322,6 @@ public final class TcpPacketProtos {
         return type_;
       }
 
-      // required .Player player = 2;
       public static final int PLAYER_FIELD_NUMBER = 2;
       private proto.PlayerProtos.Player player_;
       /**
@@ -1314,7 +1343,6 @@ public final class TcpPacketProtos {
         return player_;
       }
 
-      // optional string lobby_id = 3;
       public static final int LOBBY_ID_FIELD_NUMBER = 3;
       private java.lang.Object lobbyId_;
       /**
@@ -1357,7 +1385,6 @@ public final class TcpPacketProtos {
         }
       }
 
-      // optional .TcpPacket.ConnectPacket.Update update = 4;
       public static final int UPDATE_FIELD_NUMBER = 4;
       private proto.TcpPacketProtos.TcpPacket.ConnectPacket.Update update_;
       /**
@@ -1382,7 +1409,8 @@ public final class TcpPacketProtos {
       private byte memoizedIsInitialized = -1;
       public final boolean isInitialized() {
         byte isInitialized = memoizedIsInitialized;
-        if (isInitialized != -1) return isInitialized == 1;
+        if (isInitialized == 1) return true;
+        if (isInitialized == 0) return false;
 
         if (!hasType()) {
           memoizedIsInitialized = 0;
@@ -1522,8 +1550,9 @@ public final class TcpPacketProtos {
        * Protobuf type {@code TcpPacket.ConnectPacket}
        */
       public static final class Builder extends
-          com.google.protobuf.GeneratedMessage.Builder<Builder>
-         implements proto.TcpPacketProtos.TcpPacket.ConnectPacketOrBuilder {
+          com.google.protobuf.GeneratedMessage.Builder<Builder> implements
+          // @@protoc_insertion_point(builder_implements:TcpPacket.ConnectPacket)
+          proto.TcpPacketProtos.TcpPacket.ConnectPacketOrBuilder {
         public static final com.google.protobuf.Descriptors.Descriptor
             getDescriptor() {
           return proto.TcpPacketProtos.internal_static_TcpPacket_ConnectPacket_descriptor;
@@ -1686,7 +1715,6 @@ public final class TcpPacketProtos {
         }
         private int bitField0_;
 
-        // required .TcpPacket.PacketType type = 1;
         private proto.TcpPacketProtos.TcpPacket.PacketType type_ = proto.TcpPacketProtos.TcpPacket.PacketType.DISCONNECT;
         /**
          * <code>required .TcpPacket.PacketType type = 1;</code>
@@ -1722,7 +1750,6 @@ public final class TcpPacketProtos {
           return this;
         }
 
-        // required .Player player = 2;
         private proto.PlayerProtos.Player player_ = proto.PlayerProtos.Player.getDefaultInstance();
         private com.google.protobuf.SingleFieldBuilder<
             proto.PlayerProtos.Player, proto.PlayerProtos.Player.Builder, proto.PlayerProtos.PlayerOrBuilder> playerBuilder_;
@@ -1831,7 +1858,7 @@ public final class TcpPacketProtos {
           if (playerBuilder_ == null) {
             playerBuilder_ = new com.google.protobuf.SingleFieldBuilder<
                 proto.PlayerProtos.Player, proto.PlayerProtos.Player.Builder, proto.PlayerProtos.PlayerOrBuilder>(
-                    player_,
+                    getPlayer(),
                     getParentForChildren(),
                     isClean());
             player_ = null;
@@ -1839,7 +1866,6 @@ public final class TcpPacketProtos {
           return playerBuilder_;
         }
 
-        // optional string lobby_id = 3;
         private java.lang.Object lobbyId_ = "";
         /**
          * <code>optional string lobby_id = 3;</code>
@@ -1853,9 +1879,12 @@ public final class TcpPacketProtos {
         public java.lang.String getLobbyId() {
           java.lang.Object ref = lobbyId_;
           if (!(ref instanceof java.lang.String)) {
-            java.lang.String s = ((com.google.protobuf.ByteString) ref)
-                .toStringUtf8();
-            lobbyId_ = s;
+            com.google.protobuf.ByteString bs =
+                (com.google.protobuf.ByteString) ref;
+            java.lang.String s = bs.toStringUtf8();
+            if (bs.isValidUtf8()) {
+              lobbyId_ = s;
+            }
             return s;
           } else {
             return (java.lang.String) ref;
@@ -1913,7 +1942,6 @@ public final class TcpPacketProtos {
           return this;
         }
 
-        // optional .TcpPacket.ConnectPacket.Update update = 4;
         private proto.TcpPacketProtos.TcpPacket.ConnectPacket.Update update_ = proto.TcpPacketProtos.TcpPacket.ConnectPacket.Update.SELF;
         /**
          * <code>optional .TcpPacket.ConnectPacket.Update update = 4;</code>
@@ -1960,10 +1988,10 @@ public final class TcpPacketProtos {
       // @@protoc_insertion_point(class_scope:TcpPacket.ConnectPacket)
     }
 
-    public interface PlayerListPacketOrBuilder
-        extends com.google.protobuf.MessageOrBuilder {
+    public interface CreateLobbyPacketOrBuilder extends
+        // @@protoc_insertion_point(interface_extends:TcpPacket.CreateLobbyPacket)
+        com.google.protobuf.MessageOrBuilder {
 
-      // required .TcpPacket.PacketType type = 1;
       /**
        * <code>required .TcpPacket.PacketType type = 1;</code>
        */
@@ -1973,50 +2001,49 @@ public final class TcpPacketProtos {
        */
       proto.TcpPacketProtos.TcpPacket.PacketType getType();
 
-      // repeated .Player player_list = 3;
       /**
-       * <code>repeated .Player player_list = 3;</code>
+       * <code>optional string lobby_id = 2;</code>
        */
-      java.util.List<proto.PlayerProtos.Player> 
-          getPlayerListList();
+      boolean hasLobbyId();
       /**
-       * <code>repeated .Player player_list = 3;</code>
+       * <code>optional string lobby_id = 2;</code>
        */
-      proto.PlayerProtos.Player getPlayerList(int index);
+      java.lang.String getLobbyId();
       /**
-       * <code>repeated .Player player_list = 3;</code>
+       * <code>optional string lobby_id = 2;</code>
        */
-      int getPlayerListCount();
+      com.google.protobuf.ByteString
+          getLobbyIdBytes();
+
       /**
-       * <code>repeated .Player player_list = 3;</code>
+       * <code>optional int32 max_players = 3;</code>
        */
-      java.util.List<? extends proto.PlayerProtos.PlayerOrBuilder> 
-          getPlayerListOrBuilderList();
+      boolean hasMaxPlayers();
       /**
-       * <code>repeated .Player player_list = 3;</code>
+       * <code>optional int32 max_players = 3;</code>
        */
-      proto.PlayerProtos.PlayerOrBuilder getPlayerListOrBuilder(
-          int index);
+      int getMaxPlayers();
     }
     /**
-     * Protobuf type {@code TcpPacket.PlayerListPacket}
+     * Protobuf type {@code TcpPacket.CreateLobbyPacket}
      */
-    public static final class PlayerListPacket extends
-        com.google.protobuf.GeneratedMessage
-        implements PlayerListPacketOrBuilder {
-      // Use PlayerListPacket.newBuilder() to construct.
-      private PlayerListPacket(com.google.protobuf.GeneratedMessage.Builder<?> builder) {
+    public static final class CreateLobbyPacket extends
+        com.google.protobuf.GeneratedMessage implements
+        // @@protoc_insertion_point(message_implements:TcpPacket.CreateLobbyPacket)
+        CreateLobbyPacketOrBuilder {
+      // Use CreateLobbyPacket.newBuilder() to construct.
+      private CreateLobbyPacket(com.google.protobuf.GeneratedMessage.Builder<?> builder) {
         super(builder);
         this.unknownFields = builder.getUnknownFields();
       }
-      private PlayerListPacket(boolean noInit) { this.unknownFields = com.google.protobuf.UnknownFieldSet.getDefaultInstance(); }
+      private CreateLobbyPacket(boolean noInit) { this.unknownFields = com.google.protobuf.UnknownFieldSet.getDefaultInstance(); }
 
-      private static final PlayerListPacket defaultInstance;
-      public static PlayerListPacket getDefaultInstance() {
+      private static final CreateLobbyPacket defaultInstance;
+      public static CreateLobbyPacket getDefaultInstance() {
         return defaultInstance;
       }
 
-      public PlayerListPacket getDefaultInstanceForType() {
+      public CreateLobbyPacket getDefaultInstanceForType() {
         return defaultInstance;
       }
 
@@ -2026,7 +2053,7 @@ public final class TcpPacketProtos {
           getUnknownFields() {
         return this.unknownFields;
       }
-      private PlayerListPacket(
+      private CreateLobbyPacket(
           com.google.protobuf.CodedInputStream input,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws com.google.protobuf.InvalidProtocolBufferException {
@@ -2060,12 +2087,15 @@ public final class TcpPacketProtos {
                 }
                 break;
               }
-              case 26: {
-                if (!((mutable_bitField0_ & 0x00000002) == 0x00000002)) {
-                  playerList_ = new java.util.ArrayList<proto.PlayerProtos.Player>();
-                  mutable_bitField0_ |= 0x00000002;
-                }
-                playerList_.add(input.readMessage(proto.PlayerProtos.Player.PARSER, extensionRegistry));
+              case 18: {
+                com.google.protobuf.ByteString bs = input.readBytes();
+                bitField0_ |= 0x00000002;
+                lobbyId_ = bs;
+                break;
+              }
+              case 24: {
+                bitField0_ |= 0x00000004;
+                maxPlayers_ = input.readInt32();
                 break;
               }
             }
@@ -2076,42 +2106,38 @@ public final class TcpPacketProtos {
           throw new com.google.protobuf.InvalidProtocolBufferException(
               e.getMessage()).setUnfinishedMessage(this);
         } finally {
-          if (((mutable_bitField0_ & 0x00000002) == 0x00000002)) {
-            playerList_ = java.util.Collections.unmodifiableList(playerList_);
-          }
           this.unknownFields = unknownFields.build();
           makeExtensionsImmutable();
         }
       }
       public static final com.google.protobuf.Descriptors.Descriptor
           getDescriptor() {
-        return proto.TcpPacketProtos.internal_static_TcpPacket_PlayerListPacket_descriptor;
+        return proto.TcpPacketProtos.internal_static_TcpPacket_CreateLobbyPacket_descriptor;
       }
 
       protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
           internalGetFieldAccessorTable() {
-        return proto.TcpPacketProtos.internal_static_TcpPacket_PlayerListPacket_fieldAccessorTable
+        return proto.TcpPacketProtos.internal_static_TcpPacket_CreateLobbyPacket_fieldAccessorTable
             .ensureFieldAccessorsInitialized(
-                proto.TcpPacketProtos.TcpPacket.PlayerListPacket.class, proto.TcpPacketProtos.TcpPacket.PlayerListPacket.Builder.class);
+                proto.TcpPacketProtos.TcpPacket.CreateLobbyPacket.class, proto.TcpPacketProtos.TcpPacket.CreateLobbyPacket.Builder.class);
       }
 
-      public static com.google.protobuf.Parser<PlayerListPacket> PARSER =
-          new com.google.protobuf.AbstractParser<PlayerListPacket>() {
-        public PlayerListPacket parsePartialFrom(
+      public static com.google.protobuf.Parser<CreateLobbyPacket> PARSER =
+          new com.google.protobuf.AbstractParser<CreateLobbyPacket>() {
+        public CreateLobbyPacket parsePartialFrom(
             com.google.protobuf.CodedInputStream input,
             com.google.protobuf.ExtensionRegistryLite extensionRegistry)
             throws com.google.protobuf.InvalidProtocolBufferException {
-          return new PlayerListPacket(input, extensionRegistry);
+          return new CreateLobbyPacket(input, extensionRegistry);
         }
       };
 
       @java.lang.Override
-      public com.google.protobuf.Parser<PlayerListPacket> getParserForType() {
+      public com.google.protobuf.Parser<CreateLobbyPacket> getParserForType() {
         return PARSER;
       }
 
       private int bitField0_;
-      // required .TcpPacket.PacketType type = 1;
       public static final int TYPE_FIELD_NUMBER = 1;
       private proto.TcpPacketProtos.TcpPacket.PacketType type_;
       /**
@@ -2127,60 +2153,77 @@ public final class TcpPacketProtos {
         return type_;
       }
 
-      // repeated .Player player_list = 3;
-      public static final int PLAYER_LIST_FIELD_NUMBER = 3;
-      private java.util.List<proto.PlayerProtos.Player> playerList_;
+      public static final int LOBBY_ID_FIELD_NUMBER = 2;
+      private java.lang.Object lobbyId_;
       /**
-       * <code>repeated .Player player_list = 3;</code>
+       * <code>optional string lobby_id = 2;</code>
        */
-      public java.util.List<proto.PlayerProtos.Player> getPlayerListList() {
-        return playerList_;
+      public boolean hasLobbyId() {
+        return ((bitField0_ & 0x00000002) == 0x00000002);
       }
       /**
-       * <code>repeated .Player player_list = 3;</code>
+       * <code>optional string lobby_id = 2;</code>
        */
-      public java.util.List<? extends proto.PlayerProtos.PlayerOrBuilder> 
-          getPlayerListOrBuilderList() {
-        return playerList_;
+      public java.lang.String getLobbyId() {
+        java.lang.Object ref = lobbyId_;
+        if (ref instanceof java.lang.String) {
+          return (java.lang.String) ref;
+        } else {
+          com.google.protobuf.ByteString bs = 
+              (com.google.protobuf.ByteString) ref;
+          java.lang.String s = bs.toStringUtf8();
+          if (bs.isValidUtf8()) {
+            lobbyId_ = s;
+          }
+          return s;
+        }
       }
       /**
-       * <code>repeated .Player player_list = 3;</code>
+       * <code>optional string lobby_id = 2;</code>
        */
-      public int getPlayerListCount() {
-        return playerList_.size();
+      public com.google.protobuf.ByteString
+          getLobbyIdBytes() {
+        java.lang.Object ref = lobbyId_;
+        if (ref instanceof java.lang.String) {
+          com.google.protobuf.ByteString b = 
+              com.google.protobuf.ByteString.copyFromUtf8(
+                  (java.lang.String) ref);
+          lobbyId_ = b;
+          return b;
+        } else {
+          return (com.google.protobuf.ByteString) ref;
+        }
+      }
+
+      public static final int MAX_PLAYERS_FIELD_NUMBER = 3;
+      private int maxPlayers_;
+      /**
+       * <code>optional int32 max_players = 3;</code>
+       */
+      public boolean hasMaxPlayers() {
+        return ((bitField0_ & 0x00000004) == 0x00000004);
       }
       /**
-       * <code>repeated .Player player_list = 3;</code>
+       * <code>optional int32 max_players = 3;</code>
        */
-      public proto.PlayerProtos.Player getPlayerList(int index) {
-        return playerList_.get(index);
-      }
-      /**
-       * <code>repeated .Player player_list = 3;</code>
-       */
-      public proto.PlayerProtos.PlayerOrBuilder getPlayerListOrBuilder(
-          int index) {
-        return playerList_.get(index);
+      public int getMaxPlayers() {
+        return maxPlayers_;
       }
 
       private void initFields() {
         type_ = proto.TcpPacketProtos.TcpPacket.PacketType.DISCONNECT;
-        playerList_ = java.util.Collections.emptyList();
+        lobbyId_ = "";
+        maxPlayers_ = 0;
       }
       private byte memoizedIsInitialized = -1;
       public final boolean isInitialized() {
         byte isInitialized = memoizedIsInitialized;
-        if (isInitialized != -1) return isInitialized == 1;
+        if (isInitialized == 1) return true;
+        if (isInitialized == 0) return false;
 
         if (!hasType()) {
           memoizedIsInitialized = 0;
           return false;
-        }
-        for (int i = 0; i < getPlayerListCount(); i++) {
-          if (!getPlayerList(i).isInitialized()) {
-            memoizedIsInitialized = 0;
-            return false;
-          }
         }
         memoizedIsInitialized = 1;
         return true;
@@ -2192,8 +2235,11 @@ public final class TcpPacketProtos {
         if (((bitField0_ & 0x00000001) == 0x00000001)) {
           output.writeEnum(1, type_.getNumber());
         }
-        for (int i = 0; i < playerList_.size(); i++) {
-          output.writeMessage(3, playerList_.get(i));
+        if (((bitField0_ & 0x00000002) == 0x00000002)) {
+          output.writeBytes(2, getLobbyIdBytes());
+        }
+        if (((bitField0_ & 0x00000004) == 0x00000004)) {
+          output.writeInt32(3, maxPlayers_);
         }
         getUnknownFields().writeTo(output);
       }
@@ -2208,9 +2254,13 @@ public final class TcpPacketProtos {
           size += com.google.protobuf.CodedOutputStream
             .computeEnumSize(1, type_.getNumber());
         }
-        for (int i = 0; i < playerList_.size(); i++) {
+        if (((bitField0_ & 0x00000002) == 0x00000002)) {
           size += com.google.protobuf.CodedOutputStream
-            .computeMessageSize(3, playerList_.get(i));
+            .computeBytesSize(2, getLobbyIdBytes());
+        }
+        if (((bitField0_ & 0x00000004) == 0x00000004)) {
+          size += com.google.protobuf.CodedOutputStream
+            .computeInt32Size(3, maxPlayers_);
         }
         size += getUnknownFields().getSerializedSize();
         memoizedSerializedSize = size;
@@ -2224,53 +2274,53 @@ public final class TcpPacketProtos {
         return super.writeReplace();
       }
 
-      public static proto.TcpPacketProtos.TcpPacket.PlayerListPacket parseFrom(
+      public static proto.TcpPacketProtos.TcpPacket.CreateLobbyPacket parseFrom(
           com.google.protobuf.ByteString data)
           throws com.google.protobuf.InvalidProtocolBufferException {
         return PARSER.parseFrom(data);
       }
-      public static proto.TcpPacketProtos.TcpPacket.PlayerListPacket parseFrom(
+      public static proto.TcpPacketProtos.TcpPacket.CreateLobbyPacket parseFrom(
           com.google.protobuf.ByteString data,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws com.google.protobuf.InvalidProtocolBufferException {
         return PARSER.parseFrom(data, extensionRegistry);
       }
-      public static proto.TcpPacketProtos.TcpPacket.PlayerListPacket parseFrom(byte[] data)
+      public static proto.TcpPacketProtos.TcpPacket.CreateLobbyPacket parseFrom(byte[] data)
           throws com.google.protobuf.InvalidProtocolBufferException {
         return PARSER.parseFrom(data);
       }
-      public static proto.TcpPacketProtos.TcpPacket.PlayerListPacket parseFrom(
+      public static proto.TcpPacketProtos.TcpPacket.CreateLobbyPacket parseFrom(
           byte[] data,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws com.google.protobuf.InvalidProtocolBufferException {
         return PARSER.parseFrom(data, extensionRegistry);
       }
-      public static proto.TcpPacketProtos.TcpPacket.PlayerListPacket parseFrom(java.io.InputStream input)
+      public static proto.TcpPacketProtos.TcpPacket.CreateLobbyPacket parseFrom(java.io.InputStream input)
           throws java.io.IOException {
         return PARSER.parseFrom(input);
       }
-      public static proto.TcpPacketProtos.TcpPacket.PlayerListPacket parseFrom(
+      public static proto.TcpPacketProtos.TcpPacket.CreateLobbyPacket parseFrom(
           java.io.InputStream input,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws java.io.IOException {
         return PARSER.parseFrom(input, extensionRegistry);
       }
-      public static proto.TcpPacketProtos.TcpPacket.PlayerListPacket parseDelimitedFrom(java.io.InputStream input)
+      public static proto.TcpPacketProtos.TcpPacket.CreateLobbyPacket parseDelimitedFrom(java.io.InputStream input)
           throws java.io.IOException {
         return PARSER.parseDelimitedFrom(input);
       }
-      public static proto.TcpPacketProtos.TcpPacket.PlayerListPacket parseDelimitedFrom(
+      public static proto.TcpPacketProtos.TcpPacket.CreateLobbyPacket parseDelimitedFrom(
           java.io.InputStream input,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws java.io.IOException {
         return PARSER.parseDelimitedFrom(input, extensionRegistry);
       }
-      public static proto.TcpPacketProtos.TcpPacket.PlayerListPacket parseFrom(
+      public static proto.TcpPacketProtos.TcpPacket.CreateLobbyPacket parseFrom(
           com.google.protobuf.CodedInputStream input)
           throws java.io.IOException {
         return PARSER.parseFrom(input);
       }
-      public static proto.TcpPacketProtos.TcpPacket.PlayerListPacket parseFrom(
+      public static proto.TcpPacketProtos.TcpPacket.CreateLobbyPacket parseFrom(
           com.google.protobuf.CodedInputStream input,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws java.io.IOException {
@@ -2279,7 +2329,7 @@ public final class TcpPacketProtos {
 
       public static Builder newBuilder() { return Builder.create(); }
       public Builder newBuilderForType() { return newBuilder(); }
-      public static Builder newBuilder(proto.TcpPacketProtos.TcpPacket.PlayerListPacket prototype) {
+      public static Builder newBuilder(proto.TcpPacketProtos.TcpPacket.CreateLobbyPacket prototype) {
         return newBuilder().mergeFrom(prototype);
       }
       public Builder toBuilder() { return newBuilder(this); }
@@ -2291,24 +2341,25 @@ public final class TcpPacketProtos {
         return builder;
       }
       /**
-       * Protobuf type {@code TcpPacket.PlayerListPacket}
+       * Protobuf type {@code TcpPacket.CreateLobbyPacket}
        */
       public static final class Builder extends
-          com.google.protobuf.GeneratedMessage.Builder<Builder>
-         implements proto.TcpPacketProtos.TcpPacket.PlayerListPacketOrBuilder {
+          com.google.protobuf.GeneratedMessage.Builder<Builder> implements
+          // @@protoc_insertion_point(builder_implements:TcpPacket.CreateLobbyPacket)
+          proto.TcpPacketProtos.TcpPacket.CreateLobbyPacketOrBuilder {
         public static final com.google.protobuf.Descriptors.Descriptor
             getDescriptor() {
-          return proto.TcpPacketProtos.internal_static_TcpPacket_PlayerListPacket_descriptor;
+          return proto.TcpPacketProtos.internal_static_TcpPacket_CreateLobbyPacket_descriptor;
         }
 
         protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
             internalGetFieldAccessorTable() {
-          return proto.TcpPacketProtos.internal_static_TcpPacket_PlayerListPacket_fieldAccessorTable
+          return proto.TcpPacketProtos.internal_static_TcpPacket_CreateLobbyPacket_fieldAccessorTable
               .ensureFieldAccessorsInitialized(
-                  proto.TcpPacketProtos.TcpPacket.PlayerListPacket.class, proto.TcpPacketProtos.TcpPacket.PlayerListPacket.Builder.class);
+                  proto.TcpPacketProtos.TcpPacket.CreateLobbyPacket.class, proto.TcpPacketProtos.TcpPacket.CreateLobbyPacket.Builder.class);
         }
 
-        // Construct using proto.TcpPacketProtos.TcpPacket.PlayerListPacket.newBuilder()
+        // Construct using proto.TcpPacketProtos.TcpPacket.CreateLobbyPacket.newBuilder()
         private Builder() {
           maybeForceBuilderInitialization();
         }
@@ -2320,7 +2371,6 @@ public final class TcpPacketProtos {
         }
         private void maybeForceBuilderInitialization() {
           if (com.google.protobuf.GeneratedMessage.alwaysUseFieldBuilders) {
-            getPlayerListFieldBuilder();
           }
         }
         private static Builder create() {
@@ -2331,12 +2381,10 @@ public final class TcpPacketProtos {
           super.clear();
           type_ = proto.TcpPacketProtos.TcpPacket.PacketType.DISCONNECT;
           bitField0_ = (bitField0_ & ~0x00000001);
-          if (playerListBuilder_ == null) {
-            playerList_ = java.util.Collections.emptyList();
-            bitField0_ = (bitField0_ & ~0x00000002);
-          } else {
-            playerListBuilder_.clear();
-          }
+          lobbyId_ = "";
+          bitField0_ = (bitField0_ & ~0x00000002);
+          maxPlayers_ = 0;
+          bitField0_ = (bitField0_ & ~0x00000004);
           return this;
         }
 
@@ -2346,82 +2394,63 @@ public final class TcpPacketProtos {
 
         public com.google.protobuf.Descriptors.Descriptor
             getDescriptorForType() {
-          return proto.TcpPacketProtos.internal_static_TcpPacket_PlayerListPacket_descriptor;
+          return proto.TcpPacketProtos.internal_static_TcpPacket_CreateLobbyPacket_descriptor;
         }
 
-        public proto.TcpPacketProtos.TcpPacket.PlayerListPacket getDefaultInstanceForType() {
-          return proto.TcpPacketProtos.TcpPacket.PlayerListPacket.getDefaultInstance();
+        public proto.TcpPacketProtos.TcpPacket.CreateLobbyPacket getDefaultInstanceForType() {
+          return proto.TcpPacketProtos.TcpPacket.CreateLobbyPacket.getDefaultInstance();
         }
 
-        public proto.TcpPacketProtos.TcpPacket.PlayerListPacket build() {
-          proto.TcpPacketProtos.TcpPacket.PlayerListPacket result = buildPartial();
+        public proto.TcpPacketProtos.TcpPacket.CreateLobbyPacket build() {
+          proto.TcpPacketProtos.TcpPacket.CreateLobbyPacket result = buildPartial();
           if (!result.isInitialized()) {
             throw newUninitializedMessageException(result);
           }
           return result;
         }
 
-        public proto.TcpPacketProtos.TcpPacket.PlayerListPacket buildPartial() {
-          proto.TcpPacketProtos.TcpPacket.PlayerListPacket result = new proto.TcpPacketProtos.TcpPacket.PlayerListPacket(this);
+        public proto.TcpPacketProtos.TcpPacket.CreateLobbyPacket buildPartial() {
+          proto.TcpPacketProtos.TcpPacket.CreateLobbyPacket result = new proto.TcpPacketProtos.TcpPacket.CreateLobbyPacket(this);
           int from_bitField0_ = bitField0_;
           int to_bitField0_ = 0;
           if (((from_bitField0_ & 0x00000001) == 0x00000001)) {
             to_bitField0_ |= 0x00000001;
           }
           result.type_ = type_;
-          if (playerListBuilder_ == null) {
-            if (((bitField0_ & 0x00000002) == 0x00000002)) {
-              playerList_ = java.util.Collections.unmodifiableList(playerList_);
-              bitField0_ = (bitField0_ & ~0x00000002);
-            }
-            result.playerList_ = playerList_;
-          } else {
-            result.playerList_ = playerListBuilder_.build();
+          if (((from_bitField0_ & 0x00000002) == 0x00000002)) {
+            to_bitField0_ |= 0x00000002;
           }
+          result.lobbyId_ = lobbyId_;
+          if (((from_bitField0_ & 0x00000004) == 0x00000004)) {
+            to_bitField0_ |= 0x00000004;
+          }
+          result.maxPlayers_ = maxPlayers_;
           result.bitField0_ = to_bitField0_;
           onBuilt();
           return result;
         }
 
         public Builder mergeFrom(com.google.protobuf.Message other) {
-          if (other instanceof proto.TcpPacketProtos.TcpPacket.PlayerListPacket) {
-            return mergeFrom((proto.TcpPacketProtos.TcpPacket.PlayerListPacket)other);
+          if (other instanceof proto.TcpPacketProtos.TcpPacket.CreateLobbyPacket) {
+            return mergeFrom((proto.TcpPacketProtos.TcpPacket.CreateLobbyPacket)other);
           } else {
             super.mergeFrom(other);
             return this;
           }
         }
 
-        public Builder mergeFrom(proto.TcpPacketProtos.TcpPacket.PlayerListPacket other) {
-          if (other == proto.TcpPacketProtos.TcpPacket.PlayerListPacket.getDefaultInstance()) return this;
+        public Builder mergeFrom(proto.TcpPacketProtos.TcpPacket.CreateLobbyPacket other) {
+          if (other == proto.TcpPacketProtos.TcpPacket.CreateLobbyPacket.getDefaultInstance()) return this;
           if (other.hasType()) {
             setType(other.getType());
           }
-          if (playerListBuilder_ == null) {
-            if (!other.playerList_.isEmpty()) {
-              if (playerList_.isEmpty()) {
-                playerList_ = other.playerList_;
-                bitField0_ = (bitField0_ & ~0x00000002);
-              } else {
-                ensurePlayerListIsMutable();
-                playerList_.addAll(other.playerList_);
-              }
-              onChanged();
-            }
-          } else {
-            if (!other.playerList_.isEmpty()) {
-              if (playerListBuilder_.isEmpty()) {
-                playerListBuilder_.dispose();
-                playerListBuilder_ = null;
-                playerList_ = other.playerList_;
-                bitField0_ = (bitField0_ & ~0x00000002);
-                playerListBuilder_ = 
-                  com.google.protobuf.GeneratedMessage.alwaysUseFieldBuilders ?
-                     getPlayerListFieldBuilder() : null;
-              } else {
-                playerListBuilder_.addAllMessages(other.playerList_);
-              }
-            }
+          if (other.hasLobbyId()) {
+            bitField0_ |= 0x00000002;
+            lobbyId_ = other.lobbyId_;
+            onChanged();
+          }
+          if (other.hasMaxPlayers()) {
+            setMaxPlayers(other.getMaxPlayers());
           }
           this.mergeUnknownFields(other.getUnknownFields());
           return this;
@@ -2432,12 +2461,6 @@ public final class TcpPacketProtos {
             
             return false;
           }
-          for (int i = 0; i < getPlayerListCount(); i++) {
-            if (!getPlayerList(i).isInitialized()) {
-              
-              return false;
-            }
-          }
           return true;
         }
 
@@ -2445,11 +2468,11 @@ public final class TcpPacketProtos {
             com.google.protobuf.CodedInputStream input,
             com.google.protobuf.ExtensionRegistryLite extensionRegistry)
             throws java.io.IOException {
-          proto.TcpPacketProtos.TcpPacket.PlayerListPacket parsedMessage = null;
+          proto.TcpPacketProtos.TcpPacket.CreateLobbyPacket parsedMessage = null;
           try {
             parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
           } catch (com.google.protobuf.InvalidProtocolBufferException e) {
-            parsedMessage = (proto.TcpPacketProtos.TcpPacket.PlayerListPacket) e.getUnfinishedMessage();
+            parsedMessage = (proto.TcpPacketProtos.TcpPacket.CreateLobbyPacket) e.getUnfinishedMessage();
             throw e;
           } finally {
             if (parsedMessage != null) {
@@ -2460,7 +2483,6 @@ public final class TcpPacketProtos {
         }
         private int bitField0_;
 
-        // required .TcpPacket.PacketType type = 1;
         private proto.TcpPacketProtos.TcpPacket.PacketType type_ = proto.TcpPacketProtos.TcpPacket.PacketType.DISCONNECT;
         /**
          * <code>required .TcpPacket.PacketType type = 1;</code>
@@ -2496,261 +2518,129 @@ public final class TcpPacketProtos {
           return this;
         }
 
-        // repeated .Player player_list = 3;
-        private java.util.List<proto.PlayerProtos.Player> playerList_ =
-          java.util.Collections.emptyList();
-        private void ensurePlayerListIsMutable() {
-          if (!((bitField0_ & 0x00000002) == 0x00000002)) {
-            playerList_ = new java.util.ArrayList<proto.PlayerProtos.Player>(playerList_);
-            bitField0_ |= 0x00000002;
-           }
+        private java.lang.Object lobbyId_ = "";
+        /**
+         * <code>optional string lobby_id = 2;</code>
+         */
+        public boolean hasLobbyId() {
+          return ((bitField0_ & 0x00000002) == 0x00000002);
+        }
+        /**
+         * <code>optional string lobby_id = 2;</code>
+         */
+        public java.lang.String getLobbyId() {
+          java.lang.Object ref = lobbyId_;
+          if (!(ref instanceof java.lang.String)) {
+            com.google.protobuf.ByteString bs =
+                (com.google.protobuf.ByteString) ref;
+            java.lang.String s = bs.toStringUtf8();
+            if (bs.isValidUtf8()) {
+              lobbyId_ = s;
+            }
+            return s;
+          } else {
+            return (java.lang.String) ref;
+          }
+        }
+        /**
+         * <code>optional string lobby_id = 2;</code>
+         */
+        public com.google.protobuf.ByteString
+            getLobbyIdBytes() {
+          java.lang.Object ref = lobbyId_;
+          if (ref instanceof String) {
+            com.google.protobuf.ByteString b = 
+                com.google.protobuf.ByteString.copyFromUtf8(
+                    (java.lang.String) ref);
+            lobbyId_ = b;
+            return b;
+          } else {
+            return (com.google.protobuf.ByteString) ref;
+          }
+        }
+        /**
+         * <code>optional string lobby_id = 2;</code>
+         */
+        public Builder setLobbyId(
+            java.lang.String value) {
+          if (value == null) {
+    throw new NullPointerException();
+  }
+  bitField0_ |= 0x00000002;
+          lobbyId_ = value;
+          onChanged();
+          return this;
+        }
+        /**
+         * <code>optional string lobby_id = 2;</code>
+         */
+        public Builder clearLobbyId() {
+          bitField0_ = (bitField0_ & ~0x00000002);
+          lobbyId_ = getDefaultInstance().getLobbyId();
+          onChanged();
+          return this;
+        }
+        /**
+         * <code>optional string lobby_id = 2;</code>
+         */
+        public Builder setLobbyIdBytes(
+            com.google.protobuf.ByteString value) {
+          if (value == null) {
+    throw new NullPointerException();
+  }
+  bitField0_ |= 0x00000002;
+          lobbyId_ = value;
+          onChanged();
+          return this;
         }
 
-        private com.google.protobuf.RepeatedFieldBuilder<
-            proto.PlayerProtos.Player, proto.PlayerProtos.Player.Builder, proto.PlayerProtos.PlayerOrBuilder> playerListBuilder_;
-
+        private int maxPlayers_ ;
         /**
-         * <code>repeated .Player player_list = 3;</code>
+         * <code>optional int32 max_players = 3;</code>
          */
-        public java.util.List<proto.PlayerProtos.Player> getPlayerListList() {
-          if (playerListBuilder_ == null) {
-            return java.util.Collections.unmodifiableList(playerList_);
-          } else {
-            return playerListBuilder_.getMessageList();
-          }
+        public boolean hasMaxPlayers() {
+          return ((bitField0_ & 0x00000004) == 0x00000004);
         }
         /**
-         * <code>repeated .Player player_list = 3;</code>
+         * <code>optional int32 max_players = 3;</code>
          */
-        public int getPlayerListCount() {
-          if (playerListBuilder_ == null) {
-            return playerList_.size();
-          } else {
-            return playerListBuilder_.getCount();
-          }
+        public int getMaxPlayers() {
+          return maxPlayers_;
         }
         /**
-         * <code>repeated .Player player_list = 3;</code>
+         * <code>optional int32 max_players = 3;</code>
          */
-        public proto.PlayerProtos.Player getPlayerList(int index) {
-          if (playerListBuilder_ == null) {
-            return playerList_.get(index);
-          } else {
-            return playerListBuilder_.getMessage(index);
-          }
-        }
-        /**
-         * <code>repeated .Player player_list = 3;</code>
-         */
-        public Builder setPlayerList(
-            int index, proto.PlayerProtos.Player value) {
-          if (playerListBuilder_ == null) {
-            if (value == null) {
-              throw new NullPointerException();
-            }
-            ensurePlayerListIsMutable();
-            playerList_.set(index, value);
-            onChanged();
-          } else {
-            playerListBuilder_.setMessage(index, value);
-          }
+        public Builder setMaxPlayers(int value) {
+          bitField0_ |= 0x00000004;
+          maxPlayers_ = value;
+          onChanged();
           return this;
         }
         /**
-         * <code>repeated .Player player_list = 3;</code>
+         * <code>optional int32 max_players = 3;</code>
          */
-        public Builder setPlayerList(
-            int index, proto.PlayerProtos.Player.Builder builderForValue) {
-          if (playerListBuilder_ == null) {
-            ensurePlayerListIsMutable();
-            playerList_.set(index, builderForValue.build());
-            onChanged();
-          } else {
-            playerListBuilder_.setMessage(index, builderForValue.build());
-          }
+        public Builder clearMaxPlayers() {
+          bitField0_ = (bitField0_ & ~0x00000004);
+          maxPlayers_ = 0;
+          onChanged();
           return this;
-        }
-        /**
-         * <code>repeated .Player player_list = 3;</code>
-         */
-        public Builder addPlayerList(proto.PlayerProtos.Player value) {
-          if (playerListBuilder_ == null) {
-            if (value == null) {
-              throw new NullPointerException();
-            }
-            ensurePlayerListIsMutable();
-            playerList_.add(value);
-            onChanged();
-          } else {
-            playerListBuilder_.addMessage(value);
-          }
-          return this;
-        }
-        /**
-         * <code>repeated .Player player_list = 3;</code>
-         */
-        public Builder addPlayerList(
-            int index, proto.PlayerProtos.Player value) {
-          if (playerListBuilder_ == null) {
-            if (value == null) {
-              throw new NullPointerException();
-            }
-            ensurePlayerListIsMutable();
-            playerList_.add(index, value);
-            onChanged();
-          } else {
-            playerListBuilder_.addMessage(index, value);
-          }
-          return this;
-        }
-        /**
-         * <code>repeated .Player player_list = 3;</code>
-         */
-        public Builder addPlayerList(
-            proto.PlayerProtos.Player.Builder builderForValue) {
-          if (playerListBuilder_ == null) {
-            ensurePlayerListIsMutable();
-            playerList_.add(builderForValue.build());
-            onChanged();
-          } else {
-            playerListBuilder_.addMessage(builderForValue.build());
-          }
-          return this;
-        }
-        /**
-         * <code>repeated .Player player_list = 3;</code>
-         */
-        public Builder addPlayerList(
-            int index, proto.PlayerProtos.Player.Builder builderForValue) {
-          if (playerListBuilder_ == null) {
-            ensurePlayerListIsMutable();
-            playerList_.add(index, builderForValue.build());
-            onChanged();
-          } else {
-            playerListBuilder_.addMessage(index, builderForValue.build());
-          }
-          return this;
-        }
-        /**
-         * <code>repeated .Player player_list = 3;</code>
-         */
-        public Builder addAllPlayerList(
-            java.lang.Iterable<? extends proto.PlayerProtos.Player> values) {
-          if (playerListBuilder_ == null) {
-            ensurePlayerListIsMutable();
-            super.addAll(values, playerList_);
-            onChanged();
-          } else {
-            playerListBuilder_.addAllMessages(values);
-          }
-          return this;
-        }
-        /**
-         * <code>repeated .Player player_list = 3;</code>
-         */
-        public Builder clearPlayerList() {
-          if (playerListBuilder_ == null) {
-            playerList_ = java.util.Collections.emptyList();
-            bitField0_ = (bitField0_ & ~0x00000002);
-            onChanged();
-          } else {
-            playerListBuilder_.clear();
-          }
-          return this;
-        }
-        /**
-         * <code>repeated .Player player_list = 3;</code>
-         */
-        public Builder removePlayerList(int index) {
-          if (playerListBuilder_ == null) {
-            ensurePlayerListIsMutable();
-            playerList_.remove(index);
-            onChanged();
-          } else {
-            playerListBuilder_.remove(index);
-          }
-          return this;
-        }
-        /**
-         * <code>repeated .Player player_list = 3;</code>
-         */
-        public proto.PlayerProtos.Player.Builder getPlayerListBuilder(
-            int index) {
-          return getPlayerListFieldBuilder().getBuilder(index);
-        }
-        /**
-         * <code>repeated .Player player_list = 3;</code>
-         */
-        public proto.PlayerProtos.PlayerOrBuilder getPlayerListOrBuilder(
-            int index) {
-          if (playerListBuilder_ == null) {
-            return playerList_.get(index);  } else {
-            return playerListBuilder_.getMessageOrBuilder(index);
-          }
-        }
-        /**
-         * <code>repeated .Player player_list = 3;</code>
-         */
-        public java.util.List<? extends proto.PlayerProtos.PlayerOrBuilder> 
-             getPlayerListOrBuilderList() {
-          if (playerListBuilder_ != null) {
-            return playerListBuilder_.getMessageOrBuilderList();
-          } else {
-            return java.util.Collections.unmodifiableList(playerList_);
-          }
-        }
-        /**
-         * <code>repeated .Player player_list = 3;</code>
-         */
-        public proto.PlayerProtos.Player.Builder addPlayerListBuilder() {
-          return getPlayerListFieldBuilder().addBuilder(
-              proto.PlayerProtos.Player.getDefaultInstance());
-        }
-        /**
-         * <code>repeated .Player player_list = 3;</code>
-         */
-        public proto.PlayerProtos.Player.Builder addPlayerListBuilder(
-            int index) {
-          return getPlayerListFieldBuilder().addBuilder(
-              index, proto.PlayerProtos.Player.getDefaultInstance());
-        }
-        /**
-         * <code>repeated .Player player_list = 3;</code>
-         */
-        public java.util.List<proto.PlayerProtos.Player.Builder> 
-             getPlayerListBuilderList() {
-          return getPlayerListFieldBuilder().getBuilderList();
-        }
-        private com.google.protobuf.RepeatedFieldBuilder<
-            proto.PlayerProtos.Player, proto.PlayerProtos.Player.Builder, proto.PlayerProtos.PlayerOrBuilder> 
-            getPlayerListFieldBuilder() {
-          if (playerListBuilder_ == null) {
-            playerListBuilder_ = new com.google.protobuf.RepeatedFieldBuilder<
-                proto.PlayerProtos.Player, proto.PlayerProtos.Player.Builder, proto.PlayerProtos.PlayerOrBuilder>(
-                    playerList_,
-                    ((bitField0_ & 0x00000002) == 0x00000002),
-                    getParentForChildren(),
-                    isClean());
-            playerList_ = null;
-          }
-          return playerListBuilder_;
         }
 
-        // @@protoc_insertion_point(builder_scope:TcpPacket.PlayerListPacket)
+        // @@protoc_insertion_point(builder_scope:TcpPacket.CreateLobbyPacket)
       }
 
       static {
-        defaultInstance = new PlayerListPacket(true);
+        defaultInstance = new CreateLobbyPacket(true);
         defaultInstance.initFields();
       }
 
-      // @@protoc_insertion_point(class_scope:TcpPacket.PlayerListPacket)
+      // @@protoc_insertion_point(class_scope:TcpPacket.CreateLobbyPacket)
     }
 
-    public interface ChatPacketOrBuilder
-        extends com.google.protobuf.MessageOrBuilder {
+    public interface ChatPacketOrBuilder extends
+        // @@protoc_insertion_point(interface_extends:TcpPacket.ChatPacket)
+        com.google.protobuf.MessageOrBuilder {
 
-      // required .TcpPacket.PacketType type = 1;
       /**
        * <code>required .TcpPacket.PacketType type = 1;</code>
        */
@@ -2760,7 +2650,6 @@ public final class TcpPacketProtos {
        */
       proto.TcpPacketProtos.TcpPacket.PacketType getType();
 
-      // required string message = 2;
       /**
        * <code>required string message = 2;</code>
        */
@@ -2775,7 +2664,6 @@ public final class TcpPacketProtos {
       com.google.protobuf.ByteString
           getMessageBytes();
 
-      // optional .Player player = 3;
       /**
        * <code>optional .Player player = 3;</code>
        */
@@ -2789,7 +2677,6 @@ public final class TcpPacketProtos {
        */
       proto.PlayerProtos.PlayerOrBuilder getPlayerOrBuilder();
 
-      // optional string lobby_id = 4;
       /**
        * <code>optional string lobby_id = 4;</code>
        */
@@ -2808,8 +2695,9 @@ public final class TcpPacketProtos {
      * Protobuf type {@code TcpPacket.ChatPacket}
      */
     public static final class ChatPacket extends
-        com.google.protobuf.GeneratedMessage
-        implements ChatPacketOrBuilder {
+        com.google.protobuf.GeneratedMessage implements
+        // @@protoc_insertion_point(message_implements:TcpPacket.ChatPacket)
+        ChatPacketOrBuilder {
       // Use ChatPacket.newBuilder() to construct.
       private ChatPacket(com.google.protobuf.GeneratedMessage.Builder<?> builder) {
         super(builder);
@@ -2867,8 +2755,9 @@ public final class TcpPacketProtos {
                 break;
               }
               case 18: {
+                com.google.protobuf.ByteString bs = input.readBytes();
                 bitField0_ |= 0x00000002;
-                message_ = input.readBytes();
+                message_ = bs;
                 break;
               }
               case 26: {
@@ -2885,8 +2774,9 @@ public final class TcpPacketProtos {
                 break;
               }
               case 34: {
+                com.google.protobuf.ByteString bs = input.readBytes();
                 bitField0_ |= 0x00000008;
-                lobbyId_ = input.readBytes();
+                lobbyId_ = bs;
                 break;
               }
             }
@@ -2929,7 +2819,6 @@ public final class TcpPacketProtos {
       }
 
       private int bitField0_;
-      // required .TcpPacket.PacketType type = 1;
       public static final int TYPE_FIELD_NUMBER = 1;
       private proto.TcpPacketProtos.TcpPacket.PacketType type_;
       /**
@@ -2945,7 +2834,6 @@ public final class TcpPacketProtos {
         return type_;
       }
 
-      // required string message = 2;
       public static final int MESSAGE_FIELD_NUMBER = 2;
       private java.lang.Object message_;
       /**
@@ -2988,7 +2876,6 @@ public final class TcpPacketProtos {
         }
       }
 
-      // optional .Player player = 3;
       public static final int PLAYER_FIELD_NUMBER = 3;
       private proto.PlayerProtos.Player player_;
       /**
@@ -3010,7 +2897,6 @@ public final class TcpPacketProtos {
         return player_;
       }
 
-      // optional string lobby_id = 4;
       public static final int LOBBY_ID_FIELD_NUMBER = 4;
       private java.lang.Object lobbyId_;
       /**
@@ -3062,7 +2948,8 @@ public final class TcpPacketProtos {
       private byte memoizedIsInitialized = -1;
       public final boolean isInitialized() {
         byte isInitialized = memoizedIsInitialized;
-        if (isInitialized != -1) return isInitialized == 1;
+        if (isInitialized == 1) return true;
+        if (isInitialized == 0) return false;
 
         if (!hasType()) {
           memoizedIsInitialized = 0;
@@ -3204,8 +3091,9 @@ public final class TcpPacketProtos {
        * Protobuf type {@code TcpPacket.ChatPacket}
        */
       public static final class Builder extends
-          com.google.protobuf.GeneratedMessage.Builder<Builder>
-         implements proto.TcpPacketProtos.TcpPacket.ChatPacketOrBuilder {
+          com.google.protobuf.GeneratedMessage.Builder<Builder> implements
+          // @@protoc_insertion_point(builder_implements:TcpPacket.ChatPacket)
+          proto.TcpPacketProtos.TcpPacket.ChatPacketOrBuilder {
         public static final com.google.protobuf.Descriptors.Descriptor
             getDescriptor() {
           return proto.TcpPacketProtos.internal_static_TcpPacket_ChatPacket_descriptor;
@@ -3372,7 +3260,6 @@ public final class TcpPacketProtos {
         }
         private int bitField0_;
 
-        // required .TcpPacket.PacketType type = 1;
         private proto.TcpPacketProtos.TcpPacket.PacketType type_ = proto.TcpPacketProtos.TcpPacket.PacketType.DISCONNECT;
         /**
          * <code>required .TcpPacket.PacketType type = 1;</code>
@@ -3408,7 +3295,6 @@ public final class TcpPacketProtos {
           return this;
         }
 
-        // required string message = 2;
         private java.lang.Object message_ = "";
         /**
          * <code>required string message = 2;</code>
@@ -3422,9 +3308,12 @@ public final class TcpPacketProtos {
         public java.lang.String getMessage() {
           java.lang.Object ref = message_;
           if (!(ref instanceof java.lang.String)) {
-            java.lang.String s = ((com.google.protobuf.ByteString) ref)
-                .toStringUtf8();
-            message_ = s;
+            com.google.protobuf.ByteString bs =
+                (com.google.protobuf.ByteString) ref;
+            java.lang.String s = bs.toStringUtf8();
+            if (bs.isValidUtf8()) {
+              message_ = s;
+            }
             return s;
           } else {
             return (java.lang.String) ref;
@@ -3482,7 +3371,6 @@ public final class TcpPacketProtos {
           return this;
         }
 
-        // optional .Player player = 3;
         private proto.PlayerProtos.Player player_ = proto.PlayerProtos.Player.getDefaultInstance();
         private com.google.protobuf.SingleFieldBuilder<
             proto.PlayerProtos.Player, proto.PlayerProtos.Player.Builder, proto.PlayerProtos.PlayerOrBuilder> playerBuilder_;
@@ -3591,7 +3479,7 @@ public final class TcpPacketProtos {
           if (playerBuilder_ == null) {
             playerBuilder_ = new com.google.protobuf.SingleFieldBuilder<
                 proto.PlayerProtos.Player, proto.PlayerProtos.Player.Builder, proto.PlayerProtos.PlayerOrBuilder>(
-                    player_,
+                    getPlayer(),
                     getParentForChildren(),
                     isClean());
             player_ = null;
@@ -3599,7 +3487,6 @@ public final class TcpPacketProtos {
           return playerBuilder_;
         }
 
-        // optional string lobby_id = 4;
         private java.lang.Object lobbyId_ = "";
         /**
          * <code>optional string lobby_id = 4;</code>
@@ -3613,9 +3500,12 @@ public final class TcpPacketProtos {
         public java.lang.String getLobbyId() {
           java.lang.Object ref = lobbyId_;
           if (!(ref instanceof java.lang.String)) {
-            java.lang.String s = ((com.google.protobuf.ByteString) ref)
-                .toStringUtf8();
-            lobbyId_ = s;
+            com.google.protobuf.ByteString bs =
+                (com.google.protobuf.ByteString) ref;
+            java.lang.String s = bs.toStringUtf8();
+            if (bs.isValidUtf8()) {
+              lobbyId_ = s;
+            }
             return s;
           } else {
             return (java.lang.String) ref;
@@ -3684,8 +3574,2514 @@ public final class TcpPacketProtos {
       // @@protoc_insertion_point(class_scope:TcpPacket.ChatPacket)
     }
 
+    public interface PlayerListPacketOrBuilder extends
+        // @@protoc_insertion_point(interface_extends:TcpPacket.PlayerListPacket)
+        com.google.protobuf.MessageOrBuilder {
+
+      /**
+       * <code>required .TcpPacket.PacketType type = 1;</code>
+       */
+      boolean hasType();
+      /**
+       * <code>required .TcpPacket.PacketType type = 1;</code>
+       */
+      proto.TcpPacketProtos.TcpPacket.PacketType getType();
+
+      /**
+       * <code>repeated .Player player_list = 3;</code>
+       */
+      java.util.List<proto.PlayerProtos.Player> 
+          getPlayerListList();
+      /**
+       * <code>repeated .Player player_list = 3;</code>
+       */
+      proto.PlayerProtos.Player getPlayerList(int index);
+      /**
+       * <code>repeated .Player player_list = 3;</code>
+       */
+      int getPlayerListCount();
+      /**
+       * <code>repeated .Player player_list = 3;</code>
+       */
+      java.util.List<? extends proto.PlayerProtos.PlayerOrBuilder> 
+          getPlayerListOrBuilderList();
+      /**
+       * <code>repeated .Player player_list = 3;</code>
+       */
+      proto.PlayerProtos.PlayerOrBuilder getPlayerListOrBuilder(
+          int index);
+    }
+    /**
+     * Protobuf type {@code TcpPacket.PlayerListPacket}
+     */
+    public static final class PlayerListPacket extends
+        com.google.protobuf.GeneratedMessage implements
+        // @@protoc_insertion_point(message_implements:TcpPacket.PlayerListPacket)
+        PlayerListPacketOrBuilder {
+      // Use PlayerListPacket.newBuilder() to construct.
+      private PlayerListPacket(com.google.protobuf.GeneratedMessage.Builder<?> builder) {
+        super(builder);
+        this.unknownFields = builder.getUnknownFields();
+      }
+      private PlayerListPacket(boolean noInit) { this.unknownFields = com.google.protobuf.UnknownFieldSet.getDefaultInstance(); }
+
+      private static final PlayerListPacket defaultInstance;
+      public static PlayerListPacket getDefaultInstance() {
+        return defaultInstance;
+      }
+
+      public PlayerListPacket getDefaultInstanceForType() {
+        return defaultInstance;
+      }
+
+      private final com.google.protobuf.UnknownFieldSet unknownFields;
+      @java.lang.Override
+      public final com.google.protobuf.UnknownFieldSet
+          getUnknownFields() {
+        return this.unknownFields;
+      }
+      private PlayerListPacket(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws com.google.protobuf.InvalidProtocolBufferException {
+        initFields();
+        int mutable_bitField0_ = 0;
+        com.google.protobuf.UnknownFieldSet.Builder unknownFields =
+            com.google.protobuf.UnknownFieldSet.newBuilder();
+        try {
+          boolean done = false;
+          while (!done) {
+            int tag = input.readTag();
+            switch (tag) {
+              case 0:
+                done = true;
+                break;
+              default: {
+                if (!parseUnknownField(input, unknownFields,
+                                       extensionRegistry, tag)) {
+                  done = true;
+                }
+                break;
+              }
+              case 8: {
+                int rawValue = input.readEnum();
+                proto.TcpPacketProtos.TcpPacket.PacketType value = proto.TcpPacketProtos.TcpPacket.PacketType.valueOf(rawValue);
+                if (value == null) {
+                  unknownFields.mergeVarintField(1, rawValue);
+                } else {
+                  bitField0_ |= 0x00000001;
+                  type_ = value;
+                }
+                break;
+              }
+              case 26: {
+                if (!((mutable_bitField0_ & 0x00000002) == 0x00000002)) {
+                  playerList_ = new java.util.ArrayList<proto.PlayerProtos.Player>();
+                  mutable_bitField0_ |= 0x00000002;
+                }
+                playerList_.add(input.readMessage(proto.PlayerProtos.Player.PARSER, extensionRegistry));
+                break;
+              }
+            }
+          }
+        } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+          throw e.setUnfinishedMessage(this);
+        } catch (java.io.IOException e) {
+          throw new com.google.protobuf.InvalidProtocolBufferException(
+              e.getMessage()).setUnfinishedMessage(this);
+        } finally {
+          if (((mutable_bitField0_ & 0x00000002) == 0x00000002)) {
+            playerList_ = java.util.Collections.unmodifiableList(playerList_);
+          }
+          this.unknownFields = unknownFields.build();
+          makeExtensionsImmutable();
+        }
+      }
+      public static final com.google.protobuf.Descriptors.Descriptor
+          getDescriptor() {
+        return proto.TcpPacketProtos.internal_static_TcpPacket_PlayerListPacket_descriptor;
+      }
+
+      protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
+          internalGetFieldAccessorTable() {
+        return proto.TcpPacketProtos.internal_static_TcpPacket_PlayerListPacket_fieldAccessorTable
+            .ensureFieldAccessorsInitialized(
+                proto.TcpPacketProtos.TcpPacket.PlayerListPacket.class, proto.TcpPacketProtos.TcpPacket.PlayerListPacket.Builder.class);
+      }
+
+      public static com.google.protobuf.Parser<PlayerListPacket> PARSER =
+          new com.google.protobuf.AbstractParser<PlayerListPacket>() {
+        public PlayerListPacket parsePartialFrom(
+            com.google.protobuf.CodedInputStream input,
+            com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+            throws com.google.protobuf.InvalidProtocolBufferException {
+          return new PlayerListPacket(input, extensionRegistry);
+        }
+      };
+
+      @java.lang.Override
+      public com.google.protobuf.Parser<PlayerListPacket> getParserForType() {
+        return PARSER;
+      }
+
+      private int bitField0_;
+      public static final int TYPE_FIELD_NUMBER = 1;
+      private proto.TcpPacketProtos.TcpPacket.PacketType type_;
+      /**
+       * <code>required .TcpPacket.PacketType type = 1;</code>
+       */
+      public boolean hasType() {
+        return ((bitField0_ & 0x00000001) == 0x00000001);
+      }
+      /**
+       * <code>required .TcpPacket.PacketType type = 1;</code>
+       */
+      public proto.TcpPacketProtos.TcpPacket.PacketType getType() {
+        return type_;
+      }
+
+      public static final int PLAYER_LIST_FIELD_NUMBER = 3;
+      private java.util.List<proto.PlayerProtos.Player> playerList_;
+      /**
+       * <code>repeated .Player player_list = 3;</code>
+       */
+      public java.util.List<proto.PlayerProtos.Player> getPlayerListList() {
+        return playerList_;
+      }
+      /**
+       * <code>repeated .Player player_list = 3;</code>
+       */
+      public java.util.List<? extends proto.PlayerProtos.PlayerOrBuilder> 
+          getPlayerListOrBuilderList() {
+        return playerList_;
+      }
+      /**
+       * <code>repeated .Player player_list = 3;</code>
+       */
+      public int getPlayerListCount() {
+        return playerList_.size();
+      }
+      /**
+       * <code>repeated .Player player_list = 3;</code>
+       */
+      public proto.PlayerProtos.Player getPlayerList(int index) {
+        return playerList_.get(index);
+      }
+      /**
+       * <code>repeated .Player player_list = 3;</code>
+       */
+      public proto.PlayerProtos.PlayerOrBuilder getPlayerListOrBuilder(
+          int index) {
+        return playerList_.get(index);
+      }
+
+      private void initFields() {
+        type_ = proto.TcpPacketProtos.TcpPacket.PacketType.DISCONNECT;
+        playerList_ = java.util.Collections.emptyList();
+      }
+      private byte memoizedIsInitialized = -1;
+      public final boolean isInitialized() {
+        byte isInitialized = memoizedIsInitialized;
+        if (isInitialized == 1) return true;
+        if (isInitialized == 0) return false;
+
+        if (!hasType()) {
+          memoizedIsInitialized = 0;
+          return false;
+        }
+        for (int i = 0; i < getPlayerListCount(); i++) {
+          if (!getPlayerList(i).isInitialized()) {
+            memoizedIsInitialized = 0;
+            return false;
+          }
+        }
+        memoizedIsInitialized = 1;
+        return true;
+      }
+
+      public void writeTo(com.google.protobuf.CodedOutputStream output)
+                          throws java.io.IOException {
+        getSerializedSize();
+        if (((bitField0_ & 0x00000001) == 0x00000001)) {
+          output.writeEnum(1, type_.getNumber());
+        }
+        for (int i = 0; i < playerList_.size(); i++) {
+          output.writeMessage(3, playerList_.get(i));
+        }
+        getUnknownFields().writeTo(output);
+      }
+
+      private int memoizedSerializedSize = -1;
+      public int getSerializedSize() {
+        int size = memoizedSerializedSize;
+        if (size != -1) return size;
+
+        size = 0;
+        if (((bitField0_ & 0x00000001) == 0x00000001)) {
+          size += com.google.protobuf.CodedOutputStream
+            .computeEnumSize(1, type_.getNumber());
+        }
+        for (int i = 0; i < playerList_.size(); i++) {
+          size += com.google.protobuf.CodedOutputStream
+            .computeMessageSize(3, playerList_.get(i));
+        }
+        size += getUnknownFields().getSerializedSize();
+        memoizedSerializedSize = size;
+        return size;
+      }
+
+      private static final long serialVersionUID = 0L;
+      @java.lang.Override
+      protected java.lang.Object writeReplace()
+          throws java.io.ObjectStreamException {
+        return super.writeReplace();
+      }
+
+      public static proto.TcpPacketProtos.TcpPacket.PlayerListPacket parseFrom(
+          com.google.protobuf.ByteString data)
+          throws com.google.protobuf.InvalidProtocolBufferException {
+        return PARSER.parseFrom(data);
+      }
+      public static proto.TcpPacketProtos.TcpPacket.PlayerListPacket parseFrom(
+          com.google.protobuf.ByteString data,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws com.google.protobuf.InvalidProtocolBufferException {
+        return PARSER.parseFrom(data, extensionRegistry);
+      }
+      public static proto.TcpPacketProtos.TcpPacket.PlayerListPacket parseFrom(byte[] data)
+          throws com.google.protobuf.InvalidProtocolBufferException {
+        return PARSER.parseFrom(data);
+      }
+      public static proto.TcpPacketProtos.TcpPacket.PlayerListPacket parseFrom(
+          byte[] data,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws com.google.protobuf.InvalidProtocolBufferException {
+        return PARSER.parseFrom(data, extensionRegistry);
+      }
+      public static proto.TcpPacketProtos.TcpPacket.PlayerListPacket parseFrom(java.io.InputStream input)
+          throws java.io.IOException {
+        return PARSER.parseFrom(input);
+      }
+      public static proto.TcpPacketProtos.TcpPacket.PlayerListPacket parseFrom(
+          java.io.InputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws java.io.IOException {
+        return PARSER.parseFrom(input, extensionRegistry);
+      }
+      public static proto.TcpPacketProtos.TcpPacket.PlayerListPacket parseDelimitedFrom(java.io.InputStream input)
+          throws java.io.IOException {
+        return PARSER.parseDelimitedFrom(input);
+      }
+      public static proto.TcpPacketProtos.TcpPacket.PlayerListPacket parseDelimitedFrom(
+          java.io.InputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws java.io.IOException {
+        return PARSER.parseDelimitedFrom(input, extensionRegistry);
+      }
+      public static proto.TcpPacketProtos.TcpPacket.PlayerListPacket parseFrom(
+          com.google.protobuf.CodedInputStream input)
+          throws java.io.IOException {
+        return PARSER.parseFrom(input);
+      }
+      public static proto.TcpPacketProtos.TcpPacket.PlayerListPacket parseFrom(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws java.io.IOException {
+        return PARSER.parseFrom(input, extensionRegistry);
+      }
+
+      public static Builder newBuilder() { return Builder.create(); }
+      public Builder newBuilderForType() { return newBuilder(); }
+      public static Builder newBuilder(proto.TcpPacketProtos.TcpPacket.PlayerListPacket prototype) {
+        return newBuilder().mergeFrom(prototype);
+      }
+      public Builder toBuilder() { return newBuilder(this); }
+
+      @java.lang.Override
+      protected Builder newBuilderForType(
+          com.google.protobuf.GeneratedMessage.BuilderParent parent) {
+        Builder builder = new Builder(parent);
+        return builder;
+      }
+      /**
+       * Protobuf type {@code TcpPacket.PlayerListPacket}
+       */
+      public static final class Builder extends
+          com.google.protobuf.GeneratedMessage.Builder<Builder> implements
+          // @@protoc_insertion_point(builder_implements:TcpPacket.PlayerListPacket)
+          proto.TcpPacketProtos.TcpPacket.PlayerListPacketOrBuilder {
+        public static final com.google.protobuf.Descriptors.Descriptor
+            getDescriptor() {
+          return proto.TcpPacketProtos.internal_static_TcpPacket_PlayerListPacket_descriptor;
+        }
+
+        protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
+            internalGetFieldAccessorTable() {
+          return proto.TcpPacketProtos.internal_static_TcpPacket_PlayerListPacket_fieldAccessorTable
+              .ensureFieldAccessorsInitialized(
+                  proto.TcpPacketProtos.TcpPacket.PlayerListPacket.class, proto.TcpPacketProtos.TcpPacket.PlayerListPacket.Builder.class);
+        }
+
+        // Construct using proto.TcpPacketProtos.TcpPacket.PlayerListPacket.newBuilder()
+        private Builder() {
+          maybeForceBuilderInitialization();
+        }
+
+        private Builder(
+            com.google.protobuf.GeneratedMessage.BuilderParent parent) {
+          super(parent);
+          maybeForceBuilderInitialization();
+        }
+        private void maybeForceBuilderInitialization() {
+          if (com.google.protobuf.GeneratedMessage.alwaysUseFieldBuilders) {
+            getPlayerListFieldBuilder();
+          }
+        }
+        private static Builder create() {
+          return new Builder();
+        }
+
+        public Builder clear() {
+          super.clear();
+          type_ = proto.TcpPacketProtos.TcpPacket.PacketType.DISCONNECT;
+          bitField0_ = (bitField0_ & ~0x00000001);
+          if (playerListBuilder_ == null) {
+            playerList_ = java.util.Collections.emptyList();
+            bitField0_ = (bitField0_ & ~0x00000002);
+          } else {
+            playerListBuilder_.clear();
+          }
+          return this;
+        }
+
+        public Builder clone() {
+          return create().mergeFrom(buildPartial());
+        }
+
+        public com.google.protobuf.Descriptors.Descriptor
+            getDescriptorForType() {
+          return proto.TcpPacketProtos.internal_static_TcpPacket_PlayerListPacket_descriptor;
+        }
+
+        public proto.TcpPacketProtos.TcpPacket.PlayerListPacket getDefaultInstanceForType() {
+          return proto.TcpPacketProtos.TcpPacket.PlayerListPacket.getDefaultInstance();
+        }
+
+        public proto.TcpPacketProtos.TcpPacket.PlayerListPacket build() {
+          proto.TcpPacketProtos.TcpPacket.PlayerListPacket result = buildPartial();
+          if (!result.isInitialized()) {
+            throw newUninitializedMessageException(result);
+          }
+          return result;
+        }
+
+        public proto.TcpPacketProtos.TcpPacket.PlayerListPacket buildPartial() {
+          proto.TcpPacketProtos.TcpPacket.PlayerListPacket result = new proto.TcpPacketProtos.TcpPacket.PlayerListPacket(this);
+          int from_bitField0_ = bitField0_;
+          int to_bitField0_ = 0;
+          if (((from_bitField0_ & 0x00000001) == 0x00000001)) {
+            to_bitField0_ |= 0x00000001;
+          }
+          result.type_ = type_;
+          if (playerListBuilder_ == null) {
+            if (((bitField0_ & 0x00000002) == 0x00000002)) {
+              playerList_ = java.util.Collections.unmodifiableList(playerList_);
+              bitField0_ = (bitField0_ & ~0x00000002);
+            }
+            result.playerList_ = playerList_;
+          } else {
+            result.playerList_ = playerListBuilder_.build();
+          }
+          result.bitField0_ = to_bitField0_;
+          onBuilt();
+          return result;
+        }
+
+        public Builder mergeFrom(com.google.protobuf.Message other) {
+          if (other instanceof proto.TcpPacketProtos.TcpPacket.PlayerListPacket) {
+            return mergeFrom((proto.TcpPacketProtos.TcpPacket.PlayerListPacket)other);
+          } else {
+            super.mergeFrom(other);
+            return this;
+          }
+        }
+
+        public Builder mergeFrom(proto.TcpPacketProtos.TcpPacket.PlayerListPacket other) {
+          if (other == proto.TcpPacketProtos.TcpPacket.PlayerListPacket.getDefaultInstance()) return this;
+          if (other.hasType()) {
+            setType(other.getType());
+          }
+          if (playerListBuilder_ == null) {
+            if (!other.playerList_.isEmpty()) {
+              if (playerList_.isEmpty()) {
+                playerList_ = other.playerList_;
+                bitField0_ = (bitField0_ & ~0x00000002);
+              } else {
+                ensurePlayerListIsMutable();
+                playerList_.addAll(other.playerList_);
+              }
+              onChanged();
+            }
+          } else {
+            if (!other.playerList_.isEmpty()) {
+              if (playerListBuilder_.isEmpty()) {
+                playerListBuilder_.dispose();
+                playerListBuilder_ = null;
+                playerList_ = other.playerList_;
+                bitField0_ = (bitField0_ & ~0x00000002);
+                playerListBuilder_ = 
+                  com.google.protobuf.GeneratedMessage.alwaysUseFieldBuilders ?
+                     getPlayerListFieldBuilder() : null;
+              } else {
+                playerListBuilder_.addAllMessages(other.playerList_);
+              }
+            }
+          }
+          this.mergeUnknownFields(other.getUnknownFields());
+          return this;
+        }
+
+        public final boolean isInitialized() {
+          if (!hasType()) {
+            
+            return false;
+          }
+          for (int i = 0; i < getPlayerListCount(); i++) {
+            if (!getPlayerList(i).isInitialized()) {
+              
+              return false;
+            }
+          }
+          return true;
+        }
+
+        public Builder mergeFrom(
+            com.google.protobuf.CodedInputStream input,
+            com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+            throws java.io.IOException {
+          proto.TcpPacketProtos.TcpPacket.PlayerListPacket parsedMessage = null;
+          try {
+            parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
+          } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+            parsedMessage = (proto.TcpPacketProtos.TcpPacket.PlayerListPacket) e.getUnfinishedMessage();
+            throw e;
+          } finally {
+            if (parsedMessage != null) {
+              mergeFrom(parsedMessage);
+            }
+          }
+          return this;
+        }
+        private int bitField0_;
+
+        private proto.TcpPacketProtos.TcpPacket.PacketType type_ = proto.TcpPacketProtos.TcpPacket.PacketType.DISCONNECT;
+        /**
+         * <code>required .TcpPacket.PacketType type = 1;</code>
+         */
+        public boolean hasType() {
+          return ((bitField0_ & 0x00000001) == 0x00000001);
+        }
+        /**
+         * <code>required .TcpPacket.PacketType type = 1;</code>
+         */
+        public proto.TcpPacketProtos.TcpPacket.PacketType getType() {
+          return type_;
+        }
+        /**
+         * <code>required .TcpPacket.PacketType type = 1;</code>
+         */
+        public Builder setType(proto.TcpPacketProtos.TcpPacket.PacketType value) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          bitField0_ |= 0x00000001;
+          type_ = value;
+          onChanged();
+          return this;
+        }
+        /**
+         * <code>required .TcpPacket.PacketType type = 1;</code>
+         */
+        public Builder clearType() {
+          bitField0_ = (bitField0_ & ~0x00000001);
+          type_ = proto.TcpPacketProtos.TcpPacket.PacketType.DISCONNECT;
+          onChanged();
+          return this;
+        }
+
+        private java.util.List<proto.PlayerProtos.Player> playerList_ =
+          java.util.Collections.emptyList();
+        private void ensurePlayerListIsMutable() {
+          if (!((bitField0_ & 0x00000002) == 0x00000002)) {
+            playerList_ = new java.util.ArrayList<proto.PlayerProtos.Player>(playerList_);
+            bitField0_ |= 0x00000002;
+           }
+        }
+
+        private com.google.protobuf.RepeatedFieldBuilder<
+            proto.PlayerProtos.Player, proto.PlayerProtos.Player.Builder, proto.PlayerProtos.PlayerOrBuilder> playerListBuilder_;
+
+        /**
+         * <code>repeated .Player player_list = 3;</code>
+         */
+        public java.util.List<proto.PlayerProtos.Player> getPlayerListList() {
+          if (playerListBuilder_ == null) {
+            return java.util.Collections.unmodifiableList(playerList_);
+          } else {
+            return playerListBuilder_.getMessageList();
+          }
+        }
+        /**
+         * <code>repeated .Player player_list = 3;</code>
+         */
+        public int getPlayerListCount() {
+          if (playerListBuilder_ == null) {
+            return playerList_.size();
+          } else {
+            return playerListBuilder_.getCount();
+          }
+        }
+        /**
+         * <code>repeated .Player player_list = 3;</code>
+         */
+        public proto.PlayerProtos.Player getPlayerList(int index) {
+          if (playerListBuilder_ == null) {
+            return playerList_.get(index);
+          } else {
+            return playerListBuilder_.getMessage(index);
+          }
+        }
+        /**
+         * <code>repeated .Player player_list = 3;</code>
+         */
+        public Builder setPlayerList(
+            int index, proto.PlayerProtos.Player value) {
+          if (playerListBuilder_ == null) {
+            if (value == null) {
+              throw new NullPointerException();
+            }
+            ensurePlayerListIsMutable();
+            playerList_.set(index, value);
+            onChanged();
+          } else {
+            playerListBuilder_.setMessage(index, value);
+          }
+          return this;
+        }
+        /**
+         * <code>repeated .Player player_list = 3;</code>
+         */
+        public Builder setPlayerList(
+            int index, proto.PlayerProtos.Player.Builder builderForValue) {
+          if (playerListBuilder_ == null) {
+            ensurePlayerListIsMutable();
+            playerList_.set(index, builderForValue.build());
+            onChanged();
+          } else {
+            playerListBuilder_.setMessage(index, builderForValue.build());
+          }
+          return this;
+        }
+        /**
+         * <code>repeated .Player player_list = 3;</code>
+         */
+        public Builder addPlayerList(proto.PlayerProtos.Player value) {
+          if (playerListBuilder_ == null) {
+            if (value == null) {
+              throw new NullPointerException();
+            }
+            ensurePlayerListIsMutable();
+            playerList_.add(value);
+            onChanged();
+          } else {
+            playerListBuilder_.addMessage(value);
+          }
+          return this;
+        }
+        /**
+         * <code>repeated .Player player_list = 3;</code>
+         */
+        public Builder addPlayerList(
+            int index, proto.PlayerProtos.Player value) {
+          if (playerListBuilder_ == null) {
+            if (value == null) {
+              throw new NullPointerException();
+            }
+            ensurePlayerListIsMutable();
+            playerList_.add(index, value);
+            onChanged();
+          } else {
+            playerListBuilder_.addMessage(index, value);
+          }
+          return this;
+        }
+        /**
+         * <code>repeated .Player player_list = 3;</code>
+         */
+        public Builder addPlayerList(
+            proto.PlayerProtos.Player.Builder builderForValue) {
+          if (playerListBuilder_ == null) {
+            ensurePlayerListIsMutable();
+            playerList_.add(builderForValue.build());
+            onChanged();
+          } else {
+            playerListBuilder_.addMessage(builderForValue.build());
+          }
+          return this;
+        }
+        /**
+         * <code>repeated .Player player_list = 3;</code>
+         */
+        public Builder addPlayerList(
+            int index, proto.PlayerProtos.Player.Builder builderForValue) {
+          if (playerListBuilder_ == null) {
+            ensurePlayerListIsMutable();
+            playerList_.add(index, builderForValue.build());
+            onChanged();
+          } else {
+            playerListBuilder_.addMessage(index, builderForValue.build());
+          }
+          return this;
+        }
+        /**
+         * <code>repeated .Player player_list = 3;</code>
+         */
+        public Builder addAllPlayerList(
+            java.lang.Iterable<? extends proto.PlayerProtos.Player> values) {
+          if (playerListBuilder_ == null) {
+            ensurePlayerListIsMutable();
+            com.google.protobuf.AbstractMessageLite.Builder.addAll(
+                values, playerList_);
+            onChanged();
+          } else {
+            playerListBuilder_.addAllMessages(values);
+          }
+          return this;
+        }
+        /**
+         * <code>repeated .Player player_list = 3;</code>
+         */
+        public Builder clearPlayerList() {
+          if (playerListBuilder_ == null) {
+            playerList_ = java.util.Collections.emptyList();
+            bitField0_ = (bitField0_ & ~0x00000002);
+            onChanged();
+          } else {
+            playerListBuilder_.clear();
+          }
+          return this;
+        }
+        /**
+         * <code>repeated .Player player_list = 3;</code>
+         */
+        public Builder removePlayerList(int index) {
+          if (playerListBuilder_ == null) {
+            ensurePlayerListIsMutable();
+            playerList_.remove(index);
+            onChanged();
+          } else {
+            playerListBuilder_.remove(index);
+          }
+          return this;
+        }
+        /**
+         * <code>repeated .Player player_list = 3;</code>
+         */
+        public proto.PlayerProtos.Player.Builder getPlayerListBuilder(
+            int index) {
+          return getPlayerListFieldBuilder().getBuilder(index);
+        }
+        /**
+         * <code>repeated .Player player_list = 3;</code>
+         */
+        public proto.PlayerProtos.PlayerOrBuilder getPlayerListOrBuilder(
+            int index) {
+          if (playerListBuilder_ == null) {
+            return playerList_.get(index);  } else {
+            return playerListBuilder_.getMessageOrBuilder(index);
+          }
+        }
+        /**
+         * <code>repeated .Player player_list = 3;</code>
+         */
+        public java.util.List<? extends proto.PlayerProtos.PlayerOrBuilder> 
+             getPlayerListOrBuilderList() {
+          if (playerListBuilder_ != null) {
+            return playerListBuilder_.getMessageOrBuilderList();
+          } else {
+            return java.util.Collections.unmodifiableList(playerList_);
+          }
+        }
+        /**
+         * <code>repeated .Player player_list = 3;</code>
+         */
+        public proto.PlayerProtos.Player.Builder addPlayerListBuilder() {
+          return getPlayerListFieldBuilder().addBuilder(
+              proto.PlayerProtos.Player.getDefaultInstance());
+        }
+        /**
+         * <code>repeated .Player player_list = 3;</code>
+         */
+        public proto.PlayerProtos.Player.Builder addPlayerListBuilder(
+            int index) {
+          return getPlayerListFieldBuilder().addBuilder(
+              index, proto.PlayerProtos.Player.getDefaultInstance());
+        }
+        /**
+         * <code>repeated .Player player_list = 3;</code>
+         */
+        public java.util.List<proto.PlayerProtos.Player.Builder> 
+             getPlayerListBuilderList() {
+          return getPlayerListFieldBuilder().getBuilderList();
+        }
+        private com.google.protobuf.RepeatedFieldBuilder<
+            proto.PlayerProtos.Player, proto.PlayerProtos.Player.Builder, proto.PlayerProtos.PlayerOrBuilder> 
+            getPlayerListFieldBuilder() {
+          if (playerListBuilder_ == null) {
+            playerListBuilder_ = new com.google.protobuf.RepeatedFieldBuilder<
+                proto.PlayerProtos.Player, proto.PlayerProtos.Player.Builder, proto.PlayerProtos.PlayerOrBuilder>(
+                    playerList_,
+                    ((bitField0_ & 0x00000002) == 0x00000002),
+                    getParentForChildren(),
+                    isClean());
+            playerList_ = null;
+          }
+          return playerListBuilder_;
+        }
+
+        // @@protoc_insertion_point(builder_scope:TcpPacket.PlayerListPacket)
+      }
+
+      static {
+        defaultInstance = new PlayerListPacket(true);
+        defaultInstance.initFields();
+      }
+
+      // @@protoc_insertion_point(class_scope:TcpPacket.PlayerListPacket)
+    }
+
+    public interface ErrLdnePacketOrBuilder extends
+        // @@protoc_insertion_point(interface_extends:TcpPacket.ErrLdnePacket)
+        com.google.protobuf.MessageOrBuilder {
+
+      /**
+       * <code>required .TcpPacket.PacketType type = 1;</code>
+       */
+      boolean hasType();
+      /**
+       * <code>required .TcpPacket.PacketType type = 1;</code>
+       */
+      proto.TcpPacketProtos.TcpPacket.PacketType getType();
+
+      /**
+       * <code>optional string err_message = 2;</code>
+       */
+      boolean hasErrMessage();
+      /**
+       * <code>optional string err_message = 2;</code>
+       */
+      java.lang.String getErrMessage();
+      /**
+       * <code>optional string err_message = 2;</code>
+       */
+      com.google.protobuf.ByteString
+          getErrMessageBytes();
+    }
+    /**
+     * Protobuf type {@code TcpPacket.ErrLdnePacket}
+     */
+    public static final class ErrLdnePacket extends
+        com.google.protobuf.GeneratedMessage implements
+        // @@protoc_insertion_point(message_implements:TcpPacket.ErrLdnePacket)
+        ErrLdnePacketOrBuilder {
+      // Use ErrLdnePacket.newBuilder() to construct.
+      private ErrLdnePacket(com.google.protobuf.GeneratedMessage.Builder<?> builder) {
+        super(builder);
+        this.unknownFields = builder.getUnknownFields();
+      }
+      private ErrLdnePacket(boolean noInit) { this.unknownFields = com.google.protobuf.UnknownFieldSet.getDefaultInstance(); }
+
+      private static final ErrLdnePacket defaultInstance;
+      public static ErrLdnePacket getDefaultInstance() {
+        return defaultInstance;
+      }
+
+      public ErrLdnePacket getDefaultInstanceForType() {
+        return defaultInstance;
+      }
+
+      private final com.google.protobuf.UnknownFieldSet unknownFields;
+      @java.lang.Override
+      public final com.google.protobuf.UnknownFieldSet
+          getUnknownFields() {
+        return this.unknownFields;
+      }
+      private ErrLdnePacket(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws com.google.protobuf.InvalidProtocolBufferException {
+        initFields();
+        int mutable_bitField0_ = 0;
+        com.google.protobuf.UnknownFieldSet.Builder unknownFields =
+            com.google.protobuf.UnknownFieldSet.newBuilder();
+        try {
+          boolean done = false;
+          while (!done) {
+            int tag = input.readTag();
+            switch (tag) {
+              case 0:
+                done = true;
+                break;
+              default: {
+                if (!parseUnknownField(input, unknownFields,
+                                       extensionRegistry, tag)) {
+                  done = true;
+                }
+                break;
+              }
+              case 8: {
+                int rawValue = input.readEnum();
+                proto.TcpPacketProtos.TcpPacket.PacketType value = proto.TcpPacketProtos.TcpPacket.PacketType.valueOf(rawValue);
+                if (value == null) {
+                  unknownFields.mergeVarintField(1, rawValue);
+                } else {
+                  bitField0_ |= 0x00000001;
+                  type_ = value;
+                }
+                break;
+              }
+              case 18: {
+                com.google.protobuf.ByteString bs = input.readBytes();
+                bitField0_ |= 0x00000002;
+                errMessage_ = bs;
+                break;
+              }
+            }
+          }
+        } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+          throw e.setUnfinishedMessage(this);
+        } catch (java.io.IOException e) {
+          throw new com.google.protobuf.InvalidProtocolBufferException(
+              e.getMessage()).setUnfinishedMessage(this);
+        } finally {
+          this.unknownFields = unknownFields.build();
+          makeExtensionsImmutable();
+        }
+      }
+      public static final com.google.protobuf.Descriptors.Descriptor
+          getDescriptor() {
+        return proto.TcpPacketProtos.internal_static_TcpPacket_ErrLdnePacket_descriptor;
+      }
+
+      protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
+          internalGetFieldAccessorTable() {
+        return proto.TcpPacketProtos.internal_static_TcpPacket_ErrLdnePacket_fieldAccessorTable
+            .ensureFieldAccessorsInitialized(
+                proto.TcpPacketProtos.TcpPacket.ErrLdnePacket.class, proto.TcpPacketProtos.TcpPacket.ErrLdnePacket.Builder.class);
+      }
+
+      public static com.google.protobuf.Parser<ErrLdnePacket> PARSER =
+          new com.google.protobuf.AbstractParser<ErrLdnePacket>() {
+        public ErrLdnePacket parsePartialFrom(
+            com.google.protobuf.CodedInputStream input,
+            com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+            throws com.google.protobuf.InvalidProtocolBufferException {
+          return new ErrLdnePacket(input, extensionRegistry);
+        }
+      };
+
+      @java.lang.Override
+      public com.google.protobuf.Parser<ErrLdnePacket> getParserForType() {
+        return PARSER;
+      }
+
+      private int bitField0_;
+      public static final int TYPE_FIELD_NUMBER = 1;
+      private proto.TcpPacketProtos.TcpPacket.PacketType type_;
+      /**
+       * <code>required .TcpPacket.PacketType type = 1;</code>
+       */
+      public boolean hasType() {
+        return ((bitField0_ & 0x00000001) == 0x00000001);
+      }
+      /**
+       * <code>required .TcpPacket.PacketType type = 1;</code>
+       */
+      public proto.TcpPacketProtos.TcpPacket.PacketType getType() {
+        return type_;
+      }
+
+      public static final int ERR_MESSAGE_FIELD_NUMBER = 2;
+      private java.lang.Object errMessage_;
+      /**
+       * <code>optional string err_message = 2;</code>
+       */
+      public boolean hasErrMessage() {
+        return ((bitField0_ & 0x00000002) == 0x00000002);
+      }
+      /**
+       * <code>optional string err_message = 2;</code>
+       */
+      public java.lang.String getErrMessage() {
+        java.lang.Object ref = errMessage_;
+        if (ref instanceof java.lang.String) {
+          return (java.lang.String) ref;
+        } else {
+          com.google.protobuf.ByteString bs = 
+              (com.google.protobuf.ByteString) ref;
+          java.lang.String s = bs.toStringUtf8();
+          if (bs.isValidUtf8()) {
+            errMessage_ = s;
+          }
+          return s;
+        }
+      }
+      /**
+       * <code>optional string err_message = 2;</code>
+       */
+      public com.google.protobuf.ByteString
+          getErrMessageBytes() {
+        java.lang.Object ref = errMessage_;
+        if (ref instanceof java.lang.String) {
+          com.google.protobuf.ByteString b = 
+              com.google.protobuf.ByteString.copyFromUtf8(
+                  (java.lang.String) ref);
+          errMessage_ = b;
+          return b;
+        } else {
+          return (com.google.protobuf.ByteString) ref;
+        }
+      }
+
+      private void initFields() {
+        type_ = proto.TcpPacketProtos.TcpPacket.PacketType.DISCONNECT;
+        errMessage_ = "";
+      }
+      private byte memoizedIsInitialized = -1;
+      public final boolean isInitialized() {
+        byte isInitialized = memoizedIsInitialized;
+        if (isInitialized == 1) return true;
+        if (isInitialized == 0) return false;
+
+        if (!hasType()) {
+          memoizedIsInitialized = 0;
+          return false;
+        }
+        memoizedIsInitialized = 1;
+        return true;
+      }
+
+      public void writeTo(com.google.protobuf.CodedOutputStream output)
+                          throws java.io.IOException {
+        getSerializedSize();
+        if (((bitField0_ & 0x00000001) == 0x00000001)) {
+          output.writeEnum(1, type_.getNumber());
+        }
+        if (((bitField0_ & 0x00000002) == 0x00000002)) {
+          output.writeBytes(2, getErrMessageBytes());
+        }
+        getUnknownFields().writeTo(output);
+      }
+
+      private int memoizedSerializedSize = -1;
+      public int getSerializedSize() {
+        int size = memoizedSerializedSize;
+        if (size != -1) return size;
+
+        size = 0;
+        if (((bitField0_ & 0x00000001) == 0x00000001)) {
+          size += com.google.protobuf.CodedOutputStream
+            .computeEnumSize(1, type_.getNumber());
+        }
+        if (((bitField0_ & 0x00000002) == 0x00000002)) {
+          size += com.google.protobuf.CodedOutputStream
+            .computeBytesSize(2, getErrMessageBytes());
+        }
+        size += getUnknownFields().getSerializedSize();
+        memoizedSerializedSize = size;
+        return size;
+      }
+
+      private static final long serialVersionUID = 0L;
+      @java.lang.Override
+      protected java.lang.Object writeReplace()
+          throws java.io.ObjectStreamException {
+        return super.writeReplace();
+      }
+
+      public static proto.TcpPacketProtos.TcpPacket.ErrLdnePacket parseFrom(
+          com.google.protobuf.ByteString data)
+          throws com.google.protobuf.InvalidProtocolBufferException {
+        return PARSER.parseFrom(data);
+      }
+      public static proto.TcpPacketProtos.TcpPacket.ErrLdnePacket parseFrom(
+          com.google.protobuf.ByteString data,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws com.google.protobuf.InvalidProtocolBufferException {
+        return PARSER.parseFrom(data, extensionRegistry);
+      }
+      public static proto.TcpPacketProtos.TcpPacket.ErrLdnePacket parseFrom(byte[] data)
+          throws com.google.protobuf.InvalidProtocolBufferException {
+        return PARSER.parseFrom(data);
+      }
+      public static proto.TcpPacketProtos.TcpPacket.ErrLdnePacket parseFrom(
+          byte[] data,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws com.google.protobuf.InvalidProtocolBufferException {
+        return PARSER.parseFrom(data, extensionRegistry);
+      }
+      public static proto.TcpPacketProtos.TcpPacket.ErrLdnePacket parseFrom(java.io.InputStream input)
+          throws java.io.IOException {
+        return PARSER.parseFrom(input);
+      }
+      public static proto.TcpPacketProtos.TcpPacket.ErrLdnePacket parseFrom(
+          java.io.InputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws java.io.IOException {
+        return PARSER.parseFrom(input, extensionRegistry);
+      }
+      public static proto.TcpPacketProtos.TcpPacket.ErrLdnePacket parseDelimitedFrom(java.io.InputStream input)
+          throws java.io.IOException {
+        return PARSER.parseDelimitedFrom(input);
+      }
+      public static proto.TcpPacketProtos.TcpPacket.ErrLdnePacket parseDelimitedFrom(
+          java.io.InputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws java.io.IOException {
+        return PARSER.parseDelimitedFrom(input, extensionRegistry);
+      }
+      public static proto.TcpPacketProtos.TcpPacket.ErrLdnePacket parseFrom(
+          com.google.protobuf.CodedInputStream input)
+          throws java.io.IOException {
+        return PARSER.parseFrom(input);
+      }
+      public static proto.TcpPacketProtos.TcpPacket.ErrLdnePacket parseFrom(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws java.io.IOException {
+        return PARSER.parseFrom(input, extensionRegistry);
+      }
+
+      public static Builder newBuilder() { return Builder.create(); }
+      public Builder newBuilderForType() { return newBuilder(); }
+      public static Builder newBuilder(proto.TcpPacketProtos.TcpPacket.ErrLdnePacket prototype) {
+        return newBuilder().mergeFrom(prototype);
+      }
+      public Builder toBuilder() { return newBuilder(this); }
+
+      @java.lang.Override
+      protected Builder newBuilderForType(
+          com.google.protobuf.GeneratedMessage.BuilderParent parent) {
+        Builder builder = new Builder(parent);
+        return builder;
+      }
+      /**
+       * Protobuf type {@code TcpPacket.ErrLdnePacket}
+       */
+      public static final class Builder extends
+          com.google.protobuf.GeneratedMessage.Builder<Builder> implements
+          // @@protoc_insertion_point(builder_implements:TcpPacket.ErrLdnePacket)
+          proto.TcpPacketProtos.TcpPacket.ErrLdnePacketOrBuilder {
+        public static final com.google.protobuf.Descriptors.Descriptor
+            getDescriptor() {
+          return proto.TcpPacketProtos.internal_static_TcpPacket_ErrLdnePacket_descriptor;
+        }
+
+        protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
+            internalGetFieldAccessorTable() {
+          return proto.TcpPacketProtos.internal_static_TcpPacket_ErrLdnePacket_fieldAccessorTable
+              .ensureFieldAccessorsInitialized(
+                  proto.TcpPacketProtos.TcpPacket.ErrLdnePacket.class, proto.TcpPacketProtos.TcpPacket.ErrLdnePacket.Builder.class);
+        }
+
+        // Construct using proto.TcpPacketProtos.TcpPacket.ErrLdnePacket.newBuilder()
+        private Builder() {
+          maybeForceBuilderInitialization();
+        }
+
+        private Builder(
+            com.google.protobuf.GeneratedMessage.BuilderParent parent) {
+          super(parent);
+          maybeForceBuilderInitialization();
+        }
+        private void maybeForceBuilderInitialization() {
+          if (com.google.protobuf.GeneratedMessage.alwaysUseFieldBuilders) {
+          }
+        }
+        private static Builder create() {
+          return new Builder();
+        }
+
+        public Builder clear() {
+          super.clear();
+          type_ = proto.TcpPacketProtos.TcpPacket.PacketType.DISCONNECT;
+          bitField0_ = (bitField0_ & ~0x00000001);
+          errMessage_ = "";
+          bitField0_ = (bitField0_ & ~0x00000002);
+          return this;
+        }
+
+        public Builder clone() {
+          return create().mergeFrom(buildPartial());
+        }
+
+        public com.google.protobuf.Descriptors.Descriptor
+            getDescriptorForType() {
+          return proto.TcpPacketProtos.internal_static_TcpPacket_ErrLdnePacket_descriptor;
+        }
+
+        public proto.TcpPacketProtos.TcpPacket.ErrLdnePacket getDefaultInstanceForType() {
+          return proto.TcpPacketProtos.TcpPacket.ErrLdnePacket.getDefaultInstance();
+        }
+
+        public proto.TcpPacketProtos.TcpPacket.ErrLdnePacket build() {
+          proto.TcpPacketProtos.TcpPacket.ErrLdnePacket result = buildPartial();
+          if (!result.isInitialized()) {
+            throw newUninitializedMessageException(result);
+          }
+          return result;
+        }
+
+        public proto.TcpPacketProtos.TcpPacket.ErrLdnePacket buildPartial() {
+          proto.TcpPacketProtos.TcpPacket.ErrLdnePacket result = new proto.TcpPacketProtos.TcpPacket.ErrLdnePacket(this);
+          int from_bitField0_ = bitField0_;
+          int to_bitField0_ = 0;
+          if (((from_bitField0_ & 0x00000001) == 0x00000001)) {
+            to_bitField0_ |= 0x00000001;
+          }
+          result.type_ = type_;
+          if (((from_bitField0_ & 0x00000002) == 0x00000002)) {
+            to_bitField0_ |= 0x00000002;
+          }
+          result.errMessage_ = errMessage_;
+          result.bitField0_ = to_bitField0_;
+          onBuilt();
+          return result;
+        }
+
+        public Builder mergeFrom(com.google.protobuf.Message other) {
+          if (other instanceof proto.TcpPacketProtos.TcpPacket.ErrLdnePacket) {
+            return mergeFrom((proto.TcpPacketProtos.TcpPacket.ErrLdnePacket)other);
+          } else {
+            super.mergeFrom(other);
+            return this;
+          }
+        }
+
+        public Builder mergeFrom(proto.TcpPacketProtos.TcpPacket.ErrLdnePacket other) {
+          if (other == proto.TcpPacketProtos.TcpPacket.ErrLdnePacket.getDefaultInstance()) return this;
+          if (other.hasType()) {
+            setType(other.getType());
+          }
+          if (other.hasErrMessage()) {
+            bitField0_ |= 0x00000002;
+            errMessage_ = other.errMessage_;
+            onChanged();
+          }
+          this.mergeUnknownFields(other.getUnknownFields());
+          return this;
+        }
+
+        public final boolean isInitialized() {
+          if (!hasType()) {
+            
+            return false;
+          }
+          return true;
+        }
+
+        public Builder mergeFrom(
+            com.google.protobuf.CodedInputStream input,
+            com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+            throws java.io.IOException {
+          proto.TcpPacketProtos.TcpPacket.ErrLdnePacket parsedMessage = null;
+          try {
+            parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
+          } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+            parsedMessage = (proto.TcpPacketProtos.TcpPacket.ErrLdnePacket) e.getUnfinishedMessage();
+            throw e;
+          } finally {
+            if (parsedMessage != null) {
+              mergeFrom(parsedMessage);
+            }
+          }
+          return this;
+        }
+        private int bitField0_;
+
+        private proto.TcpPacketProtos.TcpPacket.PacketType type_ = proto.TcpPacketProtos.TcpPacket.PacketType.DISCONNECT;
+        /**
+         * <code>required .TcpPacket.PacketType type = 1;</code>
+         */
+        public boolean hasType() {
+          return ((bitField0_ & 0x00000001) == 0x00000001);
+        }
+        /**
+         * <code>required .TcpPacket.PacketType type = 1;</code>
+         */
+        public proto.TcpPacketProtos.TcpPacket.PacketType getType() {
+          return type_;
+        }
+        /**
+         * <code>required .TcpPacket.PacketType type = 1;</code>
+         */
+        public Builder setType(proto.TcpPacketProtos.TcpPacket.PacketType value) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          bitField0_ |= 0x00000001;
+          type_ = value;
+          onChanged();
+          return this;
+        }
+        /**
+         * <code>required .TcpPacket.PacketType type = 1;</code>
+         */
+        public Builder clearType() {
+          bitField0_ = (bitField0_ & ~0x00000001);
+          type_ = proto.TcpPacketProtos.TcpPacket.PacketType.DISCONNECT;
+          onChanged();
+          return this;
+        }
+
+        private java.lang.Object errMessage_ = "";
+        /**
+         * <code>optional string err_message = 2;</code>
+         */
+        public boolean hasErrMessage() {
+          return ((bitField0_ & 0x00000002) == 0x00000002);
+        }
+        /**
+         * <code>optional string err_message = 2;</code>
+         */
+        public java.lang.String getErrMessage() {
+          java.lang.Object ref = errMessage_;
+          if (!(ref instanceof java.lang.String)) {
+            com.google.protobuf.ByteString bs =
+                (com.google.protobuf.ByteString) ref;
+            java.lang.String s = bs.toStringUtf8();
+            if (bs.isValidUtf8()) {
+              errMessage_ = s;
+            }
+            return s;
+          } else {
+            return (java.lang.String) ref;
+          }
+        }
+        /**
+         * <code>optional string err_message = 2;</code>
+         */
+        public com.google.protobuf.ByteString
+            getErrMessageBytes() {
+          java.lang.Object ref = errMessage_;
+          if (ref instanceof String) {
+            com.google.protobuf.ByteString b = 
+                com.google.protobuf.ByteString.copyFromUtf8(
+                    (java.lang.String) ref);
+            errMessage_ = b;
+            return b;
+          } else {
+            return (com.google.protobuf.ByteString) ref;
+          }
+        }
+        /**
+         * <code>optional string err_message = 2;</code>
+         */
+        public Builder setErrMessage(
+            java.lang.String value) {
+          if (value == null) {
+    throw new NullPointerException();
+  }
+  bitField0_ |= 0x00000002;
+          errMessage_ = value;
+          onChanged();
+          return this;
+        }
+        /**
+         * <code>optional string err_message = 2;</code>
+         */
+        public Builder clearErrMessage() {
+          bitField0_ = (bitField0_ & ~0x00000002);
+          errMessage_ = getDefaultInstance().getErrMessage();
+          onChanged();
+          return this;
+        }
+        /**
+         * <code>optional string err_message = 2;</code>
+         */
+        public Builder setErrMessageBytes(
+            com.google.protobuf.ByteString value) {
+          if (value == null) {
+    throw new NullPointerException();
+  }
+  bitField0_ |= 0x00000002;
+          errMessage_ = value;
+          onChanged();
+          return this;
+        }
+
+        // @@protoc_insertion_point(builder_scope:TcpPacket.ErrLdnePacket)
+      }
+
+      static {
+        defaultInstance = new ErrLdnePacket(true);
+        defaultInstance.initFields();
+      }
+
+      // @@protoc_insertion_point(class_scope:TcpPacket.ErrLdnePacket)
+    }
+
+    public interface ErrLfullPacketOrBuilder extends
+        // @@protoc_insertion_point(interface_extends:TcpPacket.ErrLfullPacket)
+        com.google.protobuf.MessageOrBuilder {
+
+      /**
+       * <code>required .TcpPacket.PacketType type = 1;</code>
+       */
+      boolean hasType();
+      /**
+       * <code>required .TcpPacket.PacketType type = 1;</code>
+       */
+      proto.TcpPacketProtos.TcpPacket.PacketType getType();
+
+      /**
+       * <code>optional string err_message = 2;</code>
+       */
+      boolean hasErrMessage();
+      /**
+       * <code>optional string err_message = 2;</code>
+       */
+      java.lang.String getErrMessage();
+      /**
+       * <code>optional string err_message = 2;</code>
+       */
+      com.google.protobuf.ByteString
+          getErrMessageBytes();
+    }
+    /**
+     * Protobuf type {@code TcpPacket.ErrLfullPacket}
+     */
+    public static final class ErrLfullPacket extends
+        com.google.protobuf.GeneratedMessage implements
+        // @@protoc_insertion_point(message_implements:TcpPacket.ErrLfullPacket)
+        ErrLfullPacketOrBuilder {
+      // Use ErrLfullPacket.newBuilder() to construct.
+      private ErrLfullPacket(com.google.protobuf.GeneratedMessage.Builder<?> builder) {
+        super(builder);
+        this.unknownFields = builder.getUnknownFields();
+      }
+      private ErrLfullPacket(boolean noInit) { this.unknownFields = com.google.protobuf.UnknownFieldSet.getDefaultInstance(); }
+
+      private static final ErrLfullPacket defaultInstance;
+      public static ErrLfullPacket getDefaultInstance() {
+        return defaultInstance;
+      }
+
+      public ErrLfullPacket getDefaultInstanceForType() {
+        return defaultInstance;
+      }
+
+      private final com.google.protobuf.UnknownFieldSet unknownFields;
+      @java.lang.Override
+      public final com.google.protobuf.UnknownFieldSet
+          getUnknownFields() {
+        return this.unknownFields;
+      }
+      private ErrLfullPacket(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws com.google.protobuf.InvalidProtocolBufferException {
+        initFields();
+        int mutable_bitField0_ = 0;
+        com.google.protobuf.UnknownFieldSet.Builder unknownFields =
+            com.google.protobuf.UnknownFieldSet.newBuilder();
+        try {
+          boolean done = false;
+          while (!done) {
+            int tag = input.readTag();
+            switch (tag) {
+              case 0:
+                done = true;
+                break;
+              default: {
+                if (!parseUnknownField(input, unknownFields,
+                                       extensionRegistry, tag)) {
+                  done = true;
+                }
+                break;
+              }
+              case 8: {
+                int rawValue = input.readEnum();
+                proto.TcpPacketProtos.TcpPacket.PacketType value = proto.TcpPacketProtos.TcpPacket.PacketType.valueOf(rawValue);
+                if (value == null) {
+                  unknownFields.mergeVarintField(1, rawValue);
+                } else {
+                  bitField0_ |= 0x00000001;
+                  type_ = value;
+                }
+                break;
+              }
+              case 18: {
+                com.google.protobuf.ByteString bs = input.readBytes();
+                bitField0_ |= 0x00000002;
+                errMessage_ = bs;
+                break;
+              }
+            }
+          }
+        } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+          throw e.setUnfinishedMessage(this);
+        } catch (java.io.IOException e) {
+          throw new com.google.protobuf.InvalidProtocolBufferException(
+              e.getMessage()).setUnfinishedMessage(this);
+        } finally {
+          this.unknownFields = unknownFields.build();
+          makeExtensionsImmutable();
+        }
+      }
+      public static final com.google.protobuf.Descriptors.Descriptor
+          getDescriptor() {
+        return proto.TcpPacketProtos.internal_static_TcpPacket_ErrLfullPacket_descriptor;
+      }
+
+      protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
+          internalGetFieldAccessorTable() {
+        return proto.TcpPacketProtos.internal_static_TcpPacket_ErrLfullPacket_fieldAccessorTable
+            .ensureFieldAccessorsInitialized(
+                proto.TcpPacketProtos.TcpPacket.ErrLfullPacket.class, proto.TcpPacketProtos.TcpPacket.ErrLfullPacket.Builder.class);
+      }
+
+      public static com.google.protobuf.Parser<ErrLfullPacket> PARSER =
+          new com.google.protobuf.AbstractParser<ErrLfullPacket>() {
+        public ErrLfullPacket parsePartialFrom(
+            com.google.protobuf.CodedInputStream input,
+            com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+            throws com.google.protobuf.InvalidProtocolBufferException {
+          return new ErrLfullPacket(input, extensionRegistry);
+        }
+      };
+
+      @java.lang.Override
+      public com.google.protobuf.Parser<ErrLfullPacket> getParserForType() {
+        return PARSER;
+      }
+
+      private int bitField0_;
+      public static final int TYPE_FIELD_NUMBER = 1;
+      private proto.TcpPacketProtos.TcpPacket.PacketType type_;
+      /**
+       * <code>required .TcpPacket.PacketType type = 1;</code>
+       */
+      public boolean hasType() {
+        return ((bitField0_ & 0x00000001) == 0x00000001);
+      }
+      /**
+       * <code>required .TcpPacket.PacketType type = 1;</code>
+       */
+      public proto.TcpPacketProtos.TcpPacket.PacketType getType() {
+        return type_;
+      }
+
+      public static final int ERR_MESSAGE_FIELD_NUMBER = 2;
+      private java.lang.Object errMessage_;
+      /**
+       * <code>optional string err_message = 2;</code>
+       */
+      public boolean hasErrMessage() {
+        return ((bitField0_ & 0x00000002) == 0x00000002);
+      }
+      /**
+       * <code>optional string err_message = 2;</code>
+       */
+      public java.lang.String getErrMessage() {
+        java.lang.Object ref = errMessage_;
+        if (ref instanceof java.lang.String) {
+          return (java.lang.String) ref;
+        } else {
+          com.google.protobuf.ByteString bs = 
+              (com.google.protobuf.ByteString) ref;
+          java.lang.String s = bs.toStringUtf8();
+          if (bs.isValidUtf8()) {
+            errMessage_ = s;
+          }
+          return s;
+        }
+      }
+      /**
+       * <code>optional string err_message = 2;</code>
+       */
+      public com.google.protobuf.ByteString
+          getErrMessageBytes() {
+        java.lang.Object ref = errMessage_;
+        if (ref instanceof java.lang.String) {
+          com.google.protobuf.ByteString b = 
+              com.google.protobuf.ByteString.copyFromUtf8(
+                  (java.lang.String) ref);
+          errMessage_ = b;
+          return b;
+        } else {
+          return (com.google.protobuf.ByteString) ref;
+        }
+      }
+
+      private void initFields() {
+        type_ = proto.TcpPacketProtos.TcpPacket.PacketType.DISCONNECT;
+        errMessage_ = "";
+      }
+      private byte memoizedIsInitialized = -1;
+      public final boolean isInitialized() {
+        byte isInitialized = memoizedIsInitialized;
+        if (isInitialized == 1) return true;
+        if (isInitialized == 0) return false;
+
+        if (!hasType()) {
+          memoizedIsInitialized = 0;
+          return false;
+        }
+        memoizedIsInitialized = 1;
+        return true;
+      }
+
+      public void writeTo(com.google.protobuf.CodedOutputStream output)
+                          throws java.io.IOException {
+        getSerializedSize();
+        if (((bitField0_ & 0x00000001) == 0x00000001)) {
+          output.writeEnum(1, type_.getNumber());
+        }
+        if (((bitField0_ & 0x00000002) == 0x00000002)) {
+          output.writeBytes(2, getErrMessageBytes());
+        }
+        getUnknownFields().writeTo(output);
+      }
+
+      private int memoizedSerializedSize = -1;
+      public int getSerializedSize() {
+        int size = memoizedSerializedSize;
+        if (size != -1) return size;
+
+        size = 0;
+        if (((bitField0_ & 0x00000001) == 0x00000001)) {
+          size += com.google.protobuf.CodedOutputStream
+            .computeEnumSize(1, type_.getNumber());
+        }
+        if (((bitField0_ & 0x00000002) == 0x00000002)) {
+          size += com.google.protobuf.CodedOutputStream
+            .computeBytesSize(2, getErrMessageBytes());
+        }
+        size += getUnknownFields().getSerializedSize();
+        memoizedSerializedSize = size;
+        return size;
+      }
+
+      private static final long serialVersionUID = 0L;
+      @java.lang.Override
+      protected java.lang.Object writeReplace()
+          throws java.io.ObjectStreamException {
+        return super.writeReplace();
+      }
+
+      public static proto.TcpPacketProtos.TcpPacket.ErrLfullPacket parseFrom(
+          com.google.protobuf.ByteString data)
+          throws com.google.protobuf.InvalidProtocolBufferException {
+        return PARSER.parseFrom(data);
+      }
+      public static proto.TcpPacketProtos.TcpPacket.ErrLfullPacket parseFrom(
+          com.google.protobuf.ByteString data,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws com.google.protobuf.InvalidProtocolBufferException {
+        return PARSER.parseFrom(data, extensionRegistry);
+      }
+      public static proto.TcpPacketProtos.TcpPacket.ErrLfullPacket parseFrom(byte[] data)
+          throws com.google.protobuf.InvalidProtocolBufferException {
+        return PARSER.parseFrom(data);
+      }
+      public static proto.TcpPacketProtos.TcpPacket.ErrLfullPacket parseFrom(
+          byte[] data,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws com.google.protobuf.InvalidProtocolBufferException {
+        return PARSER.parseFrom(data, extensionRegistry);
+      }
+      public static proto.TcpPacketProtos.TcpPacket.ErrLfullPacket parseFrom(java.io.InputStream input)
+          throws java.io.IOException {
+        return PARSER.parseFrom(input);
+      }
+      public static proto.TcpPacketProtos.TcpPacket.ErrLfullPacket parseFrom(
+          java.io.InputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws java.io.IOException {
+        return PARSER.parseFrom(input, extensionRegistry);
+      }
+      public static proto.TcpPacketProtos.TcpPacket.ErrLfullPacket parseDelimitedFrom(java.io.InputStream input)
+          throws java.io.IOException {
+        return PARSER.parseDelimitedFrom(input);
+      }
+      public static proto.TcpPacketProtos.TcpPacket.ErrLfullPacket parseDelimitedFrom(
+          java.io.InputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws java.io.IOException {
+        return PARSER.parseDelimitedFrom(input, extensionRegistry);
+      }
+      public static proto.TcpPacketProtos.TcpPacket.ErrLfullPacket parseFrom(
+          com.google.protobuf.CodedInputStream input)
+          throws java.io.IOException {
+        return PARSER.parseFrom(input);
+      }
+      public static proto.TcpPacketProtos.TcpPacket.ErrLfullPacket parseFrom(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws java.io.IOException {
+        return PARSER.parseFrom(input, extensionRegistry);
+      }
+
+      public static Builder newBuilder() { return Builder.create(); }
+      public Builder newBuilderForType() { return newBuilder(); }
+      public static Builder newBuilder(proto.TcpPacketProtos.TcpPacket.ErrLfullPacket prototype) {
+        return newBuilder().mergeFrom(prototype);
+      }
+      public Builder toBuilder() { return newBuilder(this); }
+
+      @java.lang.Override
+      protected Builder newBuilderForType(
+          com.google.protobuf.GeneratedMessage.BuilderParent parent) {
+        Builder builder = new Builder(parent);
+        return builder;
+      }
+      /**
+       * Protobuf type {@code TcpPacket.ErrLfullPacket}
+       */
+      public static final class Builder extends
+          com.google.protobuf.GeneratedMessage.Builder<Builder> implements
+          // @@protoc_insertion_point(builder_implements:TcpPacket.ErrLfullPacket)
+          proto.TcpPacketProtos.TcpPacket.ErrLfullPacketOrBuilder {
+        public static final com.google.protobuf.Descriptors.Descriptor
+            getDescriptor() {
+          return proto.TcpPacketProtos.internal_static_TcpPacket_ErrLfullPacket_descriptor;
+        }
+
+        protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
+            internalGetFieldAccessorTable() {
+          return proto.TcpPacketProtos.internal_static_TcpPacket_ErrLfullPacket_fieldAccessorTable
+              .ensureFieldAccessorsInitialized(
+                  proto.TcpPacketProtos.TcpPacket.ErrLfullPacket.class, proto.TcpPacketProtos.TcpPacket.ErrLfullPacket.Builder.class);
+        }
+
+        // Construct using proto.TcpPacketProtos.TcpPacket.ErrLfullPacket.newBuilder()
+        private Builder() {
+          maybeForceBuilderInitialization();
+        }
+
+        private Builder(
+            com.google.protobuf.GeneratedMessage.BuilderParent parent) {
+          super(parent);
+          maybeForceBuilderInitialization();
+        }
+        private void maybeForceBuilderInitialization() {
+          if (com.google.protobuf.GeneratedMessage.alwaysUseFieldBuilders) {
+          }
+        }
+        private static Builder create() {
+          return new Builder();
+        }
+
+        public Builder clear() {
+          super.clear();
+          type_ = proto.TcpPacketProtos.TcpPacket.PacketType.DISCONNECT;
+          bitField0_ = (bitField0_ & ~0x00000001);
+          errMessage_ = "";
+          bitField0_ = (bitField0_ & ~0x00000002);
+          return this;
+        }
+
+        public Builder clone() {
+          return create().mergeFrom(buildPartial());
+        }
+
+        public com.google.protobuf.Descriptors.Descriptor
+            getDescriptorForType() {
+          return proto.TcpPacketProtos.internal_static_TcpPacket_ErrLfullPacket_descriptor;
+        }
+
+        public proto.TcpPacketProtos.TcpPacket.ErrLfullPacket getDefaultInstanceForType() {
+          return proto.TcpPacketProtos.TcpPacket.ErrLfullPacket.getDefaultInstance();
+        }
+
+        public proto.TcpPacketProtos.TcpPacket.ErrLfullPacket build() {
+          proto.TcpPacketProtos.TcpPacket.ErrLfullPacket result = buildPartial();
+          if (!result.isInitialized()) {
+            throw newUninitializedMessageException(result);
+          }
+          return result;
+        }
+
+        public proto.TcpPacketProtos.TcpPacket.ErrLfullPacket buildPartial() {
+          proto.TcpPacketProtos.TcpPacket.ErrLfullPacket result = new proto.TcpPacketProtos.TcpPacket.ErrLfullPacket(this);
+          int from_bitField0_ = bitField0_;
+          int to_bitField0_ = 0;
+          if (((from_bitField0_ & 0x00000001) == 0x00000001)) {
+            to_bitField0_ |= 0x00000001;
+          }
+          result.type_ = type_;
+          if (((from_bitField0_ & 0x00000002) == 0x00000002)) {
+            to_bitField0_ |= 0x00000002;
+          }
+          result.errMessage_ = errMessage_;
+          result.bitField0_ = to_bitField0_;
+          onBuilt();
+          return result;
+        }
+
+        public Builder mergeFrom(com.google.protobuf.Message other) {
+          if (other instanceof proto.TcpPacketProtos.TcpPacket.ErrLfullPacket) {
+            return mergeFrom((proto.TcpPacketProtos.TcpPacket.ErrLfullPacket)other);
+          } else {
+            super.mergeFrom(other);
+            return this;
+          }
+        }
+
+        public Builder mergeFrom(proto.TcpPacketProtos.TcpPacket.ErrLfullPacket other) {
+          if (other == proto.TcpPacketProtos.TcpPacket.ErrLfullPacket.getDefaultInstance()) return this;
+          if (other.hasType()) {
+            setType(other.getType());
+          }
+          if (other.hasErrMessage()) {
+            bitField0_ |= 0x00000002;
+            errMessage_ = other.errMessage_;
+            onChanged();
+          }
+          this.mergeUnknownFields(other.getUnknownFields());
+          return this;
+        }
+
+        public final boolean isInitialized() {
+          if (!hasType()) {
+            
+            return false;
+          }
+          return true;
+        }
+
+        public Builder mergeFrom(
+            com.google.protobuf.CodedInputStream input,
+            com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+            throws java.io.IOException {
+          proto.TcpPacketProtos.TcpPacket.ErrLfullPacket parsedMessage = null;
+          try {
+            parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
+          } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+            parsedMessage = (proto.TcpPacketProtos.TcpPacket.ErrLfullPacket) e.getUnfinishedMessage();
+            throw e;
+          } finally {
+            if (parsedMessage != null) {
+              mergeFrom(parsedMessage);
+            }
+          }
+          return this;
+        }
+        private int bitField0_;
+
+        private proto.TcpPacketProtos.TcpPacket.PacketType type_ = proto.TcpPacketProtos.TcpPacket.PacketType.DISCONNECT;
+        /**
+         * <code>required .TcpPacket.PacketType type = 1;</code>
+         */
+        public boolean hasType() {
+          return ((bitField0_ & 0x00000001) == 0x00000001);
+        }
+        /**
+         * <code>required .TcpPacket.PacketType type = 1;</code>
+         */
+        public proto.TcpPacketProtos.TcpPacket.PacketType getType() {
+          return type_;
+        }
+        /**
+         * <code>required .TcpPacket.PacketType type = 1;</code>
+         */
+        public Builder setType(proto.TcpPacketProtos.TcpPacket.PacketType value) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          bitField0_ |= 0x00000001;
+          type_ = value;
+          onChanged();
+          return this;
+        }
+        /**
+         * <code>required .TcpPacket.PacketType type = 1;</code>
+         */
+        public Builder clearType() {
+          bitField0_ = (bitField0_ & ~0x00000001);
+          type_ = proto.TcpPacketProtos.TcpPacket.PacketType.DISCONNECT;
+          onChanged();
+          return this;
+        }
+
+        private java.lang.Object errMessage_ = "";
+        /**
+         * <code>optional string err_message = 2;</code>
+         */
+        public boolean hasErrMessage() {
+          return ((bitField0_ & 0x00000002) == 0x00000002);
+        }
+        /**
+         * <code>optional string err_message = 2;</code>
+         */
+        public java.lang.String getErrMessage() {
+          java.lang.Object ref = errMessage_;
+          if (!(ref instanceof java.lang.String)) {
+            com.google.protobuf.ByteString bs =
+                (com.google.protobuf.ByteString) ref;
+            java.lang.String s = bs.toStringUtf8();
+            if (bs.isValidUtf8()) {
+              errMessage_ = s;
+            }
+            return s;
+          } else {
+            return (java.lang.String) ref;
+          }
+        }
+        /**
+         * <code>optional string err_message = 2;</code>
+         */
+        public com.google.protobuf.ByteString
+            getErrMessageBytes() {
+          java.lang.Object ref = errMessage_;
+          if (ref instanceof String) {
+            com.google.protobuf.ByteString b = 
+                com.google.protobuf.ByteString.copyFromUtf8(
+                    (java.lang.String) ref);
+            errMessage_ = b;
+            return b;
+          } else {
+            return (com.google.protobuf.ByteString) ref;
+          }
+        }
+        /**
+         * <code>optional string err_message = 2;</code>
+         */
+        public Builder setErrMessage(
+            java.lang.String value) {
+          if (value == null) {
+    throw new NullPointerException();
+  }
+  bitField0_ |= 0x00000002;
+          errMessage_ = value;
+          onChanged();
+          return this;
+        }
+        /**
+         * <code>optional string err_message = 2;</code>
+         */
+        public Builder clearErrMessage() {
+          bitField0_ = (bitField0_ & ~0x00000002);
+          errMessage_ = getDefaultInstance().getErrMessage();
+          onChanged();
+          return this;
+        }
+        /**
+         * <code>optional string err_message = 2;</code>
+         */
+        public Builder setErrMessageBytes(
+            com.google.protobuf.ByteString value) {
+          if (value == null) {
+    throw new NullPointerException();
+  }
+  bitField0_ |= 0x00000002;
+          errMessage_ = value;
+          onChanged();
+          return this;
+        }
+
+        // @@protoc_insertion_point(builder_scope:TcpPacket.ErrLfullPacket)
+      }
+
+      static {
+        defaultInstance = new ErrLfullPacket(true);
+        defaultInstance.initFields();
+      }
+
+      // @@protoc_insertion_point(class_scope:TcpPacket.ErrLfullPacket)
+    }
+
+    public interface ErrPacketOrBuilder extends
+        // @@protoc_insertion_point(interface_extends:TcpPacket.ErrPacket)
+        com.google.protobuf.MessageOrBuilder {
+
+      /**
+       * <code>required .TcpPacket.PacketType type = 1;</code>
+       */
+      boolean hasType();
+      /**
+       * <code>required .TcpPacket.PacketType type = 1;</code>
+       */
+      proto.TcpPacketProtos.TcpPacket.PacketType getType();
+
+      /**
+       * <code>required string err_message = 2;</code>
+       */
+      boolean hasErrMessage();
+      /**
+       * <code>required string err_message = 2;</code>
+       */
+      java.lang.String getErrMessage();
+      /**
+       * <code>required string err_message = 2;</code>
+       */
+      com.google.protobuf.ByteString
+          getErrMessageBytes();
+    }
+    /**
+     * Protobuf type {@code TcpPacket.ErrPacket}
+     */
+    public static final class ErrPacket extends
+        com.google.protobuf.GeneratedMessage implements
+        // @@protoc_insertion_point(message_implements:TcpPacket.ErrPacket)
+        ErrPacketOrBuilder {
+      // Use ErrPacket.newBuilder() to construct.
+      private ErrPacket(com.google.protobuf.GeneratedMessage.Builder<?> builder) {
+        super(builder);
+        this.unknownFields = builder.getUnknownFields();
+      }
+      private ErrPacket(boolean noInit) { this.unknownFields = com.google.protobuf.UnknownFieldSet.getDefaultInstance(); }
+
+      private static final ErrPacket defaultInstance;
+      public static ErrPacket getDefaultInstance() {
+        return defaultInstance;
+      }
+
+      public ErrPacket getDefaultInstanceForType() {
+        return defaultInstance;
+      }
+
+      private final com.google.protobuf.UnknownFieldSet unknownFields;
+      @java.lang.Override
+      public final com.google.protobuf.UnknownFieldSet
+          getUnknownFields() {
+        return this.unknownFields;
+      }
+      private ErrPacket(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws com.google.protobuf.InvalidProtocolBufferException {
+        initFields();
+        int mutable_bitField0_ = 0;
+        com.google.protobuf.UnknownFieldSet.Builder unknownFields =
+            com.google.protobuf.UnknownFieldSet.newBuilder();
+        try {
+          boolean done = false;
+          while (!done) {
+            int tag = input.readTag();
+            switch (tag) {
+              case 0:
+                done = true;
+                break;
+              default: {
+                if (!parseUnknownField(input, unknownFields,
+                                       extensionRegistry, tag)) {
+                  done = true;
+                }
+                break;
+              }
+              case 8: {
+                int rawValue = input.readEnum();
+                proto.TcpPacketProtos.TcpPacket.PacketType value = proto.TcpPacketProtos.TcpPacket.PacketType.valueOf(rawValue);
+                if (value == null) {
+                  unknownFields.mergeVarintField(1, rawValue);
+                } else {
+                  bitField0_ |= 0x00000001;
+                  type_ = value;
+                }
+                break;
+              }
+              case 18: {
+                com.google.protobuf.ByteString bs = input.readBytes();
+                bitField0_ |= 0x00000002;
+                errMessage_ = bs;
+                break;
+              }
+            }
+          }
+        } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+          throw e.setUnfinishedMessage(this);
+        } catch (java.io.IOException e) {
+          throw new com.google.protobuf.InvalidProtocolBufferException(
+              e.getMessage()).setUnfinishedMessage(this);
+        } finally {
+          this.unknownFields = unknownFields.build();
+          makeExtensionsImmutable();
+        }
+      }
+      public static final com.google.protobuf.Descriptors.Descriptor
+          getDescriptor() {
+        return proto.TcpPacketProtos.internal_static_TcpPacket_ErrPacket_descriptor;
+      }
+
+      protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
+          internalGetFieldAccessorTable() {
+        return proto.TcpPacketProtos.internal_static_TcpPacket_ErrPacket_fieldAccessorTable
+            .ensureFieldAccessorsInitialized(
+                proto.TcpPacketProtos.TcpPacket.ErrPacket.class, proto.TcpPacketProtos.TcpPacket.ErrPacket.Builder.class);
+      }
+
+      public static com.google.protobuf.Parser<ErrPacket> PARSER =
+          new com.google.protobuf.AbstractParser<ErrPacket>() {
+        public ErrPacket parsePartialFrom(
+            com.google.protobuf.CodedInputStream input,
+            com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+            throws com.google.protobuf.InvalidProtocolBufferException {
+          return new ErrPacket(input, extensionRegistry);
+        }
+      };
+
+      @java.lang.Override
+      public com.google.protobuf.Parser<ErrPacket> getParserForType() {
+        return PARSER;
+      }
+
+      private int bitField0_;
+      public static final int TYPE_FIELD_NUMBER = 1;
+      private proto.TcpPacketProtos.TcpPacket.PacketType type_;
+      /**
+       * <code>required .TcpPacket.PacketType type = 1;</code>
+       */
+      public boolean hasType() {
+        return ((bitField0_ & 0x00000001) == 0x00000001);
+      }
+      /**
+       * <code>required .TcpPacket.PacketType type = 1;</code>
+       */
+      public proto.TcpPacketProtos.TcpPacket.PacketType getType() {
+        return type_;
+      }
+
+      public static final int ERR_MESSAGE_FIELD_NUMBER = 2;
+      private java.lang.Object errMessage_;
+      /**
+       * <code>required string err_message = 2;</code>
+       */
+      public boolean hasErrMessage() {
+        return ((bitField0_ & 0x00000002) == 0x00000002);
+      }
+      /**
+       * <code>required string err_message = 2;</code>
+       */
+      public java.lang.String getErrMessage() {
+        java.lang.Object ref = errMessage_;
+        if (ref instanceof java.lang.String) {
+          return (java.lang.String) ref;
+        } else {
+          com.google.protobuf.ByteString bs = 
+              (com.google.protobuf.ByteString) ref;
+          java.lang.String s = bs.toStringUtf8();
+          if (bs.isValidUtf8()) {
+            errMessage_ = s;
+          }
+          return s;
+        }
+      }
+      /**
+       * <code>required string err_message = 2;</code>
+       */
+      public com.google.protobuf.ByteString
+          getErrMessageBytes() {
+        java.lang.Object ref = errMessage_;
+        if (ref instanceof java.lang.String) {
+          com.google.protobuf.ByteString b = 
+              com.google.protobuf.ByteString.copyFromUtf8(
+                  (java.lang.String) ref);
+          errMessage_ = b;
+          return b;
+        } else {
+          return (com.google.protobuf.ByteString) ref;
+        }
+      }
+
+      private void initFields() {
+        type_ = proto.TcpPacketProtos.TcpPacket.PacketType.DISCONNECT;
+        errMessage_ = "";
+      }
+      private byte memoizedIsInitialized = -1;
+      public final boolean isInitialized() {
+        byte isInitialized = memoizedIsInitialized;
+        if (isInitialized == 1) return true;
+        if (isInitialized == 0) return false;
+
+        if (!hasType()) {
+          memoizedIsInitialized = 0;
+          return false;
+        }
+        if (!hasErrMessage()) {
+          memoizedIsInitialized = 0;
+          return false;
+        }
+        memoizedIsInitialized = 1;
+        return true;
+      }
+
+      public void writeTo(com.google.protobuf.CodedOutputStream output)
+                          throws java.io.IOException {
+        getSerializedSize();
+        if (((bitField0_ & 0x00000001) == 0x00000001)) {
+          output.writeEnum(1, type_.getNumber());
+        }
+        if (((bitField0_ & 0x00000002) == 0x00000002)) {
+          output.writeBytes(2, getErrMessageBytes());
+        }
+        getUnknownFields().writeTo(output);
+      }
+
+      private int memoizedSerializedSize = -1;
+      public int getSerializedSize() {
+        int size = memoizedSerializedSize;
+        if (size != -1) return size;
+
+        size = 0;
+        if (((bitField0_ & 0x00000001) == 0x00000001)) {
+          size += com.google.protobuf.CodedOutputStream
+            .computeEnumSize(1, type_.getNumber());
+        }
+        if (((bitField0_ & 0x00000002) == 0x00000002)) {
+          size += com.google.protobuf.CodedOutputStream
+            .computeBytesSize(2, getErrMessageBytes());
+        }
+        size += getUnknownFields().getSerializedSize();
+        memoizedSerializedSize = size;
+        return size;
+      }
+
+      private static final long serialVersionUID = 0L;
+      @java.lang.Override
+      protected java.lang.Object writeReplace()
+          throws java.io.ObjectStreamException {
+        return super.writeReplace();
+      }
+
+      public static proto.TcpPacketProtos.TcpPacket.ErrPacket parseFrom(
+          com.google.protobuf.ByteString data)
+          throws com.google.protobuf.InvalidProtocolBufferException {
+        return PARSER.parseFrom(data);
+      }
+      public static proto.TcpPacketProtos.TcpPacket.ErrPacket parseFrom(
+          com.google.protobuf.ByteString data,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws com.google.protobuf.InvalidProtocolBufferException {
+        return PARSER.parseFrom(data, extensionRegistry);
+      }
+      public static proto.TcpPacketProtos.TcpPacket.ErrPacket parseFrom(byte[] data)
+          throws com.google.protobuf.InvalidProtocolBufferException {
+        return PARSER.parseFrom(data);
+      }
+      public static proto.TcpPacketProtos.TcpPacket.ErrPacket parseFrom(
+          byte[] data,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws com.google.protobuf.InvalidProtocolBufferException {
+        return PARSER.parseFrom(data, extensionRegistry);
+      }
+      public static proto.TcpPacketProtos.TcpPacket.ErrPacket parseFrom(java.io.InputStream input)
+          throws java.io.IOException {
+        return PARSER.parseFrom(input);
+      }
+      public static proto.TcpPacketProtos.TcpPacket.ErrPacket parseFrom(
+          java.io.InputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws java.io.IOException {
+        return PARSER.parseFrom(input, extensionRegistry);
+      }
+      public static proto.TcpPacketProtos.TcpPacket.ErrPacket parseDelimitedFrom(java.io.InputStream input)
+          throws java.io.IOException {
+        return PARSER.parseDelimitedFrom(input);
+      }
+      public static proto.TcpPacketProtos.TcpPacket.ErrPacket parseDelimitedFrom(
+          java.io.InputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws java.io.IOException {
+        return PARSER.parseDelimitedFrom(input, extensionRegistry);
+      }
+      public static proto.TcpPacketProtos.TcpPacket.ErrPacket parseFrom(
+          com.google.protobuf.CodedInputStream input)
+          throws java.io.IOException {
+        return PARSER.parseFrom(input);
+      }
+      public static proto.TcpPacketProtos.TcpPacket.ErrPacket parseFrom(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws java.io.IOException {
+        return PARSER.parseFrom(input, extensionRegistry);
+      }
+
+      public static Builder newBuilder() { return Builder.create(); }
+      public Builder newBuilderForType() { return newBuilder(); }
+      public static Builder newBuilder(proto.TcpPacketProtos.TcpPacket.ErrPacket prototype) {
+        return newBuilder().mergeFrom(prototype);
+      }
+      public Builder toBuilder() { return newBuilder(this); }
+
+      @java.lang.Override
+      protected Builder newBuilderForType(
+          com.google.protobuf.GeneratedMessage.BuilderParent parent) {
+        Builder builder = new Builder(parent);
+        return builder;
+      }
+      /**
+       * Protobuf type {@code TcpPacket.ErrPacket}
+       */
+      public static final class Builder extends
+          com.google.protobuf.GeneratedMessage.Builder<Builder> implements
+          // @@protoc_insertion_point(builder_implements:TcpPacket.ErrPacket)
+          proto.TcpPacketProtos.TcpPacket.ErrPacketOrBuilder {
+        public static final com.google.protobuf.Descriptors.Descriptor
+            getDescriptor() {
+          return proto.TcpPacketProtos.internal_static_TcpPacket_ErrPacket_descriptor;
+        }
+
+        protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
+            internalGetFieldAccessorTable() {
+          return proto.TcpPacketProtos.internal_static_TcpPacket_ErrPacket_fieldAccessorTable
+              .ensureFieldAccessorsInitialized(
+                  proto.TcpPacketProtos.TcpPacket.ErrPacket.class, proto.TcpPacketProtos.TcpPacket.ErrPacket.Builder.class);
+        }
+
+        // Construct using proto.TcpPacketProtos.TcpPacket.ErrPacket.newBuilder()
+        private Builder() {
+          maybeForceBuilderInitialization();
+        }
+
+        private Builder(
+            com.google.protobuf.GeneratedMessage.BuilderParent parent) {
+          super(parent);
+          maybeForceBuilderInitialization();
+        }
+        private void maybeForceBuilderInitialization() {
+          if (com.google.protobuf.GeneratedMessage.alwaysUseFieldBuilders) {
+          }
+        }
+        private static Builder create() {
+          return new Builder();
+        }
+
+        public Builder clear() {
+          super.clear();
+          type_ = proto.TcpPacketProtos.TcpPacket.PacketType.DISCONNECT;
+          bitField0_ = (bitField0_ & ~0x00000001);
+          errMessage_ = "";
+          bitField0_ = (bitField0_ & ~0x00000002);
+          return this;
+        }
+
+        public Builder clone() {
+          return create().mergeFrom(buildPartial());
+        }
+
+        public com.google.protobuf.Descriptors.Descriptor
+            getDescriptorForType() {
+          return proto.TcpPacketProtos.internal_static_TcpPacket_ErrPacket_descriptor;
+        }
+
+        public proto.TcpPacketProtos.TcpPacket.ErrPacket getDefaultInstanceForType() {
+          return proto.TcpPacketProtos.TcpPacket.ErrPacket.getDefaultInstance();
+        }
+
+        public proto.TcpPacketProtos.TcpPacket.ErrPacket build() {
+          proto.TcpPacketProtos.TcpPacket.ErrPacket result = buildPartial();
+          if (!result.isInitialized()) {
+            throw newUninitializedMessageException(result);
+          }
+          return result;
+        }
+
+        public proto.TcpPacketProtos.TcpPacket.ErrPacket buildPartial() {
+          proto.TcpPacketProtos.TcpPacket.ErrPacket result = new proto.TcpPacketProtos.TcpPacket.ErrPacket(this);
+          int from_bitField0_ = bitField0_;
+          int to_bitField0_ = 0;
+          if (((from_bitField0_ & 0x00000001) == 0x00000001)) {
+            to_bitField0_ |= 0x00000001;
+          }
+          result.type_ = type_;
+          if (((from_bitField0_ & 0x00000002) == 0x00000002)) {
+            to_bitField0_ |= 0x00000002;
+          }
+          result.errMessage_ = errMessage_;
+          result.bitField0_ = to_bitField0_;
+          onBuilt();
+          return result;
+        }
+
+        public Builder mergeFrom(com.google.protobuf.Message other) {
+          if (other instanceof proto.TcpPacketProtos.TcpPacket.ErrPacket) {
+            return mergeFrom((proto.TcpPacketProtos.TcpPacket.ErrPacket)other);
+          } else {
+            super.mergeFrom(other);
+            return this;
+          }
+        }
+
+        public Builder mergeFrom(proto.TcpPacketProtos.TcpPacket.ErrPacket other) {
+          if (other == proto.TcpPacketProtos.TcpPacket.ErrPacket.getDefaultInstance()) return this;
+          if (other.hasType()) {
+            setType(other.getType());
+          }
+          if (other.hasErrMessage()) {
+            bitField0_ |= 0x00000002;
+            errMessage_ = other.errMessage_;
+            onChanged();
+          }
+          this.mergeUnknownFields(other.getUnknownFields());
+          return this;
+        }
+
+        public final boolean isInitialized() {
+          if (!hasType()) {
+            
+            return false;
+          }
+          if (!hasErrMessage()) {
+            
+            return false;
+          }
+          return true;
+        }
+
+        public Builder mergeFrom(
+            com.google.protobuf.CodedInputStream input,
+            com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+            throws java.io.IOException {
+          proto.TcpPacketProtos.TcpPacket.ErrPacket parsedMessage = null;
+          try {
+            parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
+          } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+            parsedMessage = (proto.TcpPacketProtos.TcpPacket.ErrPacket) e.getUnfinishedMessage();
+            throw e;
+          } finally {
+            if (parsedMessage != null) {
+              mergeFrom(parsedMessage);
+            }
+          }
+          return this;
+        }
+        private int bitField0_;
+
+        private proto.TcpPacketProtos.TcpPacket.PacketType type_ = proto.TcpPacketProtos.TcpPacket.PacketType.DISCONNECT;
+        /**
+         * <code>required .TcpPacket.PacketType type = 1;</code>
+         */
+        public boolean hasType() {
+          return ((bitField0_ & 0x00000001) == 0x00000001);
+        }
+        /**
+         * <code>required .TcpPacket.PacketType type = 1;</code>
+         */
+        public proto.TcpPacketProtos.TcpPacket.PacketType getType() {
+          return type_;
+        }
+        /**
+         * <code>required .TcpPacket.PacketType type = 1;</code>
+         */
+        public Builder setType(proto.TcpPacketProtos.TcpPacket.PacketType value) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          bitField0_ |= 0x00000001;
+          type_ = value;
+          onChanged();
+          return this;
+        }
+        /**
+         * <code>required .TcpPacket.PacketType type = 1;</code>
+         */
+        public Builder clearType() {
+          bitField0_ = (bitField0_ & ~0x00000001);
+          type_ = proto.TcpPacketProtos.TcpPacket.PacketType.DISCONNECT;
+          onChanged();
+          return this;
+        }
+
+        private java.lang.Object errMessage_ = "";
+        /**
+         * <code>required string err_message = 2;</code>
+         */
+        public boolean hasErrMessage() {
+          return ((bitField0_ & 0x00000002) == 0x00000002);
+        }
+        /**
+         * <code>required string err_message = 2;</code>
+         */
+        public java.lang.String getErrMessage() {
+          java.lang.Object ref = errMessage_;
+          if (!(ref instanceof java.lang.String)) {
+            com.google.protobuf.ByteString bs =
+                (com.google.protobuf.ByteString) ref;
+            java.lang.String s = bs.toStringUtf8();
+            if (bs.isValidUtf8()) {
+              errMessage_ = s;
+            }
+            return s;
+          } else {
+            return (java.lang.String) ref;
+          }
+        }
+        /**
+         * <code>required string err_message = 2;</code>
+         */
+        public com.google.protobuf.ByteString
+            getErrMessageBytes() {
+          java.lang.Object ref = errMessage_;
+          if (ref instanceof String) {
+            com.google.protobuf.ByteString b = 
+                com.google.protobuf.ByteString.copyFromUtf8(
+                    (java.lang.String) ref);
+            errMessage_ = b;
+            return b;
+          } else {
+            return (com.google.protobuf.ByteString) ref;
+          }
+        }
+        /**
+         * <code>required string err_message = 2;</code>
+         */
+        public Builder setErrMessage(
+            java.lang.String value) {
+          if (value == null) {
+    throw new NullPointerException();
+  }
+  bitField0_ |= 0x00000002;
+          errMessage_ = value;
+          onChanged();
+          return this;
+        }
+        /**
+         * <code>required string err_message = 2;</code>
+         */
+        public Builder clearErrMessage() {
+          bitField0_ = (bitField0_ & ~0x00000002);
+          errMessage_ = getDefaultInstance().getErrMessage();
+          onChanged();
+          return this;
+        }
+        /**
+         * <code>required string err_message = 2;</code>
+         */
+        public Builder setErrMessageBytes(
+            com.google.protobuf.ByteString value) {
+          if (value == null) {
+    throw new NullPointerException();
+  }
+  bitField0_ |= 0x00000002;
+          errMessage_ = value;
+          onChanged();
+          return this;
+        }
+
+        // @@protoc_insertion_point(builder_scope:TcpPacket.ErrPacket)
+      }
+
+      static {
+        defaultInstance = new ErrPacket(true);
+        defaultInstance.initFields();
+      }
+
+      // @@protoc_insertion_point(class_scope:TcpPacket.ErrPacket)
+    }
+
     private int bitField0_;
-    // required .TcpPacket.PacketType type = 1;
     public static final int TYPE_FIELD_NUMBER = 1;
     private proto.TcpPacketProtos.TcpPacket.PacketType type_;
     /**
@@ -3707,7 +6103,8 @@ public final class TcpPacketProtos {
     private byte memoizedIsInitialized = -1;
     public final boolean isInitialized() {
       byte isInitialized = memoizedIsInitialized;
-      if (isInitialized != -1) return isInitialized == 1;
+      if (isInitialized == 1) return true;
+      if (isInitialized == 0) return false;
 
       if (!hasType()) {
         memoizedIsInitialized = 0;
@@ -3818,8 +6215,9 @@ public final class TcpPacketProtos {
      * Protobuf type {@code TcpPacket}
      */
     public static final class Builder extends
-        com.google.protobuf.GeneratedMessage.Builder<Builder>
-       implements proto.TcpPacketProtos.TcpPacketOrBuilder {
+        com.google.protobuf.GeneratedMessage.Builder<Builder> implements
+        // @@protoc_insertion_point(builder_implements:TcpPacket)
+        proto.TcpPacketProtos.TcpPacketOrBuilder {
       public static final com.google.protobuf.Descriptors.Descriptor
           getDescriptor() {
         return proto.TcpPacketProtos.internal_static_TcpPacket_descriptor;
@@ -3936,7 +6334,6 @@ public final class TcpPacketProtos {
       }
       private int bitField0_;
 
-      // required .TcpPacket.PacketType type = 1;
       private proto.TcpPacketProtos.TcpPacket.PacketType type_ = proto.TcpPacketProtos.TcpPacket.PacketType.DISCONNECT;
       /**
        * <code>required .TcpPacket.PacketType type = 1;</code>
@@ -3983,31 +6380,51 @@ public final class TcpPacketProtos {
     // @@protoc_insertion_point(class_scope:TcpPacket)
   }
 
-  private static com.google.protobuf.Descriptors.Descriptor
+  private static final com.google.protobuf.Descriptors.Descriptor
     internal_static_TcpPacket_descriptor;
   private static
     com.google.protobuf.GeneratedMessage.FieldAccessorTable
       internal_static_TcpPacket_fieldAccessorTable;
-  private static com.google.protobuf.Descriptors.Descriptor
+  private static final com.google.protobuf.Descriptors.Descriptor
     internal_static_TcpPacket_DisconnectPacket_descriptor;
   private static
     com.google.protobuf.GeneratedMessage.FieldAccessorTable
       internal_static_TcpPacket_DisconnectPacket_fieldAccessorTable;
-  private static com.google.protobuf.Descriptors.Descriptor
+  private static final com.google.protobuf.Descriptors.Descriptor
     internal_static_TcpPacket_ConnectPacket_descriptor;
   private static
     com.google.protobuf.GeneratedMessage.FieldAccessorTable
       internal_static_TcpPacket_ConnectPacket_fieldAccessorTable;
-  private static com.google.protobuf.Descriptors.Descriptor
-    internal_static_TcpPacket_PlayerListPacket_descriptor;
+  private static final com.google.protobuf.Descriptors.Descriptor
+    internal_static_TcpPacket_CreateLobbyPacket_descriptor;
   private static
     com.google.protobuf.GeneratedMessage.FieldAccessorTable
-      internal_static_TcpPacket_PlayerListPacket_fieldAccessorTable;
-  private static com.google.protobuf.Descriptors.Descriptor
+      internal_static_TcpPacket_CreateLobbyPacket_fieldAccessorTable;
+  private static final com.google.protobuf.Descriptors.Descriptor
     internal_static_TcpPacket_ChatPacket_descriptor;
   private static
     com.google.protobuf.GeneratedMessage.FieldAccessorTable
       internal_static_TcpPacket_ChatPacket_fieldAccessorTable;
+  private static final com.google.protobuf.Descriptors.Descriptor
+    internal_static_TcpPacket_PlayerListPacket_descriptor;
+  private static
+    com.google.protobuf.GeneratedMessage.FieldAccessorTable
+      internal_static_TcpPacket_PlayerListPacket_fieldAccessorTable;
+  private static final com.google.protobuf.Descriptors.Descriptor
+    internal_static_TcpPacket_ErrLdnePacket_descriptor;
+  private static
+    com.google.protobuf.GeneratedMessage.FieldAccessorTable
+      internal_static_TcpPacket_ErrLdnePacket_fieldAccessorTable;
+  private static final com.google.protobuf.Descriptors.Descriptor
+    internal_static_TcpPacket_ErrLfullPacket_descriptor;
+  private static
+    com.google.protobuf.GeneratedMessage.FieldAccessorTable
+      internal_static_TcpPacket_ErrLfullPacket_fieldAccessorTable;
+  private static final com.google.protobuf.Descriptors.Descriptor
+    internal_static_TcpPacket_ErrPacket_descriptor;
+  private static
+    com.google.protobuf.GeneratedMessage.FieldAccessorTable
+      internal_static_TcpPacket_ErrPacket_fieldAccessorTable;
 
   public static com.google.protobuf.Descriptors.FileDescriptor
       getDescriptor() {
@@ -4017,7 +6434,7 @@ public final class TcpPacketProtos {
       descriptor;
   static {
     java.lang.String[] descriptorData = {
-      "\n\020tcp_packet.proto\032\014player.proto\"\223\005\n\tTcp" +
+      "\n\020tcp_packet.proto\032\014player.proto\"\212\010\n\tTcp" +
       "Packet\022#\n\004type\030\001 \002(\0162\025.TcpPacket.PacketT" +
       "ype\032\244\001\n\020DisconnectPacket\022#\n\004type\030\001 \002(\0162\025" +
       ".TcpPacket.PacketType\022\027\n\006player\030\002 \001(\0132\007." +
@@ -4027,58 +6444,93 @@ public final class TcpPacketProtos {
       "(\0162\025.TcpPacket.PacketType\022\027\n\006player\030\002 \002(" +
       "\0132\007.Player\022\020\n\010lobby_id\030\003 \001(\t\022/\n\006update\030\004" +
       " \001(\0162\037.TcpPacket.ConnectPacket.Update\"\033\n",
-      "\006Update\022\010\n\004SELF\020\000\022\007\n\003NEW\020\001\032U\n\020PlayerList" +
-      "Packet\022#\n\004type\030\001 \002(\0162\025.TcpPacket.PacketT" +
-      "ype\022\034\n\013player_list\030\003 \003(\0132\007.Player\032m\n\nCha" +
-      "tPacket\022#\n\004type\030\001 \002(\0162\025.TcpPacket.Packet" +
-      "Type\022\017\n\007message\030\002 \002(\t\022\027\n\006player\030\003 \001(\0132\007." +
-      "Player\022\020\n\010lobby_id\030\004 \001(\t\"D\n\nPacketType\022\016" +
-      "\n\nDISCONNECT\020\000\022\013\n\007CONNECT\020\001\022\017\n\013PLAYER_LI" +
-      "ST\020\002\022\010\n\004CHAT\020\003B\030\n\005protoB\017TcpPacketProtos"
+      "\006Update\022\010\n\004SELF\020\000\022\007\n\003NEW\020\001\032_\n\021CreateLobb" +
+      "yPacket\022#\n\004type\030\001 \002(\0162\025.TcpPacket.Packet" +
+      "Type\022\020\n\010lobby_id\030\002 \001(\t\022\023\n\013max_players\030\003 " +
+      "\001(\005\032m\n\nChatPacket\022#\n\004type\030\001 \002(\0162\025.TcpPac" +
+      "ket.PacketType\022\017\n\007message\030\002 \002(\t\022\027\n\006playe" +
+      "r\030\003 \001(\0132\007.Player\022\020\n\010lobby_id\030\004 \001(\t\032U\n\020Pl" +
+      "ayerListPacket\022#\n\004type\030\001 \002(\0162\025.TcpPacket" +
+      ".PacketType\022\034\n\013player_list\030\003 \003(\0132\007.Playe" +
+      "r\032I\n\rErrLdnePacket\022#\n\004type\030\001 \002(\0162\025.TcpPa" +
+      "cket.PacketType\022\023\n\013err_message\030\002 \001(\t\032J\n\016",
+      "ErrLfullPacket\022#\n\004type\030\001 \002(\0162\025.TcpPacket" +
+      ".PacketType\022\023\n\013err_message\030\002 \001(\t\032E\n\tErrP" +
+      "acket\022#\n\004type\030\001 \002(\0162\025.TcpPacket.PacketTy" +
+      "pe\022\023\n\013err_message\030\002 \002(\t\"|\n\nPacketType\022\016\n" +
+      "\nDISCONNECT\020\000\022\013\n\007CONNECT\020\001\022\020\n\014CREATE_LOB" +
+      "BY\020\002\022\010\n\004CHAT\020\003\022\017\n\013PLAYER_LIST\020\004\022\014\n\010ERR_L" +
+      "DNE\020\005\022\r\n\tERR_LFULL\020\006\022\007\n\003ERR\020\007B\030\n\005protoB\017" +
+      "TcpPacketProtos"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
-      new com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner() {
-        public com.google.protobuf.ExtensionRegistry assignDescriptors(
-            com.google.protobuf.Descriptors.FileDescriptor root) {
-          descriptor = root;
-          internal_static_TcpPacket_descriptor =
-            getDescriptor().getMessageTypes().get(0);
-          internal_static_TcpPacket_fieldAccessorTable = new
-            com.google.protobuf.GeneratedMessage.FieldAccessorTable(
-              internal_static_TcpPacket_descriptor,
-              new java.lang.String[] { "Type", });
-          internal_static_TcpPacket_DisconnectPacket_descriptor =
-            internal_static_TcpPacket_descriptor.getNestedTypes().get(0);
-          internal_static_TcpPacket_DisconnectPacket_fieldAccessorTable = new
-            com.google.protobuf.GeneratedMessage.FieldAccessorTable(
-              internal_static_TcpPacket_DisconnectPacket_descriptor,
-              new java.lang.String[] { "Type", "Player", "Update", });
-          internal_static_TcpPacket_ConnectPacket_descriptor =
-            internal_static_TcpPacket_descriptor.getNestedTypes().get(1);
-          internal_static_TcpPacket_ConnectPacket_fieldAccessorTable = new
-            com.google.protobuf.GeneratedMessage.FieldAccessorTable(
-              internal_static_TcpPacket_ConnectPacket_descriptor,
-              new java.lang.String[] { "Type", "Player", "LobbyId", "Update", });
-          internal_static_TcpPacket_PlayerListPacket_descriptor =
-            internal_static_TcpPacket_descriptor.getNestedTypes().get(2);
-          internal_static_TcpPacket_PlayerListPacket_fieldAccessorTable = new
-            com.google.protobuf.GeneratedMessage.FieldAccessorTable(
-              internal_static_TcpPacket_PlayerListPacket_descriptor,
-              new java.lang.String[] { "Type", "PlayerList", });
-          internal_static_TcpPacket_ChatPacket_descriptor =
-            internal_static_TcpPacket_descriptor.getNestedTypes().get(3);
-          internal_static_TcpPacket_ChatPacket_fieldAccessorTable = new
-            com.google.protobuf.GeneratedMessage.FieldAccessorTable(
-              internal_static_TcpPacket_ChatPacket_descriptor,
-              new java.lang.String[] { "Type", "Message", "Player", "LobbyId", });
-          return null;
-        }
-      };
+        new com.google.protobuf.Descriptors.FileDescriptor.    InternalDescriptorAssigner() {
+          public com.google.protobuf.ExtensionRegistry assignDescriptors(
+              com.google.protobuf.Descriptors.FileDescriptor root) {
+            descriptor = root;
+            return null;
+          }
+        };
     com.google.protobuf.Descriptors.FileDescriptor
       .internalBuildGeneratedFileFrom(descriptorData,
         new com.google.protobuf.Descriptors.FileDescriptor[] {
           proto.PlayerProtos.getDescriptor(),
         }, assigner);
+    internal_static_TcpPacket_descriptor =
+      getDescriptor().getMessageTypes().get(0);
+    internal_static_TcpPacket_fieldAccessorTable = new
+      com.google.protobuf.GeneratedMessage.FieldAccessorTable(
+        internal_static_TcpPacket_descriptor,
+        new java.lang.String[] { "Type", });
+    internal_static_TcpPacket_DisconnectPacket_descriptor =
+      internal_static_TcpPacket_descriptor.getNestedTypes().get(0);
+    internal_static_TcpPacket_DisconnectPacket_fieldAccessorTable = new
+      com.google.protobuf.GeneratedMessage.FieldAccessorTable(
+        internal_static_TcpPacket_DisconnectPacket_descriptor,
+        new java.lang.String[] { "Type", "Player", "Update", });
+    internal_static_TcpPacket_ConnectPacket_descriptor =
+      internal_static_TcpPacket_descriptor.getNestedTypes().get(1);
+    internal_static_TcpPacket_ConnectPacket_fieldAccessorTable = new
+      com.google.protobuf.GeneratedMessage.FieldAccessorTable(
+        internal_static_TcpPacket_ConnectPacket_descriptor,
+        new java.lang.String[] { "Type", "Player", "LobbyId", "Update", });
+    internal_static_TcpPacket_CreateLobbyPacket_descriptor =
+      internal_static_TcpPacket_descriptor.getNestedTypes().get(2);
+    internal_static_TcpPacket_CreateLobbyPacket_fieldAccessorTable = new
+      com.google.protobuf.GeneratedMessage.FieldAccessorTable(
+        internal_static_TcpPacket_CreateLobbyPacket_descriptor,
+        new java.lang.String[] { "Type", "LobbyId", "MaxPlayers", });
+    internal_static_TcpPacket_ChatPacket_descriptor =
+      internal_static_TcpPacket_descriptor.getNestedTypes().get(3);
+    internal_static_TcpPacket_ChatPacket_fieldAccessorTable = new
+      com.google.protobuf.GeneratedMessage.FieldAccessorTable(
+        internal_static_TcpPacket_ChatPacket_descriptor,
+        new java.lang.String[] { "Type", "Message", "Player", "LobbyId", });
+    internal_static_TcpPacket_PlayerListPacket_descriptor =
+      internal_static_TcpPacket_descriptor.getNestedTypes().get(4);
+    internal_static_TcpPacket_PlayerListPacket_fieldAccessorTable = new
+      com.google.protobuf.GeneratedMessage.FieldAccessorTable(
+        internal_static_TcpPacket_PlayerListPacket_descriptor,
+        new java.lang.String[] { "Type", "PlayerList", });
+    internal_static_TcpPacket_ErrLdnePacket_descriptor =
+      internal_static_TcpPacket_descriptor.getNestedTypes().get(5);
+    internal_static_TcpPacket_ErrLdnePacket_fieldAccessorTable = new
+      com.google.protobuf.GeneratedMessage.FieldAccessorTable(
+        internal_static_TcpPacket_ErrLdnePacket_descriptor,
+        new java.lang.String[] { "Type", "ErrMessage", });
+    internal_static_TcpPacket_ErrLfullPacket_descriptor =
+      internal_static_TcpPacket_descriptor.getNestedTypes().get(6);
+    internal_static_TcpPacket_ErrLfullPacket_fieldAccessorTable = new
+      com.google.protobuf.GeneratedMessage.FieldAccessorTable(
+        internal_static_TcpPacket_ErrLfullPacket_descriptor,
+        new java.lang.String[] { "Type", "ErrMessage", });
+    internal_static_TcpPacket_ErrPacket_descriptor =
+      internal_static_TcpPacket_descriptor.getNestedTypes().get(7);
+    internal_static_TcpPacket_ErrPacket_fieldAccessorTable = new
+      com.google.protobuf.GeneratedMessage.FieldAccessorTable(
+        internal_static_TcpPacket_ErrPacket_descriptor,
+        new java.lang.String[] { "Type", "ErrMessage", });
+    proto.PlayerProtos.getDescriptor();
   }
 
   // @@protoc_insertion_point(outer_class_scope)
