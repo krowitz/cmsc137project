@@ -1,4 +1,3 @@
-import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -49,7 +48,7 @@ public class ChatClient {
         
         Player player = Player.newBuilder()
                         .setName(name)
-                        .setId(id)
+                        //.setId(id)
                         .build();
 
         this.setPlayer(player);
@@ -71,54 +70,32 @@ public class ChatClient {
         Socket server = new Socket();
 	    server.connect(new InetSocketAddress(serverName, port), 10000);
 
-        TcpPacket.CreateLobbyPacket createLobbyPacket = createLobbyPacket();
 
         OutputStream outToServer = server.getOutputStream();
         DataOutputStream out = new DataOutputStream(outToServer);
-        out.write(createLobbyPacket.toByteArray());
-
         InputStream inFromServer = server.getInputStream();
 
-        TcpPacket.CreateLobbyPacket reply = TcpPacket.CreateLobbyPacket.parseFrom(inFromServer);
-
-        System.out.println("Created a lobby " + reply.getLobbyId() + "with " + createLobbyPacket.getMaxPlayers() + " max number of players");
-
-        TcpPacket.ConnectPacket connectPacket = createConnectPacket(reply.getLobbyId());
+        TcpPacket.ConnectPacket connectPacket = createConnectPacket();
         out.write(connectPacket.toByteArray());
 
-        ReceiveThread receive = new ReceiveThread(server, this);
-        SendThread send = new SendThread(server, this);
-
-        receive.start();
-        send.start();
-
-        
-        while(true){
-            if(receive.getStatus() || send.getStatus())
-                break;
-        }
-
-        try{
-            receive.join();
-            send.join();
-        }catch(InterruptedException e){}
-
-        server.close();
-    }
-
-    //instantiate a createLobbyPacket and send it to server
-    public TcpPacket.CreateLobbyPacket createLobbyPacket() throws IOException{
-        Scanner sc = new Scanner(System.in);
-
-        System.out.print("Enter maximum number of players: ");
-        int maxplayers = sc.nextInt();
-
-        TcpPacket.CreateLobbyPacket createLobbyPacket = TcpPacket.CreateLobbyPacket.newBuilder()
-                                                    .setType(TcpPacket.PacketType.CREATE_LOBBY)
-                                                    .setMaxPlayers(maxplayers)
-                                                    .build();
-
-        return createLobbyPacket;
+//        ReceiveThread receive = new ReceiveThread(server, this);
+//        SendThread send = new SendThread(server, this);
+//
+//        receive.start();
+//        send.start();
+//
+//
+//        while(true){
+//            if(receive.getStatus() || send.getStatus())
+//                break;
+//        }
+//
+//        try{
+//            receive.join();
+//            send.join();
+//        }catch(InterruptedException e){}
+//
+//        server.close();
     }
 
     //instantiate a connectPacket and send it to server
@@ -178,24 +155,23 @@ public class ChatClient {
         System.out.println("Sent connect packet to " + server.getRemoteSocketAddress());
         System.out.println(connectPacket.toByteArray());
 
-        ReceiveThread receive = new ReceiveThread(server, this);
-        SendThread send = new SendThread(server, this);
-
-        receive.start();
-        send.start();
-
+//        ReceiveThread receive = new ReceiveThread(server, this);
+//        SendThread send = new SendThread(server, this);
+//
+//        receive.start();
+//        send.start();
         
-        while(true){
-            if(receive.getStatus() || send.getStatus())
-                break;
-        }
-
-        try{
-            receive.join();
-            send.join();
-        }catch(InterruptedException e){}
-
-        server.close();
+//        while(true){
+//            if(receive.getStatus() || send.getStatus())
+//                break;
+//        }
+//
+//        try{
+//            receive.join();
+//            send.join();
+//        }catch(InterruptedException e){}
+//
+//        server.close();
 
         /* Receive data from the ServerSocket */
         // InputStream inFromServer = server.getInputStream();
@@ -219,6 +195,10 @@ public class ChatClient {
     }
 
     public static void main(String[] args) throws Exception{
+
+	    args = new String[2];
+	    args[0] = "202.92.144.45";
+	    args[1] = "80";
         ChatClient client = new ChatClient(args[0], Integer.parseInt(args[1]));
         Scanner sc = new Scanner(System.in);
         String input;

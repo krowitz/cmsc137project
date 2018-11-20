@@ -1,79 +1,43 @@
+
 import java.io.*;
 import java.net.*;
-import java.util.*;
+import java.util.concurrent.LinkedBlockingQueue;
+
+import proto.TcpPacketProtos.TcpPacket.*;
 import proto.PlayerProtos.Player;
-import proto.TcpPacketProtos.TcpPacket;
 
 public class SendThread extends Thread {
-	private DataOutputStream out;
-	private InputStreamReader in;
-	private BufferedReader reader;
+	private DataOutputStream outputStream;
 	private boolean status;
-	private Socket server;
 	private ChatClient client;
+	private LinkedBlockingQueue<ChatPacket> messageQueue = new LinkedBlockingQueue<>();
 
-	public SendThread(Socket server, ChatClient client) {
-		this.server = server;
-		this.client = client;
-		this.status = true;
-
-		try {
-			OutputStream outToServer = server.getOutputStream();
-            out = new DataOutputStream(outToServer);
-            
-            InputStreamReader in = new InputStreamReader(System.in);
-        	reader = new BufferedReader(in);
-
-		} catch (IOException e) {
-			System.out.println("Error getting output stream");
-			e.printStackTrace();
-		}
+	public void sendMessage(String message, Player player){
+		ChatPacket chatPacket = ChatPacket.newBuilder().setPlayer(player).setMessage(message).build();
+		messageQueue.add(chatPacket);
 	}
 
-	//if user's message has the prefix /answer, it is considered a user's guess
-	boolean checkIfAnswer(String chat){
-		boolean isAnswer = chat.startsWith("/answer ") ? true : false;
-		return isAnswer;
+	public SendThread(DataOutputStream outputStream) {
+            this.outputStream = outputStream;
 	}
 
 	public boolean getStatus(){
 		return this.status;
 	}
 
+	public void stopSender(){
+		this.status = false;
+		this.interrupt();
+	}
 	public void run() {
-        TcpPacket.ChatPacket chatPacket = null;
-		boolean isAnswer;
 		try {
-			String text;
-
-			do {
-				System.out.print("[" + client.getUserName() + "]: ");
-				text = reader.readLine();
-
-				// out.writeUTF(text + "\n");
-				isAnswer = checkIfAnswer(text);
-				if(isAnswer){
-					System.out.println(text + " : " + isAnswer);
-
-					/*
-						do dictionary.validateAnswer(answer)
-					*/
-				}else{
-					chatPacket = TcpPacket.ChatPacket.newBuilder()
-								.setType(TcpPacket.PacketType.CHAT)
-								.setMessage(text)
-								.setPlayer(client.getPlayer())
-								.build();
-
-					out.write(chatPacket.toByteArray());
-				}
-			} while (!text.equals("exit") && client.isRunning());
-			out.write(client.createDisconnectPacket().toByteArray()); //send a disconnect packet to server
-			client.stopRunning();
+			while(client.isRunning()){
+				ChatPacket chatPacket = messageQueue.take();
+				outputStream.write(chatPacket.toByteArray());
+			}
 			this.status = false;
-			// server.close();
-		} catch (IOException e) {
-			System.out.println("Error writing to server");
+		} catch (Exception e) {
+			System.out.println("Error writing to server.");
 		}
 	}
 }
