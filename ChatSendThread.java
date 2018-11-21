@@ -11,10 +11,17 @@ public class ChatSendThread extends Thread {
 	private ChatClient client;
 	private LinkedBlockingQueue<ChatPacket> messageQueue = new LinkedBlockingQueue<>();
 
-	public void sendMessage(String message, String playerName){
+	boolean checkIfAnswer(String chat){
+		boolean isAnswer = chat.startsWith("/answer ") ? true : false;
+		return isAnswer;
+	}
 
-		ChatPacket chatPacket = ChatPacket.newBuilder().setPlayer(Player.newBuilder().setName(playerName).build()).setMessage(message).build();
-		messageQueue.add(chatPacket);
+	public void sendMessage(String message, String playerName){
+		//filters the message sent
+		if(!checkIfAnswer(message)){
+			ChatPacket chatPacket = ChatPacket.newBuilder().setPlayer(Player.newBuilder().setName(playerName).build()).setMessage(message).build();
+			messageQueue.add(chatPacket);
+		}
 	}
 
 	public ChatSendThread(DataOutputStream outputStream) {
