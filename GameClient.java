@@ -29,10 +29,10 @@ public class GameClient {
     private Runnable gameServerListener;
     private DataOutputStream outputStream;
     private DataInputStream inputStream;
-    private String playerName;
+    private static String playerName;
     private DatagramSocket gameServerSocket = new DatagramSocket();
-    private ChatSendThread senderThread;
-    private ChatReceiveThread receiveThread;
+    private static ChatSendThread senderThread;
+    private static ChatReceiveThread receiveThread;
 
     private String currentWord;
     private static TextArea chatArea;
@@ -58,6 +58,7 @@ public class GameClient {
 
         try{
             connectToLobby(chatLobbyId);
+            this.playerName = playerName;
         }catch (Exception e){
             System.out.println("Connecting to lobby failed. See stacktrace below.");
             e.printStackTrace();
@@ -65,11 +66,14 @@ public class GameClient {
         }
 
         ExecutorService executorService = Executors.newFixedThreadPool(3);
-        executorService.submit(gameServerListener);
-        executorService.submit(new ChatReceiveThread(inputStream));
-        executorService.submit(new ChatSendThread(outputStream));
+        senderThread = new ChatSendThread(outputStream);
+        receiveThread = new ChatReceiveThread(inputStream);
 
-        JFrame window = new JFrame("Illus");
+        executorService.submit(gameServerListener);
+        executorService.submit(receiveThread);
+        executorService.submit(senderThread);
+
+        JFrame window = new JFrame("Illus (Player: "+this.playerName+")");
         window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         window.setPreferredSize(new Dimension(500,500));
         window.setLayout(new BorderLayout());
@@ -333,9 +337,26 @@ public class GameClient {
             inputField = new TextField();
             add(inputField);
 
-            enterButton = new JButton("Enter");
+            enterButton = new JButton(new RightPane.SendAction("Enter", inputField));
             enterButton.setAlignmentX(Component.CENTER_ALIGNMENT);
             add(enterButton);
+
+        }
+
+        public class SendAction extends AbstractAction{
+            private TextField inputField;
+
+            private SendAction(String name, TextField inputField){
+                if(name != null) putValue(NAME, name);
+                this.inputField = inputField;
+            }
+
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String message = inputField.getText();
+
+                senderThread.sendMessage(message, playerName);
+            }
         }
     }
 
@@ -377,6 +398,7 @@ public class GameClient {
 
             JButton clear = new JButton(new BrushOptions.ClearAction(canvasPane, "Clear"));
 
+            add(blackColor);
             add(redColor);
             add(orangeColor);
             add(yellowColor);

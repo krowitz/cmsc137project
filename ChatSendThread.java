@@ -19,7 +19,7 @@ public class ChatSendThread extends Thread {
 	public void sendMessage(String message, String playerName){
 		//filters the message sent
 		if(!checkIfAnswer(message)){
-			ChatPacket chatPacket = ChatPacket.newBuilder().setPlayer(Player.newBuilder().setName(playerName).build()).setMessage(message).build();
+			ChatPacket chatPacket = ChatPacket.newBuilder().setType(PacketType.CHAT).setPlayer(Player.newBuilder().setName(playerName).build()).setMessage(message).build();
 			messageQueue.add(chatPacket);
 		}
 	}

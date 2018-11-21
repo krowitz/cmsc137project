@@ -20,13 +20,14 @@ public class ChatReceiveThread extends Thread {
 		this.interrupt();
 	}
 
+
 	public void run() {
 		while (true) {
 			try {
 
 				byte[] data = new byte[1024];
 				inputStream.read(data);
-
+				
 				System.out.println("Acquired from server: " + new String(data));
 
 			} catch (Exception e) {
