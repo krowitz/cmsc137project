@@ -13,6 +13,8 @@ import java.net.*;
 import java.util.Arrays;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.Timer;
+import java.util.TimerTask;
 
 /**
  * 1. Connect to lobby
@@ -123,6 +125,7 @@ public class GameClient {
         boolean connected = false;
 
         int count = 0;
+        System.out.println(connected + " " + count);
         while(!connected){
             send("CONNECT " + playerName);
             byte[] buf = new byte[256];
@@ -224,7 +227,7 @@ public class GameClient {
             setLayout(new BorderLayout());
             setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
 
-            Timer timer = new Timer(60);
+            Time timer = new Time(60);
             timer.setPreferredSize(new Dimension(55,55));
             timer.setFont(new Font("San-Serif", Font.PLAIN, 20));
 
@@ -239,19 +242,38 @@ public class GameClient {
     }
 
     //timer component
-    public class Timer extends JLabel {
+    public class Time extends JLabel {
+        Timer timer;
         private int time;
 
-        public Timer(int time) {
+        public Time(int time) {
             this.time = time;
+            this.startTimer();
         }
 
         public void updateTime(){
             this.time--;
+            this.repaint();
         }
 
         public int getTime(){
             return this.time;
+        }
+
+        void stopTimer(){
+            this.timer.cancel();
+            this.timer.purge();
+        }
+
+        void startTimer(){
+            this.timer = new Timer();
+            timer.scheduleAtFixedRate(new TimerTask(){
+                public void run(){
+                    updateTime();
+                    if(time == 0)
+                        stopTimer();
+                }
+            }, 0, 1000);
         }
 
         //render time inside circle
