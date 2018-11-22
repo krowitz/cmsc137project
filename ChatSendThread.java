@@ -8,7 +8,7 @@ import proto.PlayerProtos.Player;
 public class ChatSendThread extends Thread {
 	private DataOutputStream outputStream;
 	private boolean status;
-	private ChatClient client;
+	private GameClient client;
 	private LinkedBlockingQueue<ChatPacket> messageQueue = new LinkedBlockingQueue<>();
 
 	boolean checkIfAnswer(String chat){
@@ -24,8 +24,9 @@ public class ChatSendThread extends Thread {
 		}
 	}
 
-	public ChatSendThread(DataOutputStream outputStream) {
+	public ChatSendThread(DataOutputStream outputStream, GameClient client) {
             this.outputStream = outputStream;
+			this.client = client;
 	}
 
 	public boolean getStatus(){

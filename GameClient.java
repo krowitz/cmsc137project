@@ -68,8 +68,8 @@ public class GameClient {
         }
 
         ExecutorService executorService = Executors.newFixedThreadPool(3);
-        senderThread = new ChatSendThread(outputStream);
-        receiveThread = new ChatReceiveThread(inputStream);
+        senderThread = new ChatSendThread(outputStream, this);
+        receiveThread = new ChatReceiveThread(inputStream, this);
 
         executorService.submit(gameServerListener);
         executorService.submit(receiveThread);
@@ -99,7 +99,7 @@ public class GameClient {
 
         System.out.println("Connecting to chat lobby: " + lobbyId);
 
-        TcpPacketProtos.TcpPacket.ConnectPacket connectPacket = TcpPacketProtos.TcpPacket.ConnectPacket.newBuilder()
+        TcpPacketProtos.TcpPacket.ConnectPacket connectPacket = TcpPacketProtos.TcpPacket.ConnectPacket.newBuilder().setUpdate(TcpPacketProtos.TcpPacket.ConnectPacket.Update.NEW)
                 .setLobbyId(lobbyId).setType(TcpPacketProtos.TcpPacket.PacketType.CONNECT).setPlayer(player).build();
 
         outputStream.write(connectPacket.toByteArray());
@@ -113,10 +113,10 @@ public class GameClient {
         TcpPacketProtos.TcpPacket packet = null;
         if(bytes > 0){
             packet = packet.parseFrom(bufferResponse);
-            System.out.println(packet);
+            // System.out.println(packet);
             if(packet.getType() == TcpPacketProtos.TcpPacket.PacketType.CONNECT){
                 TcpPacketProtos.TcpPacket.ConnectPacket response = TcpPacketProtos.TcpPacket.ConnectPacket.parseFrom(bufferResponse);
-                System.out.println(response);
+                // System.out.println(response);
                 System.out.println("Successfully connected to lobby with ID " + lobbyId);
             }
             

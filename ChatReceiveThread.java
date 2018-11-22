@@ -4,13 +4,15 @@ import java.util.Arrays;
 import proto.TcpPacketProtos.TcpPacket;
 import proto.PlayerProtos.Player;
 public class ChatReceiveThread extends Thread {
+	private GameClient client;
 	private DataInputStream inputStream;
 	private boolean status;
 	private String currentWord;
 
-	public ChatReceiveThread(DataInputStream inputStream) {
+	public ChatReceiveThread(DataInputStream inputStream, GameClient client) {
 		this.status = true;
 		this.inputStream = inputStream;
+		this.client = client;
 	}
 
 	public boolean getStatus(){
@@ -43,7 +45,9 @@ public class ChatReceiveThread extends Thread {
 					
 					if(packet.getType() == TcpPacket.PacketType.CHAT){
 						TcpPacket.ChatPacket response = TcpPacket.ChatPacket.parseFrom(bufferresponse);
-						System.out.println(response.getPlayer().getName() + ":" + response.getMessage());
+						String message = new String(response.getPlayer().getName() + ":" + response.getMessage());
+						// System.out.println(response.getPlayer().getName() + ":" + response.getMessage());
+						this.client.appendMessage(message);
 					}
 					// System.out.println(packet);
 				}
