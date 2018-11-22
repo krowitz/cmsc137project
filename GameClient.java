@@ -57,8 +57,10 @@ public class GameClient {
         inputStream = new DataInputStream(server.getInputStream());
 
         try{
-            connectToLobby(chatLobbyId);
             this.playerName = playerName;
+            connectToLobby(chatLobbyId);
+            
+            
         }catch (Exception e){
             System.out.println("Connecting to lobby failed. See stacktrace below.");
             e.printStackTrace();
@@ -93,11 +95,11 @@ public class GameClient {
     }
 
     private void connectToLobby(String lobbyId) throws Exception{
-        PlayerProtos.Player player = PlayerProtos.Player.newBuilder().setName("GameServer").build();
+        PlayerProtos.Player player = PlayerProtos.Player.newBuilder().setName(this.playerName).build();
 
         System.out.println("Connecting to chat lobby: " + lobbyId);
 
-        TcpPacketProtos.TcpPacket.ConnectPacket connectPacket = TcpPacketProtos.TcpPacket.ConnectPacket.newBuilder().setUpdate(TcpPacketProtos.TcpPacket.ConnectPacket.Update.NEW)
+        TcpPacketProtos.TcpPacket.ConnectPacket connectPacket = TcpPacketProtos.TcpPacket.ConnectPacket.newBuilder()
                 .setLobbyId(lobbyId).setType(TcpPacketProtos.TcpPacket.PacketType.CONNECT).setPlayer(player).build();
 
         outputStream.write(connectPacket.toByteArray());
@@ -111,14 +113,16 @@ public class GameClient {
         TcpPacketProtos.TcpPacket packet = null;
         if(bytes > 0){
             packet = packet.parseFrom(bufferResponse);
-
+            System.out.println(packet);
             if(packet.getType() == TcpPacketProtos.TcpPacket.PacketType.CONNECT){
                 TcpPacketProtos.TcpPacket.ConnectPacket response = TcpPacketProtos.TcpPacket.ConnectPacket.parseFrom(bufferResponse);
                 System.out.println(response);
+                System.out.println("Successfully connected to lobby with ID " + lobbyId);
             }
+            
         }
 
-        System.out.println("Successfully connected to lobby with ID " + lobbyId);
+       
     }
 
     public static void appendMessage(String message){
@@ -144,8 +148,9 @@ public class GameClient {
             if(connectionStatus.startsWith("SUCCESS")){
                 connected = true;
             }
-
-            this.chatLobbyId = connectionStatus.split(" ")[1];
+            System.out.println("Connection Status");
+            System.out.println(connectionStatus);
+            this.chatLobbyId = connectionStatus.split("[^a-zA-Z0-9']+")[1];
 
             count++;
             if(count == 3) throw new Exception("Failed to connect to game server.");
