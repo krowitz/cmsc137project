@@ -15,6 +15,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.Timer;
 import java.util.TimerTask;
+import java.util.Scanner;
 
 /**
  * 1. Connect to lobby
@@ -37,6 +38,8 @@ public class GameClient {
     private String currentWord;
     private static TextArea chatArea;
     private String chatLobbyId;
+
+    private static Boolean initUI = false;
 
     private void setCurrentWord(String currentWord){
         this.currentWord = currentWord;
@@ -68,10 +71,23 @@ public class GameClient {
         }
 
         ExecutorService executorService = Executors.newFixedThreadPool(3);
+
+        executorService.submit(gameServerListener);
+
+        System.out.println("Waiting for other players");
+        
+        while(true){
+            System.out.print("");
+            if(getInitUI()){
+                System.out.println("Players completed");
+                System.out.println("[!] Initializing UI");
+                break;
+            }
+        }
+
         senderThread = new ChatSendThread(outputStream, this);
         receiveThread = new ChatReceiveThread(inputStream, this);
 
-        executorService.submit(gameServerListener);
         executorService.submit(receiveThread);
         executorService.submit(senderThread);
 
@@ -129,11 +145,19 @@ public class GameClient {
         chatArea.append("\n" + message);
     }
 
+    public static void setInitUI(Boolean value){
+        GameClient.initUI = value;
+    }
+
+    public Boolean getInitUI(){
+        return GameClient.initUI;
+    }
+
     private void connectToGame(String playerName) throws Exception{
         boolean connected = false;
 
         int count = 0;
-        System.out.println(connected + " " + count);
+        // System.out.println(connected + " " + count);
         while(!connected){
             send("CONNECT " + playerName);
             byte[] buf = new byte[256];
@@ -152,8 +176,8 @@ public class GameClient {
             System.out.println(connectionStatus);
             this.chatLobbyId = connectionStatus.split("[^a-zA-Z0-9']+")[1];
 
-            count++;
-            if(count == 3) throw new Exception("Failed to connect to game server.");
+            // count++;
+            // if(count == 3) throw new Exception("Failed to connect to game server.");
         }
         
         gameServerListener = new Runnable() {
@@ -168,37 +192,43 @@ public class GameClient {
 
                         if(packet != null){
                             String serverMessage = new String(packet.getData());
-                            String data = serverMessage.split(" ")[1];
 
-                            if(serverMessage.startsWith("MESSAGE")){
-                                appendMessage(data);
-                            }
+                            if(serverMessage.startsWith("PLAYER_COUNT_MET")){
+                                setInitUI(true);
+                            }else{
+                                String data = serverMessage.split(" ")[1];
 
-                            if(serverMessage.startsWith("WORD")){
-                                currentWord = data;
-                            }
+                                if(serverMessage.startsWith("MESSAGE")){
+                                    appendMessage(data);
+                                }
 
-                            if(serverMessage.startsWith("START")){
-                                //start timer
-                            }
+                                if(serverMessage.startsWith("WORD")){
+                                    currentWord = data;
+                                }
 
-                            if(serverMessage.startsWith("SCORES")){
-                                //update scores
-                            }
-                            if(serverMessage.startsWith("DRAWER")){
-                                if(!data.equals(playerName)){
-                                    //disable pen
+                                if(serverMessage.startsWith("START")){
+                                    //start timer
+                                }
+
+                                if(serverMessage.startsWith("SCORES")){
+                                    //update scores
+                                }
+                                if(serverMessage.startsWith("DRAWER")){
+                                    if(!data.equals(playerName)){
+                                        //disable pen
+                                    }
+                                }
+                                if(serverMessage.startsWith("POINTS")){
+                                    //draw line given points
+                                }
+                                if(serverMessage.startsWith("COLOR")){
+                                    //change pen color
+                                }
+                                if(serverMessage.startsWith("CLEAR")){
+                                    //clear
                                 }
                             }
-                            if(serverMessage.startsWith("POINTS")){
-                                //draw line given points
-                            }
-                            if(serverMessage.startsWith("COLOR")){
-                                //change pen color
-                            }
-                            if(serverMessage.startsWith("CLEAR")){
-                                //clear
-                            }
+
                         }
                     }catch (Exception e){
                         e.printStackTrace();
@@ -361,6 +391,8 @@ public class GameClient {
                 String message = inputField.getText();
 
                 senderThread.sendMessage(message, playerName);
+
+                inputField.setText("");
             }
         }
     }
@@ -544,9 +576,14 @@ public class GameClient {
     }
 
     public static void main(String[] args) throws Exception{
-        String playerName = "Paul";
+        String playerName;
         String serverAddress = "127.0.0.1";
         int port = Constants.GAME_PORT;
+
+        Scanner sc = new Scanner(System.in);
+
+        System.out.print("Enter player name: ");
+        playerName = sc.nextLine();
 
         new GameClient(playerName,serverAddress,port);
     }

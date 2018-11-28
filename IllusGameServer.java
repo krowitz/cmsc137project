@@ -32,6 +32,7 @@ import java.net.Socket;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Scanner;
 
 public class IllusGameServer implements Runnable{
     private DataOutputStream outputStream;
@@ -122,11 +123,18 @@ public class IllusGameServer implements Runnable{
         }
         //end validate command line args
 */
-        int maxPlayers = 3;
+        
+        Scanner sc = new Scanner(System.in);
+        int maxPlayers = 0;
+
+        do{
+            System.out.print("Max no. of players (3-5 only): ");
+            maxPlayers = sc.nextInt();
+        }while(maxPlayers < 3 || maxPlayers > 5);
 
         IllusGameServer gameServer = null;
         try {
-            gameServer = new IllusGameServer("202.92.144.45", 80, 3);
+            gameServer = new IllusGameServer("202.92.144.45", 80, maxPlayers);
         }catch (Exception e){
             System.out.println("Game server not successfully initialized. See stacktrace below. ");
             e.printStackTrace();
@@ -175,13 +183,19 @@ public class IllusGameServer implements Runnable{
                         player.setPort(packet.getPort());
                         players.add(player);
                         currentPlayerCount++;
-                        if(currentPlayerCount == maxPlayers){
-                            state = "RUNNING";
-                        }
+                        
                         String message = "SUCCESS " + lobbyId;
                         System.out.println("PLAYER " + player.getName() + " is now connected.");
                         send(player, message);
+
+                        if(currentPlayerCount == maxPlayers){
+                            state = "RUNNING";
+                            message = "PLAYER_COUNT_MET";
+                            sendToAll(message);
+                        }
                     }
+                    break;
+                case "RUNNING":
                     break;
             }
         }
