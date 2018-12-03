@@ -34,10 +34,12 @@ public class GameClient {
     private DatagramSocket gameServerSocket = new DatagramSocket();
     private static ChatSendThread senderThread;
     private static ChatReceiveThread receiveThread;
-
+    private Time timer;
     private String currentWord;
     private static TextArea chatArea;
     private String chatLobbyId;
+    private MainWindow mainWindow;
+    private boolean drawer = true;
 
     private static Boolean initUI = false;
 
@@ -81,6 +83,7 @@ public class GameClient {
             if(getInitUI()){
                 System.out.println("Players completed");
                 System.out.println("[!] Initializing UI");
+                send("START ");
                 break;
             }
         }
@@ -95,7 +98,7 @@ public class GameClient {
         window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         window.setPreferredSize(new Dimension(500,500));
         window.setLayout(new BorderLayout());
-        window.add(new MainWindow());
+        window.add(mainWindow = new MainWindow());
         window.pack();
         window.setLocationRelativeTo(null);
         window.setVisible(true);
@@ -140,16 +143,23 @@ public class GameClient {
 
        
     }
-
+    public String getPlayerName(){
+        return this.playerName;
+    }
+    protected void sendAnswer(String answer){
+        send("ANSWER "+answer);
+    }
     public static void appendMessage(String message){
         chatArea.append("\n" + message);
     }
 
     public static void setInitUI(Boolean value){
         GameClient.initUI = value;
+        
     }
 
     public Boolean getInitUI(){
+
         return GameClient.initUI;
     }
 
@@ -189,12 +199,12 @@ public class GameClient {
                         byte[] buf = new byte[256];
                         DatagramPacket packet = new DatagramPacket(buf, buf.length);
                         gameServerSocket.receive(packet);
-
                         if(packet != null){
                             String serverMessage = new String(packet.getData());
-
                             if(serverMessage.startsWith("PLAYER_COUNT_MET")){
                                 setInitUI(true);
+                                
+                                
                             }else{
                                 String data = serverMessage.split(" ")[1];
 
@@ -205,9 +215,13 @@ public class GameClient {
                                 if(serverMessage.startsWith("WORD")){
                                     currentWord = data;
                                 }
-
+                                if(serverMessage.startsWith("ANSWER")){
+                                    //player guesses the word correctly
+                                }
                                 if(serverMessage.startsWith("START")){
                                     //start timer
+                                    // timer.startTimer();
+                                    // System.out.println("Start timer");
                                 }
 
                                 if(serverMessage.startsWith("SCORES")){
@@ -216,7 +230,9 @@ public class GameClient {
                                 if(serverMessage.startsWith("DRAWER")){
                                     if(!data.equals(playerName)){
                                         //disable pen
-                                    }
+                                        drawer = false;
+                                    }else
+                                        drawer = true;
                                 }
                                 if(serverMessage.startsWith("POINTS")){
                                     //draw line given points
@@ -226,6 +242,8 @@ public class GameClient {
                                 }
                                 if(serverMessage.startsWith("CLEAR")){
                                     //clear
+                                    
+                                    mainWindow.getCanvas().clearCanvas();
                                 }
                             }
 
@@ -243,7 +261,7 @@ public class GameClient {
     public class MainWindow extends JPanel {
 
         private Canvas canvasPane;
-
+        
         //set up main window contents
         public MainWindow() {
             setLayout(new BorderLayout());
@@ -256,6 +274,10 @@ public class GameClient {
 
             add(new BrushOptions(canvasPane), BorderLayout.SOUTH);
         }
+
+        protected Canvas getCanvas(){
+            return canvasPane;
+        }
     }
 
     //upper portion
@@ -266,7 +288,7 @@ public class GameClient {
             setLayout(new BorderLayout());
             setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
 
-            Time timer = new Time(60);
+            timer = new Time(60);
             timer.setPreferredSize(new Dimension(55,55));
             timer.setFont(new Font("San-Serif", Font.PLAIN, 20));
 
@@ -287,7 +309,7 @@ public class GameClient {
 
         public Time(int time) {
             this.time = time;
-            this.startTimer();
+            startTimer();
         }
 
         public void updateTime(){
@@ -456,7 +478,10 @@ public class GameClient {
 
             @Override
             public void actionPerformed(ActionEvent e) {
-                canvasPane.clearCanvas();
+                if(drawer){
+                    canvasPane.clearCanvas();
+                    send("CLEAR CANVAS");
+                }
             }
         }
 
@@ -536,6 +561,8 @@ public class GameClient {
             background = null;
             updateBuffer();
             repaint();
+            
+
         }
 
         protected void updateBuffer() {

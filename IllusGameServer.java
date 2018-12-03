@@ -126,7 +126,8 @@ public class IllusGameServer implements Runnable{
         
         Scanner sc = new Scanner(System.in);
         int maxPlayers = 0;
-
+        
+        
         do{
             System.out.print("Max no. of players (3-5 only): ");
             maxPlayers = sc.nextInt();
@@ -157,6 +158,8 @@ public class IllusGameServer implements Runnable{
 
     @Override
     public void run() {
+        int loadedUI = 0;
+        level = 0;
         while (true){
 
             byte[] buf = new byte[256];
@@ -173,10 +176,12 @@ public class IllusGameServer implements Runnable{
             //remove excess bytes
             data = data.trim();
 
+            String[] dataArray;
+
             switch (state){
                 case "WAITING" :
                     if(data.startsWith("CONNECT")){
-                        String[] dataArray = data.split(" ");
+                        dataArray = data.split(" ");
                         IllusPlayer player = new IllusPlayer();
                         player.setName(dataArray[1]);
                         player.setAddress(packet.getAddress());
@@ -189,15 +194,48 @@ public class IllusGameServer implements Runnable{
                         send(player, message);
 
                         if(currentPlayerCount == maxPlayers){
-                            state = "RUNNING";
+                            state = "INIT_LEVEL";
                             message = "PLAYER_COUNT_MET";
                             sendToAll(message);
+                            System.out.println("player count met message sent");
                         }
                     }
                     break;
+                case "INIT_LEVEL":
+                    
+                    dataArray = data.split(" ");
+
+                    if(data.startsWith("START")){
+    
+                        loadedUI++;
+                            
+                        if(loadedUI == maxPlayers){
+                            state = "RUNNING";
+                            System.out.println("Select drawer");
+                            IllusPlayer drawer = players.get(level % maxPlayers);
+                            System.out.println(drawer.getName() + " will draw for this level");
+                            sendToAll("DRAWER "+drawer.getName()+" ");
+                            level++;
+                            // sendToAll("START TIMER");
+                        }
+                            
+                        
+                        // System.out.println("loaded UI " + loadedUI + " " + maxPlayers);
+                        
+                    }
                 case "RUNNING":
+                    dataArray = data.split(" ");
+                    if(data.startsWith("CLEAR")){
+                        sendToAll("CLEAR CANVAS");
+                    }else if(data.startsWith("ANSWER")){
+                        System.out.println("Received player " + dataArray[3] +" answer: " + dataArray[2]);
+                    }
                     break;
             }
+
+            // System.out.println("Current state: " + state);
+            continue;
         }
+        
     }
 }

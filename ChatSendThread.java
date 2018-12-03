@@ -21,7 +21,8 @@ public class ChatSendThread extends Thread {
 		if(!checkIfAnswer(message)){
 			ChatPacket chatPacket = ChatPacket.newBuilder().setType(PacketType.CHAT).setPlayer(Player.newBuilder().setName(playerName).build()).setMessage(message).build();
 			messageQueue.add(chatPacket);
-		}
+		}else
+			client.sendAnswer(message + " " + playerName);
 	}
 
 	public ChatSendThread(DataOutputStream outputStream, GameClient client) {

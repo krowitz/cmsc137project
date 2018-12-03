@@ -84,6 +84,11 @@ public class Dictionary{
         this.setWord(chosenWord);
     }
 
+    public boolean validateWord(String answer, String guess){
+        boolean valid;
+        return valid = answer.equals(guess) ? true : false;
+    }
+
     public void setWord(String word){
         this.word = word;
     }
