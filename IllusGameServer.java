@@ -227,6 +227,11 @@ public class IllusGameServer implements Runnable{
                     dataArray = data.split(" ");
                     if(data.startsWith("CLEAR")){
                         sendToAll("CLEAR CANVAS");
+                    }else if(data.startsWith("PAINT")){
+                        // System.out.println(dataArray[1]);
+                        
+                        sendToAll("PAINT " + dataArray[1] + " " + dataArray[2] + " "+dataArray[3]);
+                        
                     }else if(data.startsWith("ANSWER")){
                         System.out.println("Received player " + dataArray[3] +" answer: " + dataArray[2]);
                     }

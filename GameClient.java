@@ -207,7 +207,7 @@ public class GameClient {
                                 
                             }else{
                                 String data = serverMessage.split(" ")[1];
-
+                                
                                 if(serverMessage.startsWith("MESSAGE")){
                                     appendMessage(data);
                                 }
@@ -236,6 +236,17 @@ public class GameClient {
                                 }
                                 if(serverMessage.startsWith("POINTS")){
                                     //draw line given points
+                                }
+                                if(serverMessage.startsWith("PAINT")){
+        
+                                    String[] dataArray = serverMessage.split(" ");
+                                    int x = (int)Double.parseDouble(dataArray[2]);
+                                    int y = (int)Double.parseDouble(dataArray[3]);
+
+                                    Point point = new Point(x,y);
+
+                                    String color = dataArray[1];
+                                    mainWindow.getCanvas().drawDot(point, color);
                                 }
                                 if(serverMessage.startsWith("COLOR")){
                                     //change pen color
@@ -521,11 +532,13 @@ public class GameClient {
                 @Override
                 public void mousePressed(MouseEvent e) {
                     drawDot(e.getPoint());
+                    sendPoint(e.getPoint());
                 }
 
                 @Override
                 public void mouseDragged(MouseEvent e) {
                     drawDot(e.getPoint());
+                    sendPoint(e.getPoint());
                 }
 
             };
@@ -533,7 +546,31 @@ public class GameClient {
             addMouseListener(handler);
             addMouseMotionListener(handler);
         }
+        protected void sendPoint(Point pt){
+            String color = "";
+            
+            if(getForeground().equals(Color.BLACK)){
+                color = "BLACK";
+            }else if(getForeground().equals(Color.WHITE)){
+                color = "WHITE";
+            }else if(getForeground().equals(new Color(209, 0, 0))){
+                color = "RED";
+            }else if(getForeground().equals(new Color(255, 102, 34))){
+                color = "ORANGE";
+            }else if(getForeground().equals(new Color(255, 218, 33))){
+                color = "YELLOW";
+            }else if(getForeground().equals(new Color(51, 221, 0))){
+                color = "GREEN";
+            }else if(getForeground().equals(new Color(17, 51, 204))){
+                color = "BLUE";
+            }else if(getForeground().equals(new Color(51, 0, 68))){
+                color = "VIOLET";
+            }
 
+            send("PAINT " + color + " " + pt.getX() + " " + pt.getY() + " ");
+
+
+        }
         protected void drawDot(Point pt) {
             if (background == null) {
                 updateBuffer();
@@ -557,6 +594,52 @@ public class GameClient {
             repaint();
         }
 
+        protected Color getColorValue(String color){
+            Color colorValue = null;
+            if(color.equals("BLACK")){
+                 colorValue = Color.BLACK;
+            }else if(color.equals("WHITE")){
+                 colorValue = Color.WHITE;
+            }else if(color.equals("RED")){
+                 colorValue  = new Color(209, 0, 0);
+            }else if(color.equals("ORANGE")){
+                 colorValue  = new Color(255, 102, 34);
+            }else if(color.equals("YELLOW")){
+                 colorValue  = new Color(255, 218, 33);
+            }else if(color.equals("GREEN")){
+                 colorValue  = new Color(51, 221, 0);
+            }else if(color.equals("BLUE")){
+                 colorValue  = new Color(17, 51, 204);
+            }else if(color.equals("VIOLET")){
+                 colorValue  = new Color(51, 0, 68);
+            }
+
+
+            
+            return colorValue;
+        }
+        protected void drawDot(Point pt, String color) {
+            if (background == null) {
+                updateBuffer();
+            }
+
+            if (background != null) {
+                //canvas
+                Graphics2D g2d = background.createGraphics();
+
+                //change color of brush
+                g2d.setColor(getColorValue(color));
+
+                //change width and height to adjust thickness of brush
+                g2d.fillOval(pt.x - 5, pt.y - 5, 10, 10);
+
+                //release system resources of by graphics g2d
+                g2d.dispose();
+            }
+
+            //update canvas
+            repaint();
+        }
         protected void clearCanvas(){
             background = null;
             updateBuffer();
