@@ -6,6 +6,10 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
+import java.awt.event.ItemListener;
+import java.awt.event.ItemEvent;
 import java.awt.image.BufferedImage;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
@@ -16,6 +20,7 @@ import java.util.concurrent.Executors;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.Scanner;
+import java.util.Collections;
 
 /**
  * 1. Connect to lobby
@@ -35,17 +40,20 @@ public class GameClient {
     private static ChatSendThread senderThread;
     private static ChatReceiveThread receiveThread;
     private Time timer;
-    private String currentWord;
     private static TextArea chatArea;
+    private static JLabel wordLabel;
+    private static JCheckBox answerCheckbox;    
     private String chatLobbyId;
     private MainWindow mainWindow;
-    private boolean drawer = true;
+    private Boolean isDrawer = true;
+    private Boolean isAnswer = false;
 
     private static Boolean initUI = false;
 
-    private void setCurrentWord(String currentWord){
-        this.currentWord = currentWord;
+    protected void setCurrentWord(String word){
+        wordLabel.setText(word.toUpperCase());
     }
+
     public GameClient(String playerName, String serverAddress, int port) throws Exception{
 
         try{
@@ -147,7 +155,7 @@ public class GameClient {
         return this.playerName;
     }
     protected void sendAnswer(String answer){
-        send("ANSWER "+answer);
+        send("ANSWER " + this.playerName + " " + answer);
     }
     public static void appendMessage(String message){
         chatArea.append("\n" + message);
@@ -164,7 +172,7 @@ public class GameClient {
     }
 
     private void connectToGame(String playerName) throws Exception{
-        boolean connected = false;
+        Boolean connected = false;
 
         int count = 0;
         // System.out.println(connected + " " + count);
@@ -191,6 +199,7 @@ public class GameClient {
         }
         
         gameServerListener = new Runnable() {
+
             @Override
             public void run() {
                 while(true){
@@ -204,35 +213,47 @@ public class GameClient {
                             if(serverMessage.startsWith("PLAYER_COUNT_MET")){
                                 setInitUI(true);
                                 
-                                
                             }else{
-                                String data = serverMessage.split(" ")[1];
+                                String data = serverMessage.split(" ")[1].trim();
                                 
                                 if(serverMessage.startsWith("MESSAGE")){
                                     appendMessage(data);
                                 }
 
                                 if(serverMessage.startsWith("WORD")){
-                                    currentWord = data;
-                                }
-                                if(serverMessage.startsWith("ANSWER")){
-                                    //player guesses the word correctly
+                                    String word = data.trim();
+                                    if(isDrawer){
+                                        setCurrentWord(word);
+                                        answerCheckbox.setVisible(false);
+                                    }else{
+                                        String changed = String.join("", Collections.nCopies(word.length(), "\u25A1"));
+                                        setCurrentWord(changed);
+                                    }
                                 }
                                 if(serverMessage.startsWith("START")){
                                     //start timer
                                     // timer.startTimer();
-                                    // System.out.println("Start timer");
+                                    answerCheckbox.setVisible(true);
+                                    System.out.println("Start timer");
                                 }
-
+                                if(serverMessage.startsWith("CORRECT_ANSWER")){
+                                    appendMessage("PLAYER " + data + " got it CORRECT!");
+                                    
+                                    if(data.equals(playerName)){
+                                        System.out.println("[!] Answer DISABLED");
+                                        answerCheckbox.setVisible(false);
+                                        isAnswer = false;
+                                    }
+                                }
                                 if(serverMessage.startsWith("SCORES")){
                                     //update scores
                                 }
                                 if(serverMessage.startsWith("DRAWER")){
                                     if(!data.equals(playerName)){
                                         //disable pen
-                                        drawer = false;
+                                        isDrawer = false;
                                     }else
-                                        drawer = true;
+                                        isDrawer = true;
                                 }
                                 if(serverMessage.startsWith("POINTS")){
                                     //draw line given points
@@ -248,13 +269,17 @@ public class GameClient {
                                     String color = dataArray[1];
                                     mainWindow.getCanvas().drawDot(point, color);
                                 }
-                                if(serverMessage.startsWith("COLOR")){
-                                    //change pen color
-                                }
                                 if(serverMessage.startsWith("CLEAR")){
                                     //clear
-                                    
                                     mainWindow.getCanvas().clearCanvas();
+                                }
+                                if(serverMessage.startsWith("CHOOSE")){
+                                    String[] dataArray = serverMessage.split(" ");
+                                    String[] options = {dataArray[1], dataArray[2], dataArray[3]};
+
+                                    int finalChoice = JOptionPane.showOptionDialog(null, "Choose a word", "Drawer Choice", JOptionPane.DEFAULT_OPTION, JOptionPane.PLAIN_MESSAGE, null, options, options[0]);
+
+                                    send("CHOICE " + options[finalChoice]);
                                 }
                             }
 
@@ -305,11 +330,11 @@ public class GameClient {
 
             add(timer, BorderLayout.WEST);
 
-            Word word = new Word("WORD");
-            word.setHorizontalAlignment(SwingConstants.CENTER);
-            word.setFont(new Font("San-Serif", Font.PLAIN, 25));
+            wordLabel = new JLabel("Welcome!");
+            wordLabel.setHorizontalAlignment(SwingConstants.CENTER);
+            wordLabel.setFont(new Font("San-Serif", Font.PLAIN, 25));
 
-            add(word, BorderLayout.CENTER);
+            add(wordLabel, BorderLayout.CENTER);
         }
     }
 
@@ -320,7 +345,6 @@ public class GameClient {
 
         public Time(int time) {
             this.time = time;
-            startTimer();
         }
 
         public void updateTime(){
@@ -403,31 +427,64 @@ public class GameClient {
             add(chatArea);
 
             inputField = new TextField();
+            inputField.addKeyListener(new KeyAdapter() {
+                @Override
+                public void keyPressed(KeyEvent e) {
+                    if(e.getKeyCode() == KeyEvent.VK_ENTER){
+                        String message = inputField.getText();
+
+                        if(isAnswer){
+                            System.out.println("You sent answer: " + message);
+                            sendAnswer(message);
+                        }else{
+                            senderThread.sendMessage(message, playerName);
+                        }
+
+                        inputField.setText("");
+                    }
+                }
+
+            });
+
             add(inputField);
 
-            enterButton = new JButton(new RightPane.SendAction("Enter", inputField));
-            enterButton.setAlignmentX(Component.CENTER_ALIGNMENT);
-            add(enterButton);
+            answerCheckbox = new JCheckBox("Answer?");
+
+            answerCheckbox.addItemListener(new ItemListener() {    
+                public void itemStateChanged(ItemEvent e) {                 
+                    isAnswer = e.getStateChange() == 1 ? true:false;  
+                }    
+            });
+
+            add(answerCheckbox);
+
+            // enterButton = new JButton(new RightPane.SendAction("Enter", inputField));
+            // enterButton.setAlignmentX(Component.CENTER_ALIGNMENT);
+            // add(enterButton);
 
         }
 
-        public class SendAction extends AbstractAction{
-            private TextField inputField;
+        // public class SendAction extends AbstractAction{
+        //     private TextField inputField;
 
-            private SendAction(String name, TextField inputField){
-                if(name != null) putValue(NAME, name);
-                this.inputField = inputField;
-            }
+        //     private SendAction(String name, TextField inputField){
+        //         if(name != null) putValue(NAME, name);
+        //         this.inputField = inputField;
+        //     }
 
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                String message = inputField.getText();
+        //     @Override
+        //     public void actionPerformed(ActionEvent e) {
+        //         String message = inputField.getText();
 
-                senderThread.sendMessage(message, playerName);
+        //         if(isAnswer){
+        //             sendAnswer(message);
+        //         }else{
+        //             senderThread.sendMessage(message, playerName);
+        //         }
 
-                inputField.setText("");
-            }
-        }
+        //         inputField.setText("");
+        //     }
+        // }
     }
 
     //brush options component
@@ -489,7 +546,7 @@ public class GameClient {
 
             @Override
             public void actionPerformed(ActionEvent e) {
-                if(drawer){
+                if(isDrawer){
                     canvasPane.clearCanvas();
                     send("CLEAR CANVAS");
                 }
@@ -531,14 +588,18 @@ public class GameClient {
                 //render brush drawings
                 @Override
                 public void mousePressed(MouseEvent e) {
-                    drawDot(e.getPoint());
-                    sendPoint(e.getPoint());
+                    if(isDrawer){
+                        drawDot(e.getPoint());
+                        sendPoint(e.getPoint());
+                    }
                 }
 
                 @Override
                 public void mouseDragged(MouseEvent e) {
-                    drawDot(e.getPoint());
-                    sendPoint(e.getPoint());
+                    if(isDrawer){
+                        drawDot(e.getPoint());
+                        sendPoint(e.getPoint());
+                    }
                 }
 
             };

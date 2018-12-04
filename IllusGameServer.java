@@ -48,6 +48,8 @@ public class IllusGameServer implements Runnable{
 
     private int currentPlayerCount = 0;
 
+    private Dictionary dictionary;
+
     public IllusGameServer (String serverName, int port, int maxPlayers) throws Exception{
         Socket server = new Socket();
         server.connect(new InetSocketAddress(serverName, port), 10000);
@@ -57,6 +59,7 @@ public class IllusGameServer implements Runnable{
         serverSocket = new DatagramSocket(Constants.GAME_PORT);
         players = new ArrayList<>();
         this.maxPlayers = maxPlayers;
+        this.dictionary = new Dictionary();
     }
 
     private String createLobby(int maxPlayers) throws Exception{
@@ -105,6 +108,18 @@ public class IllusGameServer implements Runnable{
             send(player, msg);
         }
     }
+
+    public IllusPlayer getPlayerByName(String name){
+        IllusPlayer player = null;
+        for(IllusPlayer temp : players){
+            if(name.equals(temp.getName())){
+                player = temp;
+                break;
+            }
+        }
+        return player;
+    }
+
     public static void main(String[] args) {
 
         /*
@@ -164,6 +179,7 @@ public class IllusGameServer implements Runnable{
 
             byte[] buf = new byte[256];
             DatagramPacket packet = new DatagramPacket(buf, buf.length);
+
             try{
                 serverSocket.receive(packet);
             }catch(Exception ioe){}
@@ -197,29 +213,29 @@ public class IllusGameServer implements Runnable{
                             state = "INIT_LEVEL";
                             message = "PLAYER_COUNT_MET";
                             sendToAll(message);
-                            System.out.println("player count met message sent");
                         }
                     }
                     break;
                 case "INIT_LEVEL":
-                    
                     dataArray = data.split(" ");
 
                     if(data.startsWith("START")){
-    
                         loadedUI++;
                             
                         if(loadedUI == maxPlayers){
+                            
                             state = "RUNNING";
-                            System.out.println("Select drawer");
                             IllusPlayer drawer = players.get(level % maxPlayers);
-                            System.out.println(drawer.getName() + " will draw for this level");
+                            System.out.println("\nPLAYER " + drawer.getName() + " will draw for this level");
                             sendToAll("DRAWER "+drawer.getName()+" ");
                             level++;
+
+                            String wordChoices = dictionary.getWords();
+
+                            send(drawer, "CHOOSE " + wordChoices);
                             // sendToAll("START TIMER");
                         }
                             
-                        
                         // System.out.println("loaded UI " + loadedUI + " " + maxPlayers);
                         
                     }
@@ -228,12 +244,28 @@ public class IllusGameServer implements Runnable{
                     if(data.startsWith("CLEAR")){
                         sendToAll("CLEAR CANVAS");
                     }else if(data.startsWith("PAINT")){
-                        // System.out.println(dataArray[1]);
                         
                         sendToAll("PAINT " + dataArray[1] + " " + dataArray[2] + " "+dataArray[3]);
                         
                     }else if(data.startsWith("ANSWER")){
-                        System.out.println("Received player " + dataArray[3] +" answer: " + dataArray[2]);
+                        String playerName = dataArray[1].trim();
+                        String guess = dataArray[2].trim();
+
+                        System.out.println("\n[!] Received PLAYER " + playerName +" answer: " + guess);
+
+                        //check answer here
+                        if(dictionary.validateWord(guess)){
+                            System.out.println("\n[!] PLAYER " + playerName + " is correct");
+                            sendToAll("CORRECT_ANSWER " + playerName);
+                        }
+                        
+                    }else if(data.startsWith("CHOICE")){
+                        //drawer finalizes word to guess
+                        String choice = dataArray[1].trim();
+                        System.out.println("\n[!] Drawer chose " + choice);
+
+                        dictionary.setAnswer(choice);
+                        sendToAll("WORD "+choice);
                     }
                     break;
             }
