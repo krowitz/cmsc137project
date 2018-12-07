@@ -232,6 +232,7 @@ public class GameClient {
                                     }
                                 }
                                 if(serverMessage.startsWith("START")){
+                                    // timer.startTimer(); client side timer
                                     answerCheckbox.setVisible(true);
                                 }
                                 if(serverMessage.startsWith("CORRECT_ANSWER")){
@@ -280,6 +281,7 @@ public class GameClient {
                                     send("CHOICE " + options[finalChoice]);
                                 }
                                 if(serverMessage.startsWith("TIME")){
+                                    // server side timer
                                     String[] dataArray = serverMessage.split(" ");
                                     int currentTime = Integer.parseInt(dataArray[1]);
                                     timer.setTime(currentTime);
@@ -359,6 +361,31 @@ public class GameClient {
             this.time = time;
             this.repaint();
         }
+        
+        /*
+        client side timer 
+
+        public void updateTime(){
+            this.time--;
+            this.repaint();
+        }
+
+        void stopTimer(){
+            this.timer.cancel();
+            this.timer.purge();
+        }
+
+        void startTimer(){
+            this.timer = new Timer();
+            timer.scheduleAtFixedRate(new TimerTask(){
+                public void run(){
+                    updateTime();
+                    if(time == 0)
+                        stopTimer();
+                }
+            }, 0, 1000);
+        }
+        */
 
         //render time inside circle
         public void paintComponent( Graphics g ) {
