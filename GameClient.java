@@ -155,7 +155,8 @@ public class GameClient {
         return this.playerName;
     }
     protected void sendAnswer(String answer){
-        send("ANSWER " + this.playerName + " " + answer);
+        if(!isDrawer)
+            send("ANSWER " + this.playerName + " " + answer);
     }
     public static void appendMessage(String message){
         chatArea.append("\n" + message);
@@ -231,10 +232,7 @@ public class GameClient {
                                     }
                                 }
                                 if(serverMessage.startsWith("START")){
-                                    //start timer
-                                    // timer.startTimer();
                                     answerCheckbox.setVisible(true);
-                                    System.out.println("Start timer");
                                 }
                                 if(serverMessage.startsWith("CORRECT_ANSWER")){
                                     appendMessage("PLAYER " + data + " got it CORRECT!");
@@ -280,6 +278,12 @@ public class GameClient {
                                     int finalChoice = JOptionPane.showOptionDialog(null, "Choose a word", "Drawer Choice", JOptionPane.DEFAULT_OPTION, JOptionPane.PLAIN_MESSAGE, null, options, options[0]);
 
                                     send("CHOICE " + options[finalChoice]);
+                                }
+                                if(serverMessage.startsWith("TIME")){
+                                    String[] dataArray = serverMessage.split(" ");
+                                    int currentTime = Integer.parseInt(dataArray[1]);
+                                    timer.setTime(currentTime);
+
                                 }
                             }
 
@@ -347,29 +351,13 @@ public class GameClient {
             this.time = time;
         }
 
-        public void updateTime(){
-            this.time--;
-            this.repaint();
-        }
-
         public int getTime(){
             return this.time;
         }
 
-        void stopTimer(){
-            this.timer.cancel();
-            this.timer.purge();
-        }
-
-        void startTimer(){
-            this.timer = new Timer();
-            timer.scheduleAtFixedRate(new TimerTask(){
-                public void run(){
-                    updateTime();
-                    if(time == 0)
-                        stopTimer();
-                }
-            }, 0, 1000);
+        public void setTime(int time){
+            this.time = time;
+            this.repaint();
         }
 
         //render time inside circle

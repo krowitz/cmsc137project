@@ -32,6 +32,8 @@ import java.net.Socket;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 import java.util.Scanner;
 
 public class IllusGameServer implements Runnable{
@@ -41,6 +43,7 @@ public class IllusGameServer implements Runnable{
     private List<IllusPlayer> players;
     private String lobbyId;
     private int maxPlayers;
+    private Time timer;
 
     private int level;
 
@@ -118,6 +121,41 @@ public class IllusGameServer implements Runnable{
             }
         }
         return player;
+    }
+
+    // TIMER
+    public class Time{
+        Timer timer;
+        private int time;
+
+        public Time(int time) {
+            this.time = time;
+        }
+
+        public void updateTime(){
+            this.time--;
+            sendToAll("TIME " + this.time + " ");
+        }
+
+        public int getTime(){
+            return this.time;
+        }
+
+        void stopTimer(){
+            this.timer.cancel();
+            this.timer.purge();
+        }
+
+        void startTimer(){
+            this.timer = new Timer();
+            timer.scheduleAtFixedRate(new TimerTask(){
+                public void run(){
+                    updateTime();
+                    if(time == 0)
+                        stopTimer();
+                }
+            }, 0, 1000);
+        }
     }
 
     public static void main(String[] args) {
@@ -249,7 +287,7 @@ public class IllusGameServer implements Runnable{
                         
                     }else if(data.startsWith("ANSWER")){
                         String playerName = dataArray[1].trim();
-                        String guess = dataArray[2].trim();
+                        String guess = dataArray[3].trim();
 
                         System.out.println("\n[!] Received PLAYER " + playerName +" answer: " + guess);
 
@@ -266,6 +304,8 @@ public class IllusGameServer implements Runnable{
 
                         dictionary.setAnswer(choice);
                         sendToAll("WORD "+choice);
+                        timer = new Time(60);
+                        timer.startTimer();
                     }
                     break;
             }
