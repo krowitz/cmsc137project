@@ -306,12 +306,18 @@ public class IllusGameServer implements Runnable{
                         sendToAll("WORD "+choice);
 
                         // server side timer initialization
-                        timer = new Time(60);
+                        timer = new Time(4);
                         timer.startTimer();
-
+                        
                         /* client side timer initialization
                         sendtoAll("START ");
                         */
+                    }else if(data.startsWith("GAME_START")){
+                        sendToAll("GAME_START ");
+                        sendToAll("WORD "+dictionary.getAnswer());
+                        timer = new Time(60);
+                        timer.startTimer();
+                        
                     }
                     break;
             }

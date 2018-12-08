@@ -234,6 +234,7 @@ public class GameClient {
                                 if(serverMessage.startsWith("START")){
                                     // timer.startTimer(); client side timer
                                     answerCheckbox.setVisible(true);
+                                    
                                 }
                                 if(serverMessage.startsWith("CORRECT_ANSWER")){
                                     appendMessage("PLAYER " + data + " got it CORRECT!");
@@ -348,6 +349,7 @@ public class GameClient {
     public class Time extends JLabel {
         Timer timer;
         private int time;
+        private Boolean isInGame = false;
 
         public Time(int time) {
             this.time = time;
@@ -362,6 +364,9 @@ public class GameClient {
             this.repaint();
         }
         
+        public void setInGameTimer(){
+            this.isInGame = true;
+        }
         /*
         client side timer 
 
@@ -396,7 +401,21 @@ public class GameClient {
             g2d.setColor(Color.RED);
             g2d.drawOval(0,0, 50, 50);
 
-            g2d.setColor(Color.BLACK);
+            if(!isInGame && this.getTime() <= 3 && this.getTime() >= 0){
+                setCurrentWord("Game will start in " + this.getTime());
+            }
+            if(this.getTime() == 3 && !isInGame)
+                g2d.setColor(new Color(209, 0, 0));
+            else if(this.getTime() == 2 && !isInGame)
+                g2d.setColor(new Color(255, 102, 34));
+            else if(this.getTime() == 1 && !isInGame)
+                g2d.setColor( new Color(51, 221, 0));
+            else if(this.getTime() == 0 && !isInGame){
+                this.setInGameTimer();
+                send("GAME_START");
+            }
+            else
+                g2d.setColor(Color.BLACK);
             g2d.drawString(Integer.toString(this.getTime()), 15, 32);
         }
     }
