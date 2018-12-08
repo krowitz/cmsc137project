@@ -32,6 +32,9 @@ import java.net.Socket;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
+import java.util.Scanner;
 
 public class IllusGameServer implements Runnable{
     private DataOutputStream outputStream;
@@ -40,12 +43,15 @@ public class IllusGameServer implements Runnable{
     private List<IllusPlayer> players;
     private String lobbyId;
     private int maxPlayers;
+    private Time timer;
 
     private int level;
 
     private String state = "WAITING";
 
     private int currentPlayerCount = 0;
+
+    private Dictionary dictionary;
 
     public IllusGameServer (String serverName, int port, int maxPlayers) throws Exception{
         Socket server = new Socket();
@@ -56,6 +62,7 @@ public class IllusGameServer implements Runnable{
         serverSocket = new DatagramSocket(Constants.GAME_PORT);
         players = new ArrayList<>();
         this.maxPlayers = maxPlayers;
+        this.dictionary = new Dictionary();
     }
 
     private String createLobby(int maxPlayers) throws Exception{
@@ -104,6 +111,53 @@ public class IllusGameServer implements Runnable{
             send(player, msg);
         }
     }
+
+    public IllusPlayer getPlayerByName(String name){
+        IllusPlayer player = null;
+        for(IllusPlayer temp : players){
+            if(name.equals(temp.getName())){
+                player = temp;
+                break;
+            }
+        }
+        return player;
+    }
+
+    // TIMER
+    public class Time{
+        Timer timer;
+        private int time;
+
+        public Time(int time) {
+            this.time = time;
+        }
+
+        public void updateTime(){
+            this.time--;
+            sendToAll("TIME " + this.time + " ");
+        }
+
+        public int getTime(){
+            return this.time;
+        }
+
+        void stopTimer(){
+            this.timer.cancel();
+            this.timer.purge();
+        }
+
+        void startTimer(){
+            this.timer = new Timer();
+            timer.scheduleAtFixedRate(new TimerTask(){
+                public void run(){
+                    updateTime();
+                    if(time == 0)
+                        stopTimer();
+                }
+            }, 0, 1000);
+        }
+    }
+
     public static void main(String[] args) {
 
         /*
@@ -122,11 +176,19 @@ public class IllusGameServer implements Runnable{
         }
         //end validate command line args
 */
-        int maxPlayers = 3;
+        
+        Scanner sc = new Scanner(System.in);
+        int maxPlayers = 0;
+        
+        
+        do{
+            System.out.print("Max no. of players (3-5 only): ");
+            maxPlayers = sc.nextInt();
+        }while(maxPlayers < 3 || maxPlayers > 5);
 
         IllusGameServer gameServer = null;
         try {
-            gameServer = new IllusGameServer("202.92.144.45", 80, 3);
+            gameServer = new IllusGameServer("202.92.144.45", 80, maxPlayers);
         }catch (Exception e){
             System.out.println("Game server not successfully initialized. See stacktrace below. ");
             e.printStackTrace();
@@ -149,10 +211,13 @@ public class IllusGameServer implements Runnable{
 
     @Override
     public void run() {
+        int loadedUI = 0;
+        level = 0;
         while (true){
 
             byte[] buf = new byte[256];
             DatagramPacket packet = new DatagramPacket(buf, buf.length);
+
             try{
                 serverSocket.receive(packet);
             }catch(Exception ioe){}
@@ -165,25 +230,95 @@ public class IllusGameServer implements Runnable{
             //remove excess bytes
             data = data.trim();
 
+            String[] dataArray;
+
             switch (state){
                 case "WAITING" :
                     if(data.startsWith("CONNECT")){
-                        String[] dataArray = data.split(" ");
+                        dataArray = data.split(" ");
                         IllusPlayer player = new IllusPlayer();
                         player.setName(dataArray[1]);
                         player.setAddress(packet.getAddress());
                         player.setPort(packet.getPort());
                         players.add(player);
                         currentPlayerCount++;
-                        if(currentPlayerCount == maxPlayers){
-                            state = "RUNNING";
-                        }
+                        
                         String message = "SUCCESS " + lobbyId;
                         System.out.println("PLAYER " + player.getName() + " is now connected.");
                         send(player, message);
+
+                        if(currentPlayerCount == maxPlayers){
+                            state = "INIT_LEVEL";
+                            message = "PLAYER_COUNT_MET";
+                            sendToAll(message);
+                        }
+                    }
+                    break;
+                case "INIT_LEVEL":
+                    dataArray = data.split(" ");
+
+                    if(data.startsWith("START")){
+                        loadedUI++;
+                            
+                        if(loadedUI == maxPlayers){
+                            
+                            state = "RUNNING";
+                            IllusPlayer drawer = players.get(level % maxPlayers);
+                            System.out.println("\nPLAYER " + drawer.getName() + " will draw for this level");
+                            sendToAll("DRAWER "+drawer.getName()+" ");
+                            level++;
+
+                            String wordChoices = dictionary.getWords();
+
+                            send(drawer, "CHOOSE " + wordChoices);
+                            // sendToAll("START TIMER");
+                        }
+                            
+                        // System.out.println("loaded UI " + loadedUI + " " + maxPlayers);
+                        
+                    }
+                case "RUNNING":
+                    dataArray = data.split(" ");
+                    if(data.startsWith("CLEAR")){
+                        sendToAll("CLEAR CANVAS");
+                    }else if(data.startsWith("PAINT")){
+                        
+                        sendToAll("PAINT " + dataArray[1] + " " + dataArray[2] + " "+dataArray[3]);
+                        
+                    }else if(data.startsWith("ANSWER")){
+                        String playerName = dataArray[1].trim();
+                        String guess = dataArray[3].trim();
+
+                        System.out.println("\n[!] Received PLAYER " + playerName +" answer: " + guess);
+
+                        //check answer here
+                        if(dictionary.validateWord(guess)){
+                            System.out.println("\n[!] PLAYER " + playerName + " is correct");
+                            sendToAll("CORRECT_ANSWER " + playerName);
+                        }
+                        
+                    }else if(data.startsWith("CHOICE")){
+                        //drawer finalizes word to guess
+                        String choice = dataArray[1].trim();
+                        System.out.println("\n[!] Drawer chose " + choice);
+
+                        dictionary.setAnswer(choice);
+                        sendToAll("WORD "+choice);
+
+                        // server side timer initialization
+                        timer = new Time(60);
+                        timer.startTimer();
+
+                        /* client side timer initialization
+                        sendtoAll("START ");
+                        */
                     }
                     break;
             }
+
+            // System.out.println("Current state: " + state);
+            continue;
         }
+        
     }
 }

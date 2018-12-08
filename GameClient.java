@@ -6,6 +6,10 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
+import java.awt.event.ItemListener;
+import java.awt.event.ItemEvent;
 import java.awt.image.BufferedImage;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
@@ -15,6 +19,8 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.Timer;
 import java.util.TimerTask;
+import java.util.Scanner;
+import java.util.Collections;
 
 /**
  * 1. Connect to lobby
@@ -33,14 +39,21 @@ public class GameClient {
     private DatagramSocket gameServerSocket = new DatagramSocket();
     private static ChatSendThread senderThread;
     private static ChatReceiveThread receiveThread;
-
-    private String currentWord;
+    private Time timer;
     private static TextArea chatArea;
+    private static JLabel wordLabel;
+    private static JCheckBox answerCheckbox;    
     private String chatLobbyId;
+    private MainWindow mainWindow;
+    private Boolean isDrawer = true;
+    private Boolean isAnswer = false;
 
-    private void setCurrentWord(String currentWord){
-        this.currentWord = currentWord;
+    private static Boolean initUI = false;
+
+    protected void setCurrentWord(String word){
+        wordLabel.setText(word.toUpperCase());
     }
+
     public GameClient(String playerName, String serverAddress, int port) throws Exception{
 
         try{
@@ -68,10 +81,24 @@ public class GameClient {
         }
 
         ExecutorService executorService = Executors.newFixedThreadPool(3);
+
+        executorService.submit(gameServerListener);
+
+        System.out.println("Waiting for other players");
+        
+        while(true){
+            System.out.print("");
+            if(getInitUI()){
+                System.out.println("Players completed");
+                System.out.println("[!] Initializing UI");
+                send("START ");
+                break;
+            }
+        }
+
         senderThread = new ChatSendThread(outputStream, this);
         receiveThread = new ChatReceiveThread(inputStream, this);
 
-        executorService.submit(gameServerListener);
         executorService.submit(receiveThread);
         executorService.submit(senderThread);
 
@@ -79,7 +106,7 @@ public class GameClient {
         window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         window.setPreferredSize(new Dimension(500,500));
         window.setLayout(new BorderLayout());
-        window.add(new MainWindow());
+        window.add(mainWindow = new MainWindow());
         window.pack();
         window.setLocationRelativeTo(null);
         window.setVisible(true);
@@ -124,16 +151,32 @@ public class GameClient {
 
        
     }
-
+    public String getPlayerName(){
+        return this.playerName;
+    }
+    protected void sendAnswer(String answer){
+        if(!isDrawer)
+            send("ANSWER " + this.playerName + " " + answer);
+    }
     public static void appendMessage(String message){
         chatArea.append("\n" + message);
     }
 
+    public static void setInitUI(Boolean value){
+        GameClient.initUI = value;
+        
+    }
+
+    public Boolean getInitUI(){
+
+        return GameClient.initUI;
+    }
+
     private void connectToGame(String playerName) throws Exception{
-        boolean connected = false;
+        Boolean connected = false;
 
         int count = 0;
-        System.out.println(connected + " " + count);
+        // System.out.println(connected + " " + count);
         while(!connected){
             send("CONNECT " + playerName);
             byte[] buf = new byte[256];
@@ -152,11 +195,12 @@ public class GameClient {
             System.out.println(connectionStatus);
             this.chatLobbyId = connectionStatus.split("[^a-zA-Z0-9']+")[1];
 
-            count++;
-            if(count == 3) throw new Exception("Failed to connect to game server.");
+            // count++;
+            // if(count == 3) throw new Exception("Failed to connect to game server.");
         }
         
         gameServerListener = new Runnable() {
+
             @Override
             public void run() {
                 while(true){
@@ -165,40 +209,86 @@ public class GameClient {
                         byte[] buf = new byte[256];
                         DatagramPacket packet = new DatagramPacket(buf, buf.length);
                         gameServerSocket.receive(packet);
-
                         if(packet != null){
                             String serverMessage = new String(packet.getData());
-                            String data = serverMessage.split(" ")[1];
+                            if(serverMessage.startsWith("PLAYER_COUNT_MET")){
+                                setInitUI(true);
+                                
+                            }else{
+                                String data = serverMessage.split(" ")[1].trim();
+                                
+                                if(serverMessage.startsWith("MESSAGE")){
+                                    appendMessage(data);
+                                }
 
-                            if(serverMessage.startsWith("MESSAGE")){
-                                appendMessage(data);
-                            }
+                                if(serverMessage.startsWith("WORD")){
+                                    String word = data.trim();
+                                    if(isDrawer){
+                                        setCurrentWord(word);
+                                        answerCheckbox.setVisible(false);
+                                    }else{
+                                        String changed = String.join("", Collections.nCopies(word.length(), "\u25A1"));
+                                        setCurrentWord(changed);
+                                    }
+                                }
+                                if(serverMessage.startsWith("START")){
+                                    // timer.startTimer(); client side timer
+                                    answerCheckbox.setVisible(true);
+                                }
+                                if(serverMessage.startsWith("CORRECT_ANSWER")){
+                                    appendMessage("PLAYER " + data + " got it CORRECT!");
+                                    
+                                    if(data.equals(playerName)){
+                                        System.out.println("[!] Answer DISABLED");
+                                        answerCheckbox.setVisible(false);
+                                        isAnswer = false;
+                                    }
+                                }
+                                if(serverMessage.startsWith("SCORES")){
+                                    //update scores
+                                }
+                                if(serverMessage.startsWith("DRAWER")){
+                                    if(!data.equals(playerName)){
+                                        //disable pen
+                                        isDrawer = false;
+                                    }else
+                                        isDrawer = true;
+                                }
+                                if(serverMessage.startsWith("POINTS")){
+                                    //draw line given points
+                                }
+                                if(serverMessage.startsWith("PAINT")){
+        
+                                    String[] dataArray = serverMessage.split(" ");
+                                    int x = (int)Double.parseDouble(dataArray[2]);
+                                    int y = (int)Double.parseDouble(dataArray[3]);
 
-                            if(serverMessage.startsWith("WORD")){
-                                currentWord = data;
-                            }
+                                    Point point = new Point(x,y);
 
-                            if(serverMessage.startsWith("START")){
-                                //start timer
-                            }
+                                    String color = dataArray[1];
+                                    mainWindow.getCanvas().drawDot(point, color);
+                                }
+                                if(serverMessage.startsWith("CLEAR")){
+                                    //clear
+                                    mainWindow.getCanvas().clearCanvas();
+                                }
+                                if(serverMessage.startsWith("CHOOSE")){
+                                    String[] dataArray = serverMessage.split(" ");
+                                    String[] options = {dataArray[1], dataArray[2], dataArray[3]};
 
-                            if(serverMessage.startsWith("SCORES")){
-                                //update scores
-                            }
-                            if(serverMessage.startsWith("DRAWER")){
-                                if(!data.equals(playerName)){
-                                    //disable pen
+                                    int finalChoice = JOptionPane.showOptionDialog(null, "Choose a word", "Drawer Choice", JOptionPane.DEFAULT_OPTION, JOptionPane.PLAIN_MESSAGE, null, options, options[0]);
+
+                                    send("CHOICE " + options[finalChoice]);
+                                }
+                                if(serverMessage.startsWith("TIME")){
+                                    // server side timer
+                                    String[] dataArray = serverMessage.split(" ");
+                                    int currentTime = Integer.parseInt(dataArray[1]);
+                                    timer.setTime(currentTime);
+
                                 }
                             }
-                            if(serverMessage.startsWith("POINTS")){
-                                //draw line given points
-                            }
-                            if(serverMessage.startsWith("COLOR")){
-                                //change pen color
-                            }
-                            if(serverMessage.startsWith("CLEAR")){
-                                //clear
-                            }
+
                         }
                     }catch (Exception e){
                         e.printStackTrace();
@@ -213,7 +303,7 @@ public class GameClient {
     public class MainWindow extends JPanel {
 
         private Canvas canvasPane;
-
+        
         //set up main window contents
         public MainWindow() {
             setLayout(new BorderLayout());
@@ -226,6 +316,10 @@ public class GameClient {
 
             add(new BrushOptions(canvasPane), BorderLayout.SOUTH);
         }
+
+        protected Canvas getCanvas(){
+            return canvasPane;
+        }
     }
 
     //upper portion
@@ -236,17 +330,17 @@ public class GameClient {
             setLayout(new BorderLayout());
             setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
 
-            Time timer = new Time(60);
+            timer = new Time(60);
             timer.setPreferredSize(new Dimension(55,55));
             timer.setFont(new Font("San-Serif", Font.PLAIN, 20));
 
             add(timer, BorderLayout.WEST);
 
-            Word word = new Word("WORD");
-            word.setHorizontalAlignment(SwingConstants.CENTER);
-            word.setFont(new Font("San-Serif", Font.PLAIN, 25));
+            wordLabel = new JLabel("Welcome!");
+            wordLabel.setHorizontalAlignment(SwingConstants.CENTER);
+            wordLabel.setFont(new Font("San-Serif", Font.PLAIN, 25));
 
-            add(word, BorderLayout.CENTER);
+            add(wordLabel, BorderLayout.CENTER);
         }
     }
 
@@ -257,16 +351,23 @@ public class GameClient {
 
         public Time(int time) {
             this.time = time;
-            this.startTimer();
-        }
-
-        public void updateTime(){
-            this.time--;
-            this.repaint();
         }
 
         public int getTime(){
             return this.time;
+        }
+
+        public void setTime(int time){
+            this.time = time;
+            this.repaint();
+        }
+        
+        /*
+        client side timer 
+
+        public void updateTime(){
+            this.time--;
+            this.repaint();
         }
 
         void stopTimer(){
@@ -284,6 +385,7 @@ public class GameClient {
                 }
             }, 0, 1000);
         }
+        */
 
         //render time inside circle
         public void paintComponent( Graphics g ) {
@@ -340,29 +442,64 @@ public class GameClient {
             add(chatArea);
 
             inputField = new TextField();
+            inputField.addKeyListener(new KeyAdapter() {
+                @Override
+                public void keyPressed(KeyEvent e) {
+                    if(e.getKeyCode() == KeyEvent.VK_ENTER){
+                        String message = inputField.getText();
+
+                        if(isAnswer){
+                            System.out.println("You sent answer: " + message);
+                            sendAnswer(message);
+                        }else{
+                            senderThread.sendMessage(message, playerName);
+                        }
+
+                        inputField.setText("");
+                    }
+                }
+
+            });
+
             add(inputField);
 
-            enterButton = new JButton(new RightPane.SendAction("Enter", inputField));
-            enterButton.setAlignmentX(Component.CENTER_ALIGNMENT);
-            add(enterButton);
+            answerCheckbox = new JCheckBox("Answer?");
+
+            answerCheckbox.addItemListener(new ItemListener() {    
+                public void itemStateChanged(ItemEvent e) {                 
+                    isAnswer = e.getStateChange() == 1 ? true:false;  
+                }    
+            });
+
+            add(answerCheckbox);
+
+            // enterButton = new JButton(new RightPane.SendAction("Enter", inputField));
+            // enterButton.setAlignmentX(Component.CENTER_ALIGNMENT);
+            // add(enterButton);
 
         }
 
-        public class SendAction extends AbstractAction{
-            private TextField inputField;
+        // public class SendAction extends AbstractAction{
+        //     private TextField inputField;
 
-            private SendAction(String name, TextField inputField){
-                if(name != null) putValue(NAME, name);
-                this.inputField = inputField;
-            }
+        //     private SendAction(String name, TextField inputField){
+        //         if(name != null) putValue(NAME, name);
+        //         this.inputField = inputField;
+        //     }
 
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                String message = inputField.getText();
+        //     @Override
+        //     public void actionPerformed(ActionEvent e) {
+        //         String message = inputField.getText();
 
-                senderThread.sendMessage(message, playerName);
-            }
-        }
+        //         if(isAnswer){
+        //             sendAnswer(message);
+        //         }else{
+        //             senderThread.sendMessage(message, playerName);
+        //         }
+
+        //         inputField.setText("");
+        //     }
+        // }
     }
 
     //brush options component
@@ -424,7 +561,10 @@ public class GameClient {
 
             @Override
             public void actionPerformed(ActionEvent e) {
-                canvasPane.clearCanvas();
+                if(isDrawer){
+                    canvasPane.clearCanvas();
+                    send("CLEAR CANVAS");
+                }
             }
         }
 
@@ -463,12 +603,18 @@ public class GameClient {
                 //render brush drawings
                 @Override
                 public void mousePressed(MouseEvent e) {
-                    drawDot(e.getPoint());
+                    if(isDrawer){
+                        drawDot(e.getPoint());
+                        sendPoint(e.getPoint());
+                    }
                 }
 
                 @Override
                 public void mouseDragged(MouseEvent e) {
-                    drawDot(e.getPoint());
+                    if(isDrawer){
+                        drawDot(e.getPoint());
+                        sendPoint(e.getPoint());
+                    }
                 }
 
             };
@@ -476,7 +622,31 @@ public class GameClient {
             addMouseListener(handler);
             addMouseMotionListener(handler);
         }
+        protected void sendPoint(Point pt){
+            String color = "";
+            
+            if(getForeground().equals(Color.BLACK)){
+                color = "BLACK";
+            }else if(getForeground().equals(Color.WHITE)){
+                color = "WHITE";
+            }else if(getForeground().equals(new Color(209, 0, 0))){
+                color = "RED";
+            }else if(getForeground().equals(new Color(255, 102, 34))){
+                color = "ORANGE";
+            }else if(getForeground().equals(new Color(255, 218, 33))){
+                color = "YELLOW";
+            }else if(getForeground().equals(new Color(51, 221, 0))){
+                color = "GREEN";
+            }else if(getForeground().equals(new Color(17, 51, 204))){
+                color = "BLUE";
+            }else if(getForeground().equals(new Color(51, 0, 68))){
+                color = "VIOLET";
+            }
 
+            send("PAINT " + color + " " + pt.getX() + " " + pt.getY() + " ");
+
+
+        }
         protected void drawDot(Point pt) {
             if (background == null) {
                 updateBuffer();
@@ -500,10 +670,58 @@ public class GameClient {
             repaint();
         }
 
+        protected Color getColorValue(String color){
+            Color colorValue = null;
+            if(color.equals("BLACK")){
+                 colorValue = Color.BLACK;
+            }else if(color.equals("WHITE")){
+                 colorValue = Color.WHITE;
+            }else if(color.equals("RED")){
+                 colorValue  = new Color(209, 0, 0);
+            }else if(color.equals("ORANGE")){
+                 colorValue  = new Color(255, 102, 34);
+            }else if(color.equals("YELLOW")){
+                 colorValue  = new Color(255, 218, 33);
+            }else if(color.equals("GREEN")){
+                 colorValue  = new Color(51, 221, 0);
+            }else if(color.equals("BLUE")){
+                 colorValue  = new Color(17, 51, 204);
+            }else if(color.equals("VIOLET")){
+                 colorValue  = new Color(51, 0, 68);
+            }
+
+
+            
+            return colorValue;
+        }
+        protected void drawDot(Point pt, String color) {
+            if (background == null) {
+                updateBuffer();
+            }
+
+            if (background != null) {
+                //canvas
+                Graphics2D g2d = background.createGraphics();
+
+                //change color of brush
+                g2d.setColor(getColorValue(color));
+
+                //change width and height to adjust thickness of brush
+                g2d.fillOval(pt.x - 5, pt.y - 5, 10, 10);
+
+                //release system resources of by graphics g2d
+                g2d.dispose();
+            }
+
+            //update canvas
+            repaint();
+        }
         protected void clearCanvas(){
             background = null;
             updateBuffer();
             repaint();
+            
+
         }
 
         protected void updateBuffer() {
@@ -544,9 +762,14 @@ public class GameClient {
     }
 
     public static void main(String[] args) throws Exception{
-        String playerName = "Paul";
+        String playerName;
         String serverAddress = "127.0.0.1";
         int port = Constants.GAME_PORT;
+
+        Scanner sc = new Scanner(System.in);
+
+        System.out.print("Enter player name: ");
+        playerName = sc.nextLine();
 
         new GameClient(playerName,serverAddress,port);
     }

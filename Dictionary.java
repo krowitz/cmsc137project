@@ -8,7 +8,11 @@ import java.util.Scanner;
 public class Dictionary{
     private final String filename = "words.txt";
     private ArrayList<String> randomWords;
-    private String word;
+    private String answer;
+
+    public Dictionary(){
+        readFile();
+    }
 
     // reads the contents of the file
     public void readFile(){
@@ -23,7 +27,7 @@ public class Dictionary{
             numberOfWords = Integer.parseInt(line);
 
             while(i<wordIndexArr.length){
-                boolean existing = false;
+                Boolean existing = false;
                 randomIndex = getRandomWordIndex(numberOfWords);
                 
                 for(int j=0; j<wordIndexArr.length; j++){
@@ -62,7 +66,7 @@ public class Dictionary{
     public void chooseWord(){
         String chosenWord;
         Scanner sc = new Scanner(System.in);
-        boolean valid;
+        Boolean valid;
 
         System.out.println("Select a word to be guessed from the pool of words ");
         
@@ -80,16 +84,25 @@ public class Dictionary{
             }
         }while(!valid);
 
-        System.out.println("Chosen word is: " + chosenWord);
-        this.setWord(chosenWord);
+        // System.out.println("Chosen word is: " + chosenWord);
+        // this.setWord(chosenWord);
     }
 
-    public void setWord(String word){
-        this.word = word;
+    public Boolean validateWord(String guess){
+        Boolean valid = this.answer.equals(guess) ? true : false;
+        return valid;
     }
 
-    public String getWord(){
-        return this.word;
+    public void setAnswer(String word){
+        this.answer = word;
     }
-    
+
+    public String getAnswer(){
+        return this.answer;
+    }
+
+    public String getWords(){
+        String options = String.join(" ", this.randomWords);
+        return options;
+    }
 }

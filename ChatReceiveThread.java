@@ -38,18 +38,37 @@ public class ChatReceiveThread extends Thread {
 
 				bytes = inputStream.read(data); //number of bytes received from server
 				byte[] bufferresponse = Arrays.copyOfRange(data, 0, bytes); //adjust byte array length depending on the number of bytes received
-
+				String message;
 				TcpPacket packet = null;
 				if(bytes > 0){
 					packet = packet.parseFrom(bufferresponse);
 					
-					if(packet.getType() == TcpPacket.PacketType.CHAT){
-						TcpPacket.ChatPacket response = TcpPacket.ChatPacket.parseFrom(bufferresponse);
-						String message = new String(response.getPlayer().getName() + ":" + response.getMessage());
-						// System.out.println(response.getPlayer().getName() + ":" + response.getMessage());
-						this.client.appendMessage(message);
+					switch(packet.getType()){
+						case CHAT:
+							TcpPacket.ChatPacket chatresponse = TcpPacket.ChatPacket.parseFrom(bufferresponse);
+							message = new String(chatresponse.getPlayer().getName() + ":" + chatresponse.getMessage());
+							// System.out.println(response.getPlayer().getName() + ":" + response.getMessage());
+							this.client.appendMessage(message);
+							break;
+						case DISCONNECT:
+							TcpPacket.DisconnectPacket disconnectresponse = TcpPacket.DisconnectPacket.parseFrom(bufferresponse);
+							if(disconnectresponse.getUpdate() == TcpPacket.DisconnectPacket.Update.NORMAL){
+								message = new String(disconnectresponse.getPlayer().getName() + " has disconnected.");
+								this.client.appendMessage(message);
+							}else if(disconnectresponse.getUpdate() == TcpPacket.DisconnectPacket.Update.LOST){
+								message = new String(disconnectresponse.getPlayer().getName() + " has lost connection.");
+								this.client.appendMessage(message);
+							}
+							break;
+						case CONNECT:
+							TcpPacket.ConnectPacket connectresponse = TcpPacket.ConnectPacket.parseFrom(bufferresponse);
+							// if(connectresponse.getUpdate() == TcpPacket.ConnectPacket.Update.NEW){
+							// 	message = new String(connectresponse.getPlayer().getName() + " has entered the lobby.");
+							// 	this.client.appendMessage(message);
+							// }
+							break;
+
 					}
-					// System.out.println(packet);
 				}
 
 			} catch (Exception e) {
