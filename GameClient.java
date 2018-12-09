@@ -18,7 +18,6 @@ import java.util.Arrays;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.Timer;
-import java.util.TimerTask;
 import java.util.Scanner;
 import java.util.Collections;
 
@@ -27,7 +26,6 @@ import java.util.Collections;
  * 2. Run chat sender / server update listener threads.
  * 3. Parse messages from server.
  * 4. Run instance of Main UI.
- *
  */
 
 public class GameClient {
@@ -41,8 +39,9 @@ public class GameClient {
     private static ChatReceiveThread receiveThread;
     private Time timer;
     private static TextArea chatArea;
+    private static TextArea scores;
     private static JLabel wordLabel;
-    private static JCheckBox answerCheckbox;    
+    private static JCheckBox answerCheckbox;
     private String chatLobbyId;
     private MainWindow mainWindow;
     private Boolean isDrawer = true;
@@ -50,15 +49,15 @@ public class GameClient {
 
     private static Boolean initUI = false;
 
-    protected void setCurrentWord(String word){
+    protected void setCurrentWord(String word) {
         wordLabel.setText(word.toUpperCase());
     }
 
-    public GameClient(String playerName, String serverAddress, int port) throws Exception{
+    public GameClient(String playerName, String serverAddress, int port) throws Exception {
 
-        try{
+        try {
             connectToGame(playerName);
-        }catch(Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
             System.exit(-1);
         }
@@ -69,12 +68,12 @@ public class GameClient {
         outputStream = new DataOutputStream(server.getOutputStream());
         inputStream = new DataInputStream(server.getInputStream());
 
-        try{
+        try {
             this.playerName = playerName;
             connectToLobby(chatLobbyId);
-            
-            
-        }catch (Exception e){
+
+
+        } catch (Exception e) {
             System.out.println("Connecting to lobby failed. See stacktrace below.");
             e.printStackTrace();
             System.exit(-1);
@@ -85,10 +84,10 @@ public class GameClient {
         executorService.submit(gameServerListener);
 
         System.out.println("Waiting for other players");
-        
-        while(true){
+
+        while (true) {
             System.out.print("");
-            if(getInitUI()){
+            if (getInitUI()) {
                 System.out.println("Players completed");
                 System.out.println("[!] Initializing UI");
                 send("START ");
@@ -102,9 +101,9 @@ public class GameClient {
         executorService.submit(receiveThread);
         executorService.submit(senderThread);
 
-        JFrame window = new JFrame("Illus (Player: "+this.playerName+")");
+        JFrame window = new JFrame("Illus (Player: " + this.playerName + ")");
         window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        window.setPreferredSize(new Dimension(500,500));
+        window.setPreferredSize(new Dimension(500, 500));
         window.setLayout(new BorderLayout());
         window.add(mainWindow = new MainWindow());
         window.pack();
@@ -112,16 +111,17 @@ public class GameClient {
         window.setVisible(true);
     }
 
-    private void send(String msg){
-        try{
+    private void send(String msg) {
+        try {
             byte[] buf = msg.getBytes();
             InetAddress address = InetAddress.getByName("localhost");
             DatagramPacket packet = new DatagramPacket(buf, buf.length, address, Constants.GAME_PORT);
             gameServerSocket.send(packet);
-        }catch(Exception e){}
+        } catch (Exception e) {
+        }
     }
 
-    private void connectToLobby(String lobbyId) throws Exception{
+    private void connectToLobby(String lobbyId) throws Exception {
         PlayerProtos.Player player = PlayerProtos.Player.newBuilder().setName(this.playerName).build();
 
         System.out.println("Connecting to chat lobby: " + lobbyId);
@@ -138,57 +138,65 @@ public class GameClient {
         byte[] bufferResponse = Arrays.copyOfRange(buffer, 0, bytes); //adjust byte array length depending on the number of bytes received
 
         TcpPacketProtos.TcpPacket packet = null;
-        if(bytes > 0){
+        if (bytes > 0) {
             packet = packet.parseFrom(bufferResponse);
             // System.out.println(packet);
-            if(packet.getType() == TcpPacketProtos.TcpPacket.PacketType.CONNECT){
+            if (packet.getType() == TcpPacketProtos.TcpPacket.PacketType.CONNECT) {
                 TcpPacketProtos.TcpPacket.ConnectPacket response = TcpPacketProtos.TcpPacket.ConnectPacket.parseFrom(bufferResponse);
                 // System.out.println(response);
                 System.out.println("Successfully connected to lobby with ID " + lobbyId);
             }
-            
-        }
 
-       
+        }
     }
-    public String getPlayerName(){
+
+    private Thread ticker = new Thread() {
+        @Override
+        public void run() {
+            send("TICK");
+        }
+    };
+
+    public String getPlayerName() {
         return this.playerName;
     }
-    protected void sendAnswer(String answer){
-        if(!isDrawer)
+
+    protected void sendAnswer(String answer) {
+        if (!isDrawer)
             send("ANSWER " + this.playerName + " " + answer);
     }
-    public static void appendMessage(String message){
+
+    public static void appendMessage(String message) {
         chatArea.append("\n" + message);
     }
 
-    public static void setInitUI(Boolean value){
+    public static void setInitUI(Boolean value) {
         GameClient.initUI = value;
-        
+
     }
 
-    public Boolean getInitUI(){
+    public Boolean getInitUI() {
 
         return GameClient.initUI;
     }
 
-    private void connectToGame(String playerName) throws Exception{
+    private void connectToGame(String playerName) throws Exception {
         Boolean connected = false;
 
         int count = 0;
         // System.out.println(connected + " " + count);
-        while(!connected){
+        while (!connected) {
             send("CONNECT " + playerName);
             byte[] buf = new byte[256];
             DatagramPacket packet = new DatagramPacket(buf, buf.length);
-            try{
+            try {
                 gameServerSocket.receive(packet);
-            }catch(Exception ioe){
+            } catch (Exception ioe) {
                 ioe.printStackTrace();
             }
             String connectionStatus = new String(packet.getData());
 
-            if(connectionStatus.startsWith("SUCCESS")){
+            if (connectionStatus.startsWith("SUCCESS")) {
                 connected = true;
             }
             System.out.println("Connection Status");
@@ -198,81 +206,102 @@ public class GameClient {
             // count++;
             // if(count == 3) throw new Exception("Failed to connect to game server.");
         }
-        
+
         gameServerListener = new Runnable() {
 
             @Override
             public void run() {
-                while(true){
-
+                while (true) {
                     try {
                         byte[] buf = new byte[256];
                         DatagramPacket packet = new DatagramPacket(buf, buf.length);
                         gameServerSocket.receive(packet);
-                        if(packet != null){
+                        if (packet != null) {
                             String serverMessage = new String(packet.getData());
-                            if(serverMessage.startsWith("PLAYER_COUNT_MET")){
+                            if (serverMessage.startsWith("PLAYER_COUNT_MET")) {
                                 setInitUI(true);
-                                
-                            }else{
-                                String data = serverMessage.split(" ")[1].trim();
-                                
-                                if(serverMessage.startsWith("MESSAGE")){
+
+                            } else {
+                                if (serverMessage.startsWith("MESSAGE")) {
+                                    String data = serverMessage.substring(8);
+
                                     appendMessage(data);
                                 }
 
-                                if(serverMessage.startsWith("WORD")){
+                                if (serverMessage.startsWith("WORD")) {
+                                    String data = serverMessage.split(" ")[1].trim();
+
                                     String word = data.trim();
-                                    if(isDrawer){
+                                    if (isDrawer) {
                                         setCurrentWord(word);
                                         answerCheckbox.setVisible(false);
-                                    }else{
+                                    } else {
                                         String changed = String.join("", Collections.nCopies(word.length(), "\u25A1"));
                                         setCurrentWord(changed);
+                                        answerCheckbox.setVisible(true);
+                                        isAnswer = true;
                                     }
                                 }
-                                if(serverMessage.startsWith("START")){
+                                if (serverMessage.startsWith("START")) {
                                     // timer.startTimer(); client side timer
-                                    answerCheckbox.setVisible(true);
+                                    if(!isDrawer){
+                                        answerCheckbox.setVisible(true);
+                                        isAnswer = true;
+                                    }
                                 }
-                                if(serverMessage.startsWith("CORRECT_ANSWER")){
+                                if (serverMessage.startsWith("CORRECT_ANSWER")) {
+                                    String data = serverMessage.split(" ")[1].trim();
+
                                     appendMessage("PLAYER " + data + " got it CORRECT!");
-                                    
-                                    if(data.equals(playerName)){
+
+                                    if (data.equals(playerName)) {
                                         System.out.println("[!] Answer DISABLED");
                                         answerCheckbox.setVisible(false);
                                         isAnswer = false;
                                     }
                                 }
-                                if(serverMessage.startsWith("SCORES")){
+                                if (serverMessage.startsWith("SCORES")) {
+                                    String data = serverMessage.split(" ")[1].trim();
+
                                     //update scores
+                                    String[] score = data.split(",");
+
+                                    StringBuilder sb = new StringBuilder("SCORES: \n");
+                                    for(int i = 0; i < score.length; i++){
+                                        sb.append(score[i]);
+                                        if(i % 2 == 0) sb.append(": ");
+                                        if(i % 2 == 1) sb.append("\n");
+                                    }
+                                    scores.setText(sb.toString());
                                 }
-                                if(serverMessage.startsWith("DRAWER")){
-                                    if(!data.equals(playerName)){
+                                if (serverMessage.startsWith("DRAWER")) {
+                                    String data = serverMessage.split(" ")[1].trim();
+
+                                    if (!data.equals(playerName)) {
                                         //disable pen
                                         isDrawer = false;
-                                    }else
+                                    } else
                                         isDrawer = true;
                                 }
-                                if(serverMessage.startsWith("POINTS")){
+                                if (serverMessage.startsWith("POINTS")) {
                                     //draw line given points
                                 }
-                                if(serverMessage.startsWith("PAINT")){
-        
-                                    String[] dataArray = serverMessage.split(" ");
-                                    int x = (int)Double.parseDouble(dataArray[2]);
-                                    int y = (int)Double.parseDouble(dataArray[3]);
+                                if (serverMessage.startsWith("PAINT")) {
 
-                                    Point point = new Point(x,y);
+                                    String[] dataArray = serverMessage.split(" ");
+                                    int x = (int) Double.parseDouble(dataArray[2]);
+                                    int y = (int) Double.parseDouble(dataArray[3]);
+
+                                    Point point = new Point(x, y);
 
                                     String color = dataArray[1];
                                     mainWindow.getCanvas().drawDot(point, color);
                                 }
-                                if(serverMessage.startsWith("CLEAR")){
+                                if (serverMessage.startsWith("CLEAR")) {
                                     //clear
                                     mainWindow.getCanvas().clearCanvas();
                                 }
-                                if(serverMessage.startsWith("CHOOSE")){
+                                if (serverMessage.startsWith("CHOOSE")) {
                                     String[] dataArray = serverMessage.split(" ");
                                     String[] options = {dataArray[1], dataArray[2], dataArray[3]};
 
@@ -280,30 +309,33 @@ public class GameClient {
 
                                     send("CHOICE " + options[finalChoice]);
                                 }
-                                if(serverMessage.startsWith("TIME")){
+                                if (serverMessage.startsWith("TIME")) {
                                     // server side timer
                                     String[] dataArray = serverMessage.split(" ");
                                     int currentTime = Integer.parseInt(dataArray[1]);
                                     timer.setTime(currentTime);
-
+                                    System.out.println(playerName + "current time" + currentTime);
+                                    if(currentTime == 0){
+                                        send("TIME_UP");
+                                    }
                                 }
                             }
 
                         }
-                    }catch (Exception e){
+                    } catch (Exception e) {
                         e.printStackTrace();
                     }
                 }
             }
         };
-        
+
     }
 
     //main window contents
     public class MainWindow extends JPanel {
 
         private Canvas canvasPane;
-        
+
         //set up main window contents
         public MainWindow() {
             setLayout(new BorderLayout());
@@ -317,13 +349,13 @@ public class GameClient {
             add(new BrushOptions(canvasPane), BorderLayout.SOUTH);
         }
 
-        protected Canvas getCanvas(){
+        protected Canvas getCanvas() {
             return canvasPane;
         }
     }
 
     //upper portion
-    public class UpperPane extends JPanel{
+    public class UpperPane extends JPanel {
 
         //contains timer and word to guess
         public UpperPane() {
@@ -331,7 +363,7 @@ public class GameClient {
             setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
 
             timer = new Time(60);
-            timer.setPreferredSize(new Dimension(55,55));
+            timer.setPreferredSize(new Dimension(55, 55));
             timer.setFont(new Font("San-Serif", Font.PLAIN, 20));
 
             add(timer, BorderLayout.WEST);
@@ -353,11 +385,11 @@ public class GameClient {
             this.time = time;
         }
 
-        public int getTime(){
+        public int getTime() {
             return this.time;
         }
 
-        public void setTime(int time){
+        public void setTime(int time) {
             this.time = time;
             this.repaint();
         }
@@ -388,13 +420,13 @@ public class GameClient {
         */
 
         //render time inside circle
-        public void paintComponent( Graphics g ) {
+        public void paintComponent(Graphics g) {
             super.paintComponent(g);
 
-            Graphics2D g2d = (Graphics2D)g;
+            Graphics2D g2d = (Graphics2D) g;
 
             g2d.setColor(Color.RED);
-            g2d.drawOval(0,0, 50, 50);
+            g2d.drawOval(0, 0, 50, 50);
 
             g2d.setColor(Color.BLACK);
             g2d.drawString(Integer.toString(this.getTime()), 15, 32);
@@ -402,7 +434,7 @@ public class GameClient {
     }
 
     //word-to-guess component
-    public class Word extends JLabel{
+    public class Word extends JLabel {
         private String word;
 
         public Word(String word) {
@@ -411,32 +443,31 @@ public class GameClient {
 
         }
 
-        public void updateWord(String word){
+        public void updateWord(String word) {
             this.word = word;
         }
 
-        public String getTime(){
+        public String getTime() {
             return this.word;
         }
     }
 
     //right portion of UI
     public class RightPane extends JPanel {
-        private TextArea scores;
         private TextField inputField;
         private JButton enterButton;
 
         //contains player score and chat room
 
-        public RightPane(){
-            setLayout(new BoxLayout(this,BoxLayout.Y_AXIS));
-            setPreferredSize(new Dimension(200,250));
+        public RightPane() {
+            setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
+            setPreferredSize(new Dimension(200, 250));
 
-            scores = new TextArea("SCORES:",5,1, TextArea.SCROLLBARS_VERTICAL_ONLY);
+            scores = new TextArea("SCORES:", 5, 1, TextArea.SCROLLBARS_VERTICAL_ONLY);
             scores.setEditable(false);
             add(scores);
 
-            chatArea = new TextArea("CHATROOM:",13,1, TextArea.SCROLLBARS_VERTICAL_ONLY);
+            chatArea = new TextArea("CHATROOM:", 13, 1, TextArea.SCROLLBARS_VERTICAL_ONLY);
             chatArea.setEditable(false);
 
             add(chatArea);
@@ -445,13 +476,13 @@ public class GameClient {
             inputField.addKeyListener(new KeyAdapter() {
                 @Override
                 public void keyPressed(KeyEvent e) {
-                    if(e.getKeyCode() == KeyEvent.VK_ENTER){
+                    if (e.getKeyCode() == KeyEvent.VK_ENTER) {
                         String message = inputField.getText();
 
-                        if(isAnswer){
+                        if (isAnswer) {
                             System.out.println("You sent answer: " + message);
                             sendAnswer(message);
-                        }else{
+                        } else {
                             senderThread.sendMessage(message, playerName);
                         }
 
@@ -465,10 +496,10 @@ public class GameClient {
 
             answerCheckbox = new JCheckBox("Answer?");
 
-            answerCheckbox.addItemListener(new ItemListener() {    
-                public void itemStateChanged(ItemEvent e) {                 
-                    isAnswer = e.getStateChange() == 1 ? true:false;  
-                }    
+            answerCheckbox.addItemListener(new ItemListener() {
+                public void itemStateChanged(ItemEvent e) {
+                    isAnswer = e.getStateChange() == 1 ? true : false;
+                }
             });
 
             add(answerCheckbox);
@@ -507,38 +538,38 @@ public class GameClient {
 
         //ROYGBV colors and erasers
         public BrushOptions(Canvas canvasPane) {
-            JButton blackColor = new JButton(new BrushOptions.ColorAction(canvasPane, null, Color.BLACK));
+            JButton blackColor = new JButton(new ColorAction(canvasPane, null, Color.BLACK));
             blackColor.setBackground(Color.BLACK);
-            blackColor.setPreferredSize(new Dimension(25,25));
+            blackColor.setPreferredSize(new Dimension(25, 25));
 
-            JButton redColor = new JButton(new BrushOptions.ColorAction(canvasPane, null, new Color(209, 0, 0)));
+            JButton redColor = new JButton(new ColorAction(canvasPane, null, new Color(209, 0, 0)));
             redColor.setBackground(new Color(209, 0, 0));
-            redColor.setPreferredSize(new Dimension(25,25));
+            redColor.setPreferredSize(new Dimension(25, 25));
 
-            JButton orangeColor = new JButton(new BrushOptions.ColorAction(canvasPane, null, new Color(255, 102, 34)));
+            JButton orangeColor = new JButton(new ColorAction(canvasPane, null, new Color(255, 102, 34)));
             orangeColor.setBackground(new Color(255, 102, 34));
-            orangeColor.setPreferredSize(new Dimension(25,25));
+            orangeColor.setPreferredSize(new Dimension(25, 25));
 
-            JButton yellowColor = new JButton(new BrushOptions.ColorAction(canvasPane, null, new Color(255, 218, 33)));
+            JButton yellowColor = new JButton(new ColorAction(canvasPane, null, new Color(255, 218, 33)));
             yellowColor.setBackground(new Color(255, 218, 33));
-            yellowColor.setPreferredSize(new Dimension(25,25));
+            yellowColor.setPreferredSize(new Dimension(25, 25));
 
-            JButton greenColor = new JButton(new BrushOptions.ColorAction(canvasPane, null, new Color(51, 221, 0)));
+            JButton greenColor = new JButton(new ColorAction(canvasPane, null, new Color(51, 221, 0)));
             greenColor.setBackground(new Color(51, 221, 0));
-            greenColor.setPreferredSize(new Dimension(25,25));
+            greenColor.setPreferredSize(new Dimension(25, 25));
 
-            JButton blueColor = new JButton(new BrushOptions.ColorAction(canvasPane, null, new Color(17, 51, 204)));
+            JButton blueColor = new JButton(new ColorAction(canvasPane, null, new Color(17, 51, 204)));
             blueColor.setBackground(new Color(17, 51, 204));
-            blueColor.setPreferredSize(new Dimension(25,25));
+            blueColor.setPreferredSize(new Dimension(25, 25));
 
-            JButton violetColor = new JButton(new BrushOptions.ColorAction(canvasPane, null, new Color(51, 0, 68)));
+            JButton violetColor = new JButton(new ColorAction(canvasPane, null, new Color(51, 0, 68)));
             violetColor.setBackground(new Color(51, 0, 68));
-            violetColor.setPreferredSize(new Dimension(25,25));
+            violetColor.setPreferredSize(new Dimension(25, 25));
 
 
-            JButton eraser = new JButton(new BrushOptions.ColorAction(canvasPane, "Eraser", Color.WHITE));
+            JButton eraser = new JButton(new ColorAction(canvasPane, "Eraser", Color.WHITE));
 
-            JButton clear = new JButton(new BrushOptions.ClearAction(canvasPane, "Clear"));
+            JButton clear = new JButton(new ClearAction(canvasPane, "Clear"));
 
             add(blackColor);
             add(redColor);
@@ -551,17 +582,17 @@ public class GameClient {
             add(clear);
         }
 
-        public class ClearAction extends AbstractAction{
+        public class ClearAction extends AbstractAction {
             private Canvas canvasPane;
 
-            private ClearAction(Canvas canvasPane, String name){
-                if(name != null) putValue(NAME, name);
+            private ClearAction(Canvas canvasPane, String name) {
+                if (name != null) putValue(NAME, name);
                 this.canvasPane = canvasPane;
             }
 
             @Override
             public void actionPerformed(ActionEvent e) {
-                if(isDrawer){
+                if (isDrawer) {
                     canvasPane.clearCanvas();
                     send("CLEAR CANVAS");
                 }
@@ -574,7 +605,7 @@ public class GameClient {
             private Color color;
 
             private ColorAction(Canvas canvasPane, String name, Color color) {
-                if(name != null) putValue(NAME, name);
+                if (name != null) putValue(NAME, name);
                 this.canvasPane = canvasPane;
                 this.color = color;
             }
@@ -603,7 +634,7 @@ public class GameClient {
                 //render brush drawings
                 @Override
                 public void mousePressed(MouseEvent e) {
-                    if(isDrawer){
+                    if (isDrawer) {
                         drawDot(e.getPoint());
                         sendPoint(e.getPoint());
                     }
@@ -611,7 +642,7 @@ public class GameClient {
 
                 @Override
                 public void mouseDragged(MouseEvent e) {
-                    if(isDrawer){
+                    if (isDrawer) {
                         drawDot(e.getPoint());
                         sendPoint(e.getPoint());
                     }
@@ -622,24 +653,25 @@ public class GameClient {
             addMouseListener(handler);
             addMouseMotionListener(handler);
         }
-        protected void sendPoint(Point pt){
+
+        protected void sendPoint(Point pt) {
             String color = "";
-            
-            if(getForeground().equals(Color.BLACK)){
+
+            if (getForeground().equals(Color.BLACK)) {
                 color = "BLACK";
-            }else if(getForeground().equals(Color.WHITE)){
+            } else if (getForeground().equals(Color.WHITE)) {
                 color = "WHITE";
-            }else if(getForeground().equals(new Color(209, 0, 0))){
+            } else if (getForeground().equals(new Color(209, 0, 0))) {
                 color = "RED";
-            }else if(getForeground().equals(new Color(255, 102, 34))){
+            } else if (getForeground().equals(new Color(255, 102, 34))) {
                 color = "ORANGE";
-            }else if(getForeground().equals(new Color(255, 218, 33))){
+            } else if (getForeground().equals(new Color(255, 218, 33))) {
                 color = "YELLOW";
-            }else if(getForeground().equals(new Color(51, 221, 0))){
+            } else if (getForeground().equals(new Color(51, 221, 0))) {
                 color = "GREEN";
-            }else if(getForeground().equals(new Color(17, 51, 204))){
+            } else if (getForeground().equals(new Color(17, 51, 204))) {
                 color = "BLUE";
-            }else if(getForeground().equals(new Color(51, 0, 68))){
+            } else if (getForeground().equals(new Color(51, 0, 68))) {
                 color = "VIOLET";
             }
 
@@ -647,6 +679,7 @@ public class GameClient {
 
 
         }
+
         protected void drawDot(Point pt) {
             if (background == null) {
                 updateBuffer();
@@ -670,30 +703,30 @@ public class GameClient {
             repaint();
         }
 
-        protected Color getColorValue(String color){
+        protected Color getColorValue(String color) {
             Color colorValue = null;
-            if(color.equals("BLACK")){
-                 colorValue = Color.BLACK;
-            }else if(color.equals("WHITE")){
-                 colorValue = Color.WHITE;
-            }else if(color.equals("RED")){
-                 colorValue  = new Color(209, 0, 0);
-            }else if(color.equals("ORANGE")){
-                 colorValue  = new Color(255, 102, 34);
-            }else if(color.equals("YELLOW")){
-                 colorValue  = new Color(255, 218, 33);
-            }else if(color.equals("GREEN")){
-                 colorValue  = new Color(51, 221, 0);
-            }else if(color.equals("BLUE")){
-                 colorValue  = new Color(17, 51, 204);
-            }else if(color.equals("VIOLET")){
-                 colorValue  = new Color(51, 0, 68);
+            if (color.equals("BLACK")) {
+                colorValue = Color.BLACK;
+            } else if (color.equals("WHITE")) {
+                colorValue = Color.WHITE;
+            } else if (color.equals("RED")) {
+                colorValue = new Color(209, 0, 0);
+            } else if (color.equals("ORANGE")) {
+                colorValue = new Color(255, 102, 34);
+            } else if (color.equals("YELLOW")) {
+                colorValue = new Color(255, 218, 33);
+            } else if (color.equals("GREEN")) {
+                colorValue = new Color(51, 221, 0);
+            } else if (color.equals("BLUE")) {
+                colorValue = new Color(17, 51, 204);
+            } else if (color.equals("VIOLET")) {
+                colorValue = new Color(51, 0, 68);
             }
 
 
-            
             return colorValue;
         }
+
         protected void drawDot(Point pt, String color) {
             if (background == null) {
                 updateBuffer();
@@ -716,11 +749,12 @@ public class GameClient {
             //update canvas
             repaint();
         }
-        protected void clearCanvas(){
+
+        protected void clearCanvas() {
             background = null;
             updateBuffer();
             repaint();
-            
+
 
         }
 
@@ -761,7 +795,7 @@ public class GameClient {
         }
     }
 
-    public static void main(String[] args) throws Exception{
+    public static void main(String[] args) throws Exception {
         String playerName;
         String serverAddress = "127.0.0.1";
         int port = Constants.GAME_PORT;
@@ -771,6 +805,6 @@ public class GameClient {
         System.out.print("Enter player name: ");
         playerName = sc.nextLine();
 
-        new GameClient(playerName,serverAddress,port);
+        new GameClient(playerName, serverAddress, port);
     }
 }
