@@ -53,6 +53,11 @@ public class GameClient {
         wordLabel.setText(word.toUpperCase());
     }
 
+    protected String getCurrentWord() {
+       return wordLabel.getText();
+    }
+
+
     public GameClient(String playerName, String serverAddress, int port) throws Exception {
 
         try {
@@ -251,6 +256,7 @@ public class GameClient {
                                 }
                                 if (serverMessage.startsWith("CORRECT_ANSWER")) {
                                     String data = serverMessage.split(" ")[1].trim();
+                                    String word = serverMessage.split(" ")[2].trim();
 
                                     appendMessage("PLAYER " + data + " got it CORRECT!");
 
@@ -258,6 +264,7 @@ public class GameClient {
                                         System.out.println("[!] Answer DISABLED");
                                         answerCheckbox.setVisible(false);
                                         isAnswer = false;
+                                        setCurrentWord(word);
                                     }
                                 }
                                 if (serverMessage.startsWith("SCORES")) {
@@ -308,7 +315,7 @@ public class GameClient {
                                     int finalChoice = JOptionPane.showOptionDialog(null, "Choose a word", "Drawer Choice", JOptionPane.DEFAULT_OPTION, JOptionPane.PLAIN_MESSAGE, null, options, options[0]);
 
                                     send("CHOICE " + options[finalChoice]);
-                                }
+                                } 
                                 if (serverMessage.startsWith("TIME")) {
                                     // server side timer
                                     String[] dataArray = serverMessage.split(" ");
@@ -318,6 +325,13 @@ public class GameClient {
                                     if(currentTime == 0){
                                         send("TIME_UP");
                                     }
+                                }
+                                if (serverMessage.startsWith("REVEAL")){
+                                    String word = serverMessage.split(" ")[1].trim();
+                                    System.out.println(serverMessage);
+                                    setCurrentWord(word);
+
+
                                 }
                             }
 
@@ -482,7 +496,9 @@ public class GameClient {
                         if (isAnswer) {
                             System.out.println("You sent answer: " + message);
                             sendAnswer(message);
-                        } else {
+                        } else if(message.toUpperCase().equals(getCurrentWord())){
+                            System.out.println("attempt to say answer " + message);
+                        }else {
                             senderThread.sendMessage(message, playerName);
                         }
 
