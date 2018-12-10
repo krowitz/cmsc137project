@@ -130,18 +130,43 @@ public class IllusGameServer implements Runnable {
         this.current_word = dictionary.getAnswer();
     }
 
+    public void start_after_countdown(){
+        sendToAll("WORD "+dictionary.getAnswer());
+        timer = new Time(60, true);
+        timer.startTimer();
+        
+        sendToAll("START");
+    }
     // TIMER
     public class Time {
         Timer timer;
         private int time;
+        private Boolean isInGame = false;
 
+        public Time(int time, Boolean isInGame){
+            this.isInGame = isInGame;
+            this.time = time;
+        }
         public Time(int time) {
             this.time = time;
         }
 
+        public void setTimerStatus(){
+            this.isInGame = !this.isInGame;
+        }
+        
+        public Boolean getTimerStatus(){
+            return this.isInGame;
+        }
+
         public void updateTime() {
             this.time--;
-            sendToAll("TIME " + this.time + " ");
+            sendToAll("TIME " + this.time + " " + this.isInGame);
+
+            if(time == 0 && !isInGame){
+                start_after_countdown();
+            }
+            
         }
 
         public int getTime() {
@@ -260,7 +285,7 @@ public class IllusGameServer implements Runnable {
                         if (currentPlayerCount == maxPlayers) {
                             state = "INIT_LEVEL";
                             message = "PLAYER_COUNT_MET";
-                            max_level = maxPlayers * 1;
+                            max_level = maxPlayers * 2;
                             sendToAll(message);
                         }
                     }
@@ -337,7 +362,7 @@ public class IllusGameServer implements Runnable {
 
                                 //TODO: if level == max levels - 1, end game
                                 timer.stopTimer();
-                                if(level == max_level-1){
+                                if(level >= max_level-1){
                                     System.out.println("END GAME");
                                 }else{
                                     drawer = players.get(level % maxPlayers);
@@ -367,13 +392,13 @@ public class IllusGameServer implements Runnable {
                         if(timer != null){
                             timer.stopTimer();
                         }
-                        timer = new Time(60);
-                        timer.startTimer();
                         sendToAll("CLEAR CANVAS");
-                        sendToAll("START");
+                        timer = new Time(4);
+                        timer.startTimer();
+   
                     }
                     else if(data.startsWith("TIME_UP")){
-                        
+                        System.out.println("time up");
                         for(IllusPlayer player : players){
                             send(player, "REVEAL " + current_word);
                         }
@@ -391,8 +416,8 @@ public class IllusGameServer implements Runnable {
                             correctAnswers = 0;
                             timeUp = 0;
                             //TODO: if level == max levels - 1, end game
-                            if(level == max_level-1){
-                                System.out.println("END GAME");
+                            if(level >= max_level-1){
+                                System.out.println("END GAMETIME UP");
                             }else{ 
                                 System.out.println("\nPLAYER " + drawer.getName() + " will draw for level (" + level + "/" + max_level + ")");
                                 sendToAll("DRAWER " + drawer.getName() + " ");

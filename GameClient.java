@@ -321,8 +321,11 @@ public class GameClient {
                                     String[] dataArray = serverMessage.split(" ");
                                     int currentTime = Integer.parseInt(dataArray[1]);
                                     timer.setTime(currentTime);
+                                    timer.setTimerStatus(Boolean.parseBoolean(dataArray[2].trim()));
+                                    
                                     System.out.println(playerName + "current time" + currentTime);
-                                    if(currentTime == 0){
+                                    if(currentTime == 0 && timer.getTimerStatus()){
+                                        
                                         send("TIME_UP");
                                     }
                                 }
@@ -394,6 +397,7 @@ public class GameClient {
     public class Time extends JLabel {
         Timer timer;
         private int time;
+        private Boolean isInGame = false;
 
         public Time(int time) {
             this.time = time;
@@ -407,7 +411,15 @@ public class GameClient {
             this.time = time;
             this.repaint();
         }
+
+        public void setTimerStatus(Boolean status){
+
+            this.isInGame = status;
+        }
         
+        public Boolean getTimerStatus(){
+            return this.isInGame;
+        }
         /*
         client side timer 
 
@@ -442,7 +454,17 @@ public class GameClient {
             g2d.setColor(Color.RED);
             g2d.drawOval(0, 0, 50, 50);
 
-            g2d.setColor(Color.BLACK);
+            if(!isInGame && this.getTime() <= 3 && this.getTime() > 0){
+                setCurrentWord("Game will start in " + this.getTime());
+            }
+            if(this.getTime() == 3 && !isInGame)
+                g2d.setColor(new Color(209, 0, 0));
+            else if(this.getTime() == 2 && !isInGame)
+                g2d.setColor(new Color(255, 102, 34));
+            else if(this.getTime() == 1 && !isInGame)
+                g2d.setColor( new Color(51, 221, 0));
+            else
+                g2d.setColor(Color.BLACK);
             g2d.drawString(Integer.toString(this.getTime()), 15, 32);
         }
     }
