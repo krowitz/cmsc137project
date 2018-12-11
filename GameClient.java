@@ -118,7 +118,7 @@ public class GameClient {
         executorService.submit(receiveThread);
         executorService.submit(senderThread);
 
-        JFrame window = new JFrame("Illus (Player: " + this.playerName + ")");
+        window = new JFrame("Illus (Player: " + this.playerName + ")");
         window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         window.setPreferredSize(new Dimension(500, 500));
         window.setLayout(new BorderLayout());
@@ -276,7 +276,7 @@ public class GameClient {
                                     String data = serverMessage.split(" ")[1].trim();
                                     String word = serverMessage.split(" ")[2].trim();
 
-                                    appendMessage("PLAYER " + data + " got it CORRECTLY!");
+                                    appendMessage("PLAYER " + data + " got it CORRECT!");
 
                                     if (data.equals(playerName)) {
                                         System.out.println("[!] Answer DISABLED");
