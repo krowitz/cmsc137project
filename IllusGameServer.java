@@ -375,6 +375,8 @@ public class IllusGameServer implements Runnable {
                                 timer.stopTimer();
                                 if(level >= max_level-1){
                                     System.out.println("END GAME");
+                                    for(IllusPlayer player : players)
+                                        send(player, "END_GAME " + player.getScore());
                                 }else{
                                     drawer = players.get(level % maxPlayers);
                                     level++;
@@ -429,6 +431,8 @@ public class IllusGameServer implements Runnable {
                             //TODO: if level == max levels - 1, end game
                             if(level >= max_level-1){
                                 System.out.println("END GAMETIME UP");
+                                for(IllusPlayer player : players)
+                                        send(player, "END_GAME " + player.getScore());
                             }else{ 
                                 System.out.println("\nPLAYER " + drawer.getName() + " will draw for level (" + level + "/" + max_level + ")");
                                 sendToAll("DRAWER " + drawer.getName() + " ");

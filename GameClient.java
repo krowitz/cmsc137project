@@ -29,7 +29,7 @@ import java.util.Collections;
  */
 
 public class GameClient {
-
+    private JFrame window;
     private Runnable gameServerListener;
     private DataOutputStream outputStream;
     private DataInputStream inputStream;
@@ -276,7 +276,7 @@ public class GameClient {
                                     String data = serverMessage.split(" ")[1].trim();
                                     String word = serverMessage.split(" ")[2].trim();
 
-                                    appendMessage("PLAYER " + data + " got it CORRECT!");
+                                    appendMessage("PLAYER " + data + " got it CORRECTLY!");
 
                                     if (data.equals(playerName)) {
                                         System.out.println("[!] Answer DISABLED");
@@ -353,6 +353,15 @@ public class GameClient {
                                     setCurrentWord(word);
 
 
+                                }
+                                if (serverMessage.startsWith("END_GAME")){
+                                    System.out.println("End game");
+                                    String score = serverMessage.split(" ")[1].trim();
+                                    window.remove(mainWindow);
+                                    
+                                    window.add(new EndGamePanel(playerName, score));
+                                     window.repaint();
+                                    window.validate();
                                 }
                             }
 
@@ -912,7 +921,7 @@ public class GameClient {
             }
             @Override
             public void actionPerformed(ActionEvent e){
-                JFrame window = new JFrame("How To Play ILLUS");
+                window = new JFrame("How To Play ILLUS");
                 window.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
                 window.setPreferredSize(new Dimension(500, 500));
                 window.setLayout(new BorderLayout());
