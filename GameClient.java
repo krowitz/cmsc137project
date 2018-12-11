@@ -29,7 +29,7 @@ import java.util.Collections;
  */
 
 public class GameClient {
-
+    private JFrame window;
     private Runnable gameServerListener;
     private DataOutputStream outputStream;
     private DataInputStream inputStream;
@@ -41,6 +41,7 @@ public class GameClient {
     private static TextArea chatArea;
     private static TextArea scores;
     private static JLabel wordLabel;
+    
     private static JCheckBox answerCheckbox;
     private String chatLobbyId;
     private MainWindow mainWindow;
@@ -106,7 +107,7 @@ public class GameClient {
         executorService.submit(receiveThread);
         executorService.submit(senderThread);
 
-        JFrame window = new JFrame("Illus (Player: " + this.playerName + ")");
+        window = new JFrame("Illus (Player: " + this.playerName + ")");
         window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         window.setPreferredSize(new Dimension(500, 500));
         window.setLayout(new BorderLayout());
@@ -335,6 +336,16 @@ public class GameClient {
                                     setCurrentWord(word);
 
 
+                                }
+                                if (serverMessage.startsWith("END_GAME")){
+                                    System.out.println("End game");
+                                    String score = serverMessage.split(" ")[1].trim();
+                                    window.remove(mainWindow);
+                                    
+                                    window.add(new EndGamePanel(playerName, score));
+
+                                    window.repaint();
+                                    window.validate();
                                 }
                             }
 
