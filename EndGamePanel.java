@@ -2,10 +2,12 @@ import javax.swing.*;
 import java.awt.*;
 
 public class EndGamePanel extends JPanel{
-    JPanel subPanel;
+    /*
+    displays the end game view after the last level which
+    consists of the name and score of the player
+    */
     public EndGamePanel(String name, String score){
-        // subPanel = new JPanel(new BoxLayout(subPanel, BoxLayout.Y_AXIS));
-        // subPanel.setOpaque(false);
+
         this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
         this.setBackground(Color.WHITE);
 
@@ -17,7 +19,6 @@ public class EndGamePanel extends JPanel{
         JLabel scoreValue = new JLabel(score);
         scoreValue.setFont(new Font("San-Serif", Font.BOLD, 100));
         scoreValue.setForeground(Color.ORANGE);
-        //this.add(Box.createVerticalGlue());
 
         endGameText.setAlignmentX(JLabel.CENTER_ALIGNMENT);
         scoreText.setAlignmentX(JLabel.CENTER_ALIGNMENT);
@@ -26,6 +27,5 @@ public class EndGamePanel extends JPanel{
         this.add(endGameText);
         this.add(scoreText);
         this.add(scoreValue);
-
     }
 }
