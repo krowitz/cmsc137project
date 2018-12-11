@@ -1,3 +1,11 @@
+/**
+ * Flow of Game Client process
+ * 1. Connect to lobby
+ * 2. Run chat sender / server update listener threads.
+ * 3. Run instance of Main UI.
+ * 4. Parse messages from server.
+ */
+
 import proto.PlayerProtos;
 import proto.TcpPacketProtos;
 
@@ -21,22 +29,21 @@ import java.util.Timer;
 import java.util.Scanner;
 import java.util.Collections;
 
-/**
- * 1. Connect to lobby
- * 2. Run chat sender / server update listener threads.
- * 3. Parse messages from server.
- * 4. Run instance of Main UI.
- */
-
 public class GameClient {
     private JFrame window;
+
     private Runnable gameServerListener;
+    
     private DataOutputStream outputStream;
     private DataInputStream inputStream;
+    
     private String playerName;
+    
     private DatagramSocket gameServerSocket = new DatagramSocket();
+
     private static ChatSendThread senderThread;
     private static ChatReceiveThread receiveThread;
+
     private Time timer;
     private static TextArea chatArea;
     private static TextArea scores;
@@ -52,26 +59,32 @@ public class GameClient {
     private StartInterface startUI;
     private static String serverAddress;
 
+    //updates word to guess on interface
     protected void setCurrentWord(String word) {
         wordLabel.setText(word.toUpperCase());
     }
 
+    //retrieve word to guess
     protected String getCurrentWord() {
        return wordLabel.getText();
     }
 
-
+    //constructor for game client
     public GameClient(int port) throws Exception {
+        //initialize startup UI
         startUI = new StartInterface("CMSC 137 Project");
 
+        //wait for user to submit the needed details
         while(!startUI.isSubmit()){
             System.out.print("");
         }
 
         System.out.println(startUI.isSubmit());
 
+        //set player name
         String playerName = startUI.getPlayerName();
 
+        //connect to game server
         try {
             connectToGame(playerName);
         } catch (Exception e) {
@@ -79,12 +92,14 @@ public class GameClient {
             System.exit(-1);
         }
 
+        //initialize chatroom
         Socket server = new Socket();
         server.connect(new InetSocketAddress("202.92.144.45", 80), 10000);
 
         outputStream = new DataOutputStream(server.getOutputStream());
         inputStream = new DataInputStream(server.getInputStream());
 
+        //connect to chat lobby
         try {
             this.playerName = playerName;
             connectToLobby(chatLobbyId);
@@ -96,10 +111,12 @@ public class GameClient {
             System.exit(-1);
         }
 
+        //create threads for chat and game server
         ExecutorService executorService = Executors.newFixedThreadPool(3);
 
         executorService.submit(gameServerListener);
 
+        //wait for complete number of players before starting game
         while (true) {
             System.out.print("");
             if (getInitUI()) {
@@ -117,6 +134,7 @@ public class GameClient {
         executorService.submit(receiveThread);
         executorService.submit(senderThread);
 
+        //initialize main game UI
         window = new JFrame("Illus (Player: " + this.playerName + ")");
         window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         window.setPreferredSize(new Dimension(500, 500));
@@ -127,6 +145,7 @@ public class GameClient {
         window.setVisible(true);
     }
 
+    //sends message to game server
     private void send(String msg) {
         try {
             // System.out.println(serverAddress);
@@ -138,6 +157,7 @@ public class GameClient {
         }
     }
 
+    //connects to chat lobby
     private void connectToLobby(String lobbyId) throws Exception {
         PlayerProtos.Player player = PlayerProtos.Player.newBuilder().setName(this.playerName).build();
 
@@ -172,30 +192,36 @@ public class GameClient {
         }
     };
 
+    //retrieves current player name
     public String getPlayerName() {
         return this.playerName;
     }
 
+    //send answer to game server
     protected void sendAnswer(String answer) {
         if (!isDrawer)
             send("ANSWER " + this.playerName + " " + answer);
     }
 
+    //updates chat text area
     public static void appendMessage(String message) {
         chatArea.append("\n" + message);
         chatArea.setCaretPosition(chatArea.getText().length() - 1);
     }
 
+    //check if main game UI is initialized
     public static void setInitUI(Boolean value) {
         GameClient.initUI = value;
 
     }
 
+    //retrieves instance of UI
     public Boolean getInitUI() {
 
         return GameClient.initUI;
-    }
+    }   
 
+    //connects to game server
     private void connectToGame(String playerName) throws Exception {
         Boolean connected = false;
 
@@ -222,6 +248,7 @@ public class GameClient {
 
         }
 
+        //create thread for receiving messages from game server
         gameServerListener = new Runnable() {
 
             @Override
@@ -233,16 +260,15 @@ public class GameClient {
                         gameServerSocket.receive(packet);
                         if (packet != null) {
                             String serverMessage = new String(packet.getData());
+                            //initialize UI if player count is met
                             if (serverMessage.startsWith("PLAYER_COUNT_MET")) {
                                 setInitUI(true);
-
                             } else {
                                 if (serverMessage.startsWith("MESSAGE")) {
                                     String data = serverMessage.substring(8);
-
                                     appendMessage(data);
                                 }
-
+                                //if word to guess
                                 if (serverMessage.startsWith("WORD")) {
                                     String data = serverMessage.split(" ")[1].trim();
 
@@ -257,12 +283,14 @@ public class GameClient {
                                         isAnswer = true;
                                     }
                                 }
+                                //start of level
                                 if (serverMessage.startsWith("START")) {
                                     if(!isDrawer){
                                         answerCheckbox.setVisible(true);
                                         isAnswer = false;
                                     }
                                 }
+                                //if player got correct answer
                                 if (serverMessage.startsWith("CORRECT_ANSWER")) {
                                     String data = serverMessage.split(" ")[1].trim();
                                     String word = serverMessage.split(" ")[2].trim();
@@ -276,6 +304,7 @@ public class GameClient {
                                         setCurrentWord(word);
                                     }
                                 }
+                                //for player scores
                                 if (serverMessage.startsWith("SCORES")) {
                                     String data = serverMessage.split(" ")[1].trim();
 
@@ -290,6 +319,7 @@ public class GameClient {
                                     }
                                     scores.setText(sb.toString());
                                 }
+                                //checks if current player is drawer
                                 if (serverMessage.startsWith("DRAWER")) {
                                     String data = serverMessage.split(" ")[1].trim();
 
@@ -299,7 +329,7 @@ public class GameClient {
                                     } else
                                         isDrawer = true;
                                 }
-                                
+                                //render drawing on canvas
                                 if (serverMessage.startsWith("PAINT")) {
 
                                     String[] dataArray = serverMessage.split(" ");
@@ -311,10 +341,12 @@ public class GameClient {
                                     String color = dataArray[1];
                                     mainWindow.getCanvas().drawDot(point, color);
                                 }
+                                //clears canvas
                                 if (serverMessage.startsWith("CLEAR")) {
                                     //clear
                                     mainWindow.getCanvas().clearCanvas();
                                 }
+                                //choose 1 from 3 words to guess
                                 if (serverMessage.startsWith("CHOOSE")) {
                                     String[] dataArray = serverMessage.split(" ");
                                     String[] options = {dataArray[1], dataArray[2], dataArray[3]};
@@ -323,6 +355,7 @@ public class GameClient {
 
                                     send("CHOICE " + options[finalChoice]);
                                 } 
+                                //updating of game timer
                                 if (serverMessage.startsWith("TIME")) {
                                     // server side timer
                                     String[] dataArray = serverMessage.split(" ");
@@ -336,6 +369,7 @@ public class GameClient {
                                         send("TIME_UP");
                                     }
                                 }
+                                //reveal word to guess on UI
                                 if (serverMessage.startsWith("REVEAL")){
                                     String word = serverMessage.split(" ")[1].trim();
                                     System.out.println(serverMessage);
@@ -343,6 +377,7 @@ public class GameClient {
 
 
                                 }
+                                //end game detection
                                 if (serverMessage.startsWith("END_GAME")){
                                     System.out.println("End game");
                                     String score = serverMessage.split(" ")[1].trim();
@@ -499,6 +534,7 @@ public class GameClient {
 
             add(chatArea);
 
+            //inputs listen on press of Enter key
             inputField = new TextField();
             inputField.addKeyListener(new KeyAdapter() {
                 @Override
@@ -585,6 +621,7 @@ public class GameClient {
             add(clear);
         }
 
+        //clear canvas
         public class ClearAction extends AbstractAction {
             private Canvas canvasPane;
 
@@ -602,6 +639,7 @@ public class GameClient {
             }
         }
 
+        //change color
         public class ColorAction extends AbstractAction {
 
             private Canvas canvasPane;
@@ -695,7 +733,7 @@ public class GameClient {
                 //change color of brush
                 g2d.setColor(getForeground());
 
-                //change width and height to adjust thickness of brush
+                //brush strokes
                 g2d.fillOval(pt.x - 5, pt.y - 5, 10, 10);
 
                 //release system resources of by graphics g2d
@@ -742,7 +780,7 @@ public class GameClient {
                 //change color of brush
                 g2d.setColor(getColorValue(color));
 
-                //change width and height to adjust thickness of brush
+                //brush stroke
                 g2d.fillOval(pt.x - 5, pt.y - 5, 10, 10);
 
                 //release system resources of by graphics g2d
@@ -757,8 +795,6 @@ public class GameClient {
             background = null;
             updateBuffer();
             repaint();
-
-
         }
 
         protected void updateBuffer() {
@@ -798,6 +834,7 @@ public class GameClient {
         }
     }
 
+    //initial interface for getting player name and game server address
     public class StartInterface extends JFrame{
         private String playerName;
         private TextField nameInput;
@@ -865,6 +902,7 @@ public class GameClient {
             return this.didSubmit;
         }
 
+        //how to play section
         public class HowToPlayAction extends AbstractAction{
             private JTextArea howToContent;
 
@@ -893,6 +931,7 @@ public class GameClient {
             }
         }
 
+        //inputs submission
         public class SendAction extends AbstractAction {
             private TextField nameInput;
             private TextField addressInput;
@@ -905,6 +944,7 @@ public class GameClient {
                 this.notif = notif;
             }
 
+            //check for input validity
             @Override
             public void actionPerformed(ActionEvent e){
                 playerName = nameInput.getText();
@@ -925,6 +965,7 @@ public class GameClient {
         }
     }
 
+    //game client interface initialization
     public static void main(String[] args) throws Exception {
         int port = Constants.GAME_PORT;
 
