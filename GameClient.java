@@ -71,7 +71,6 @@ public class GameClient {
         System.out.println(startUI.isSubmit());
 
         String playerName = startUI.getPlayerName();
-        // String serverAddress = startUI.getServerAddress();
 
         try {
             connectToGame(playerName);
@@ -130,7 +129,7 @@ public class GameClient {
 
     private void send(String msg) {
         try {
-            System.out.println(serverAddress);
+            // System.out.println(serverAddress);
             byte[] buf = msg.getBytes();
             InetAddress address = InetAddress.getByName(serverAddress);
             DatagramPacket packet = new DatagramPacket(buf, buf.length, address, Constants.GAME_PORT);
@@ -158,10 +157,8 @@ public class GameClient {
         TcpPacketProtos.TcpPacket packet = null;
         if (bytes > 0) {
             packet = packet.parseFrom(bufferResponse);
-            // System.out.println(packet);
             if (packet.getType() == TcpPacketProtos.TcpPacket.PacketType.CONNECT) {
                 TcpPacketProtos.TcpPacket.ConnectPacket response = TcpPacketProtos.TcpPacket.ConnectPacket.parseFrom(bufferResponse);
-                // System.out.println(response);
                 System.out.println("Successfully connected to lobby with ID " + lobbyId);
             }
 
@@ -203,7 +200,6 @@ public class GameClient {
         Boolean connected = false;
 
         int count = 0;
-        // System.out.println(connected + " " + count);
         while (!connected) {
             send("CONNECT " + playerName);
             byte[] buf = new byte[256];
@@ -222,12 +218,8 @@ public class GameClient {
                 System.out.println(connectionStatus);
                 String[] data = connectionStatus.split("[^a-zA-Z0-9']+");
                 this.chatLobbyId = data[1];
-                //this.playerName = data[2];
-            }else{
-                //TODO: jules to display lobby full message here
             }
-            // count++;
-            // if(count == 3) throw new Exception("Failed to connect to game server.");
+
         }
 
         gameServerListener = new Runnable() {
@@ -266,17 +258,16 @@ public class GameClient {
                                     }
                                 }
                                 if (serverMessage.startsWith("START")) {
-                                    // timer.startTimer(); client side timer
                                     if(!isDrawer){
                                         answerCheckbox.setVisible(true);
-                                        isAnswer = true;
+                                        isAnswer = false;
                                     }
                                 }
                                 if (serverMessage.startsWith("CORRECT_ANSWER")) {
                                     String data = serverMessage.split(" ")[1].trim();
                                     String word = serverMessage.split(" ")[2].trim();
 
-                                    appendMessage("PLAYER " + data + " got it CORRECT!");
+                                    appendMessage("PLAYER " + data + " got it CORRECTLY!");
 
                                     if (data.equals(playerName)) {
                                         System.out.println("[!] Answer DISABLED");
@@ -308,9 +299,7 @@ public class GameClient {
                                     } else
                                         isDrawer = true;
                                 }
-                                if (serverMessage.startsWith("POINTS")) {
-                                    //draw line given points
-                                }
+                                
                                 if (serverMessage.startsWith("PAINT")) {
 
                                     String[] dataArray = serverMessage.split(" ");
@@ -341,8 +330,8 @@ public class GameClient {
                                     timer.setTime(currentTime);
                                     timer.setTimerStatus(Boolean.parseBoolean(dataArray[2].trim()));
                                     
-                                    System.out.println(playerName + "current time" + currentTime);
-                                    if(currentTime == 0 && timer.getTimerStatus()){
+                                    // System.out.println(playerName + "current time" + currentTime);
+                                    if(currentTime <= 0 && timer.getTimerStatus()){
                                         
                                         send("TIME_UP");
                                     }
@@ -447,30 +436,6 @@ public class GameClient {
         public Boolean getTimerStatus(){
             return this.isInGame;
         }
-        /*
-        client side timer 
-
-        public void updateTime(){
-            this.time--;
-            this.repaint();
-        }
-
-        void stopTimer(){
-            this.timer.cancel();
-            this.timer.purge();
-        }
-
-        void startTimer(){
-            this.timer = new Timer();
-            timer.scheduleAtFixedRate(new TimerTask(){
-                public void run(){
-                    updateTime();
-                    if(time == 0)
-                        stopTimer();
-                }
-            }, 0, 1000);
-        }
-        */
 
         //render time inside circle
         public void paintComponent(Graphics g) {
@@ -521,7 +486,6 @@ public class GameClient {
         private JButton enterButton;
 
         //contains player score and chat room
-
         public RightPane() {
             setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
             setPreferredSize(new Dimension(200, 250));
@@ -836,7 +800,6 @@ public class GameClient {
 
     public class StartInterface extends JFrame{
         private String playerName;
-        // private String serverAddress = "127.0.0.1";
         private TextField nameInput;
         private TextField addressInput;
         private JButton submitButton;
@@ -897,10 +860,6 @@ public class GameClient {
             return this.playerName;
         }
 
-        // public String getServerAddress(){
-        //     return this.serverAddress;
-        // }
-
         public Boolean isSubmit(){
             
             return this.didSubmit;
@@ -912,7 +871,7 @@ public class GameClient {
             private HowToPlayAction(String name){
                 if(name != null) putValue(NAME, name);
 
-                String howTo = "\n\nA. Possible Player Types:\n     1. Player who guesses the word\n     2. Player who draws the image describing the word to be guessed\n\nB. Instructions\n     1. The maximum number of rounds is divisible by the number of players (i.e. rounds = number of players * 3). For each round, assign a player who will draw. The remaining players will try to guess the word being drawn. The first player who is able to guess the word within the shortest amount of time will gain the most points.\n     2. The player who will draw chooses 1 from 3 words. After choosing a word, the player will illustrate the word using the canvas and brush options on the interface.\n     3. The player who will guess will check the 'Answer?' checkbox​​ for the player’s answer to be considered valid.\n\nC. Scoring\n     1. The player who is able to guess the word first will earn a score equivalent to the remaining time in seconds.\n     2. The player who draws will also earn a score based on the number of players who are able to guess the word. The more players who guessed correctly, the higher the additional points (but only of small increments)\n\nD. Endgame\n     1. If all players disconnect or if the maximum number of levels are completed.\n     2. The top 3 scorers will also be displayed at the end of the game";
+                String howTo = "\n\nA. Possible Player Types:\n     1. Player who guesses the word\n     2. Player who draws the image describing the word to be guessed\n\nB. Instructions\n     1. The maximum number of rounds is divisible by the number of players (i.e. rounds = number of players * 3). For each round, assign a player who will draw. The remaining players will try to guess the word being drawn. The first player who is able to guess the word within the shortest amount of time will gain the most points.\n     2. The player who will draw chooses 1 from 3 words. After choosing a word, the player will illustrate the word using the canvas and brush options on the interface.\n     3. The player who will guess will check the 'Answer?' checkbox​​ for the player’s answer to be considered valid.\n\nC. Scoring\n     1. The player who is able to guess the word first will earn a score equivalent to the remaining time in seconds.\n     2. The player who draws will also earn a score based on the number of players who are able to guess the word. The more players who guessed correctly, the higher the additional points (but only of small increments)\n\nD. Endgame\n     1. If the maximum number of levels are completed.\n     2. The scores of each player will also be displayed at the end of the game";
 
                 this.howToContent = new JTextArea(howTo);
                 this.howToContent.setEditable(false); 
@@ -961,36 +920,12 @@ public class GameClient {
                     submitButton.setEnabled(false);
                     notif.setText("Waiting for other players...");
                 }
-
-                // byte[] buf = new byte[256];
-                // DatagramPacket packet = new DatagramPacket(buf, buf.length);
-                // try {
-                //     gameServerSocket.receive(packet);
-                // } catch (Exception ex) {
-                //     ex.printStackTrace();
-                //     System.exit(-1);
-                // }      
-
-                // if (packet != null) {
-                //     String serverMessage = new String(packet.getData());
-                //     if (serverMessage.startsWith("SUCCESS")) {
-                //         playerName = nameInput.getText();
-                //         serverAddress = addressInput.getText();
-                //         didSubmit = true;
-
-                //         submitButton.setEnabled(false);
-                //         notif.setText("Waiting for other players...");
-                //     }else if(serverMessage.startsWith("FAIL")){
-
-                //     }
-                // }
                 
             }
         }
     }
 
     public static void main(String[] args) throws Exception {
-        // String serverAddress = "192.168.137.86";
         int port = Constants.GAME_PORT;
 
         new GameClient(port);

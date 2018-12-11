@@ -192,23 +192,6 @@ public class IllusGameServer implements Runnable {
 
     public static void main(String[] args) {
 
-        /*
-        //validate command line args
-        if (args.length != 2){
-            System.out.println("Usage: java -jar IllusGameServer <lobby id> <max players>");
-            System.exit(1);
-        }
-        int maxPlayers = 0;
-        try{
-            maxPlayers = Integer.parseInt(args[1]);
-        }catch (Exception e){
-            System.out.println("Usage: java -jar IllusGameServer <lobby id> <max players>");
-            System.out.println("Max players should be a qualified Integer");
-            System.exit(1);
-        }
-        //end validate command line args
-*/
-
         Scanner sc = new Scanner(System.in);
         int maxPlayers = 0;
 
@@ -274,22 +257,8 @@ public class IllusGameServer implements Runnable {
                         dataArray = data.split(" ");
                         IllusPlayer player = new IllusPlayer();
 
-
-//                        if(players.size() > 0){
-//                            int sameNameCount = 0;
-//                            for(int i = 0; i < players.size(); i++){
-//                                if(players.get(i).getGivenName().equals(dataArray[1])){
-//                                    sameNameCount++;
-//                                }
-//                            }
-//                            int playerLabel = sameNameCount + 1;
-//                            connectingPlayerName = connectingPlayerName + playerLabel;
-//                        }
-//                        else{
-//                            connectingPlayerName = dataArray[1];
-//                        }
                         player.setName(dataArray[1]);
-                        //player.setGivenName(dataArray[1]);
+
                         player.setAddress(packet.getAddress());
                         player.setPort(packet.getPort());
                         players.add(player);
@@ -302,7 +271,7 @@ public class IllusGameServer implements Runnable {
                         if (currentPlayerCount == maxPlayers) {
                             state = "INIT_LEVEL";
                             message = "PLAYER_COUNT_MET";
-                            max_level = maxPlayers * 2;
+                            max_level = maxPlayers * 3;
                             sendToAll(message);
                         }
                     }
@@ -370,8 +339,6 @@ public class IllusGameServer implements Runnable {
                                     
                                 }
 
-
-                                //TODO: if level == max levels - 1, end game
                                 timer.stopTimer();
                                 if(level >= max_level-1){
                                     System.out.println("END GAME");
@@ -416,7 +383,7 @@ public class IllusGameServer implements Runnable {
                             send(player, "REVEAL " + current_word);
                         }
                         timeUp++;
-                        if(timeUp == maxPlayers -1){
+                        if(timeUp == maxPlayers){
                             if(correctAnswers == 0){
                                 for(IllusPlayer player : players){
                                     if(player.getName().equals(drawer)){
@@ -428,9 +395,8 @@ public class IllusGameServer implements Runnable {
                             level++;
                             correctAnswers = 0;
                             timeUp = 0;
-                            //TODO: if level == max levels - 1, end game
                             if(level >= max_level-1){
-                                System.out.println("END GAMETIME UP");
+                                System.out.println("END GAME TIME UP");
                                 for(IllusPlayer player : players)
                                         send(player, "END_GAME " + player.getScore());
                             }else{ 
@@ -445,7 +411,6 @@ public class IllusGameServer implements Runnable {
                     break;
             }
 
-            // System.out.println("Current state: " + state);
             continue;
         }
 
