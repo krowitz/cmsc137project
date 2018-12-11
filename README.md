@@ -12,15 +12,19 @@ The following should be installed on your system for the project to work.
 ```
 git clone https://github.com/krowitz/cmsc137project/
 ```
-2. Compile the java files
+2. Use protobuf
+```
+export CLASSPATH=protobuf-java-3.6.1.jar:$CLASSPATH
+```
+3. Compile the java files
 ```
 javac *.java 
 ```
-3.1 Run the game server if it is not already running
+4.1 Run the game server if it is not already running
 ```
 java IllusGameServer
 ```
-3.2 Run the game client
+4.2 Run the game client
 ```
 java GameClient
 ```

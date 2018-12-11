@@ -30,9 +30,6 @@ public class ChatReceiveThread extends Thread {
 			try {
 
 				byte[] data = new byte[1024];
-				// inputStream.read(data);
-				
-				// System.out.println("Acquired from server: " + new String(data));
 
 				int bytes = -1;
 
@@ -47,7 +44,6 @@ public class ChatReceiveThread extends Thread {
 						case CHAT:
 							TcpPacket.ChatPacket chatresponse = TcpPacket.ChatPacket.parseFrom(bufferresponse);
 							message = new String(chatresponse.getPlayer().getName() + ":" + chatresponse.getMessage());
-							// System.out.println(response.getPlayer().getName() + ":" + response.getMessage());
 							this.client.appendMessage(message);
 							break;
 						case DISCONNECT:
@@ -62,10 +58,7 @@ public class ChatReceiveThread extends Thread {
 							break;
 						case CONNECT:
 							TcpPacket.ConnectPacket connectresponse = TcpPacket.ConnectPacket.parseFrom(bufferresponse);
-							// if(connectresponse.getUpdate() == TcpPacket.ConnectPacket.Update.NEW){
-							// 	message = new String(connectresponse.getPlayer().getName() + " has entered the lobby.");
-							// 	this.client.appendMessage(message);
-							// }
+							
 							break;
 
 					}

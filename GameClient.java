@@ -287,6 +287,7 @@ public class GameClient {
                                 if (serverMessage.startsWith("START")) {
                                     if(!isDrawer){
                                         answerCheckbox.setVisible(true);
+                                        answerCheckbox.setSelected(false);
                                         isAnswer = false;
                                     }
                                 }
@@ -909,7 +910,7 @@ public class GameClient {
             private HowToPlayAction(String name){
                 if(name != null) putValue(NAME, name);
 
-                String howTo = "\n\nA. Possible Player Types:\n     1. Player who guesses the word\n     2. Player who draws the image describing the word to be guessed\n\nB. Instructions\n     1. The maximum number of rounds is divisible by the number of players (i.e. rounds = number of players * 3). For each round, assign a player who will draw. The remaining players will try to guess the word being drawn. The first player who is able to guess the word within the shortest amount of time will gain the most points.\n     2. The player who will draw chooses 1 from 3 words. After choosing a word, the player will illustrate the word using the canvas and brush options on the interface.\n     3. The player who will guess will check the 'Answer?' checkbox​​ for the player’s answer to be considered valid.\n\nC. Scoring\n     1. The player who is able to guess the word first will earn a score equivalent to the remaining time in seconds.\n     2. The player who draws will also earn a score based on the number of players who are able to guess the word. The more players who guessed correctly, the higher the additional points (but only of small increments)\n\nD. Endgame\n     1. If the maximum number of levels are completed.\n     2. The scores of each player will also be displayed at the end of the game";
+                String howTo = "\n\nA. Possible Player Types:\n     1. Player who guesses the word\n     2. Player who draws the image describing the word to be guessed\n\nB. Instructions\n     1. The maximum number of rounds is divisible by the number of players (i.e. rounds = number of players * 3). For each round, a player will be assigned to draw. The remaining players will try to guess the word being drawn. The player who is able to guess the word within the shortest amount of time will gain the most points.\n     2. The player who will draw chooses 1 from 3 words. After choosing a word, the player will illustrate the word using the canvas and brush options on the interface.\n     3. The player who will guess will check the 'Answer?' checkbox​​ for the player’s answer to be considered valid.\n\nC. Scoring\n     1. The player who is able to guess the word first will earn a score equivalent to the remaining time in seconds.\n     2. The player who draws will also earn a score based on the number of players who are able to guess the word. If all players guessed correctly, the drawer gets 10 bonus points for being a good drawer.\n\nD. Endgame\n     1. The game ends if the maximum number of levels are completed.\n     2. The scores of each player will also be displayed at the end of the game.";
 
                 this.howToContent = new JTextArea(howTo);
                 this.howToContent.setEditable(false); 
