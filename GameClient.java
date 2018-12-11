@@ -53,6 +53,11 @@ public class GameClient {
         wordLabel.setText(word.toUpperCase());
     }
 
+    protected String getCurrentWord() {
+       return wordLabel.getText();
+    }
+
+
     public GameClient(String playerName, String serverAddress, int port) throws Exception {
 
         try {
@@ -251,6 +256,7 @@ public class GameClient {
                                 }
                                 if (serverMessage.startsWith("CORRECT_ANSWER")) {
                                     String data = serverMessage.split(" ")[1].trim();
+                                    String word = serverMessage.split(" ")[2].trim();
 
                                     appendMessage("PLAYER " + data + " got it CORRECT!");
 
@@ -258,6 +264,7 @@ public class GameClient {
                                         System.out.println("[!] Answer DISABLED");
                                         answerCheckbox.setVisible(false);
                                         isAnswer = false;
+                                        setCurrentWord(word);
                                     }
                                 }
                                 if (serverMessage.startsWith("SCORES")) {
@@ -308,16 +315,26 @@ public class GameClient {
                                     int finalChoice = JOptionPane.showOptionDialog(null, "Choose a word", "Drawer Choice", JOptionPane.DEFAULT_OPTION, JOptionPane.PLAIN_MESSAGE, null, options, options[0]);
 
                                     send("CHOICE " + options[finalChoice]);
-                                }
+                                } 
                                 if (serverMessage.startsWith("TIME")) {
                                     // server side timer
                                     String[] dataArray = serverMessage.split(" ");
                                     int currentTime = Integer.parseInt(dataArray[1]);
                                     timer.setTime(currentTime);
+                                    timer.setTimerStatus(Boolean.parseBoolean(dataArray[2].trim()));
+                                    
                                     System.out.println(playerName + "current time" + currentTime);
-                                    if(currentTime == 0){
+                                    if(currentTime == 0 && timer.getTimerStatus()){
+                                        
                                         send("TIME_UP");
                                     }
+                                }
+                                if (serverMessage.startsWith("REVEAL")){
+                                    String word = serverMessage.split(" ")[1].trim();
+                                    System.out.println(serverMessage);
+                                    setCurrentWord(word);
+
+
                                 }
                             }
 
@@ -380,6 +397,7 @@ public class GameClient {
     public class Time extends JLabel {
         Timer timer;
         private int time;
+        private Boolean isInGame = false;
 
         public Time(int time) {
             this.time = time;
@@ -393,7 +411,15 @@ public class GameClient {
             this.time = time;
             this.repaint();
         }
+
+        public void setTimerStatus(Boolean status){
+
+            this.isInGame = status;
+        }
         
+        public Boolean getTimerStatus(){
+            return this.isInGame;
+        }
         /*
         client side timer 
 
@@ -428,7 +454,17 @@ public class GameClient {
             g2d.setColor(Color.RED);
             g2d.drawOval(0, 0, 50, 50);
 
-            g2d.setColor(Color.BLACK);
+            if(!isInGame && this.getTime() <= 3 && this.getTime() > 0){
+                setCurrentWord("Game will start in " + this.getTime());
+            }
+            if(this.getTime() == 3 && !isInGame)
+                g2d.setColor(new Color(209, 0, 0));
+            else if(this.getTime() == 2 && !isInGame)
+                g2d.setColor(new Color(255, 102, 34));
+            else if(this.getTime() == 1 && !isInGame)
+                g2d.setColor( new Color(51, 221, 0));
+            else
+                g2d.setColor(Color.BLACK);
             g2d.drawString(Integer.toString(this.getTime()), 15, 32);
         }
     }
@@ -482,7 +518,9 @@ public class GameClient {
                         if (isAnswer) {
                             System.out.println("You sent answer: " + message);
                             sendAnswer(message);
-                        } else {
+                        } else if(message.toUpperCase().equals(getCurrentWord())){
+                            System.out.println("attempt to say answer " + message);
+                        }else {
                             senderThread.sendMessage(message, playerName);
                         }
 

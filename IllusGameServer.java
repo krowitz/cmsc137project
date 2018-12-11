@@ -47,6 +47,7 @@ public class IllusGameServer implements Runnable {
     private Time timer;
 
     private int level;
+    private int max_level;
 
     private String state = "WAITING";
 
@@ -54,6 +55,7 @@ public class IllusGameServer implements Runnable {
     private int correctAnswers = 0;
 
     private Dictionary dictionary;
+    private String current_word;
 
     public IllusGameServer(String serverName, int port, int maxPlayers) throws Exception {
         Socket server = new Socket();
@@ -83,7 +85,6 @@ public class IllusGameServer implements Runnable {
         TcpPacket packet = null;
         if (bytes > 0) {
             packet = packet.parseFrom(bufferresponse);
-            //System.out.println(packet);
         }
 
         String lobbyId = "";
@@ -125,18 +126,47 @@ public class IllusGameServer implements Runnable {
         return player;
     }
 
+    private void setCurrentWord(){
+        this.current_word = dictionary.getAnswer();
+    }
+
+    public void start_after_countdown(){
+        sendToAll("WORD "+dictionary.getAnswer());
+        timer = new Time(60, true);
+        timer.startTimer();
+        
+        sendToAll("START");
+    }
     // TIMER
     public class Time {
         Timer timer;
         private int time;
+        private Boolean isInGame = false;
 
+        public Time(int time, Boolean isInGame){
+            this.isInGame = isInGame;
+            this.time = time;
+        }
         public Time(int time) {
             this.time = time;
         }
 
+        public void setTimerStatus(){
+            this.isInGame = !this.isInGame;
+        }
+        
+        public Boolean getTimerStatus(){
+            return this.isInGame;
+        }
+
         public void updateTime() {
             this.time--;
-            sendToAll("TIME " + this.time + " ");
+            sendToAll("TIME " + this.time + " " + this.isInGame);
+
+            if(time == 0 && !isInGame){
+                start_after_countdown();
+            }
+            
         }
 
         public int getTime() {
@@ -255,6 +285,7 @@ public class IllusGameServer implements Runnable {
                         if (currentPlayerCount == maxPlayers) {
                             state = "INIT_LEVEL";
                             message = "PLAYER_COUNT_MET";
+                            max_level = maxPlayers * 2;
                             sendToAll(message);
                         }
                     }
@@ -298,41 +329,52 @@ public class IllusGameServer implements Runnable {
 
                         //check answer here
                         if (dictionary.validateWord(guess)) {
-                            System.out.println("\n[!] PLAYER " + playerName + " is correct");
-                            sendToAll("CORRECT_ANSWER " + playerName);
-
+                            
                             for(IllusPlayer player : players){
                                 if(player.getName().equals(playerName)){
+                                    // increment player score
                                     if(timer.getTime() > 30){
                                         player.setScore(player.getScore() + 20);
                                     }
                                     else{
                                         player.setScore(player.getScore() + 10);
                                     }
+
                                 }
                             }
+                            sendToAll("CORRECT_ANSWER " + playerName + " " + dictionary.getAnswer());
+                            
                             updateScores();
-                            correctAnswers++;
                             timeUp++;
-
+                            correctAnswers++;
+                            
+                           
+                            // end of level
                             if(correctAnswers == (maxPlayers-1)){
                                 for(IllusPlayer player : players){
+                                    // drawer earns points
                                     if(player.getName().equals(drawer.getName())){
                                         player.setScore(player.getScore() + 10);
                                     }
+                                    
                                 }
 
 
                                 //TODO: if level == max levels - 1, end game
-                                drawer = players.get(level % maxPlayers);
-                                level++;
-                                System.out.println("\nPLAYER " + drawer.getName() + " will draw for this level");
-                                sendToAll("DRAWER " + drawer.getName() + " ");
-                                timeUp = 0;
-                                correctAnswers = 0;
-                                dictionary = new Dictionary();
-                                String wordChoices = dictionary.getWords();
-                                send(drawer, "CHOOSE " + wordChoices);
+                                timer.stopTimer();
+                                if(level >= max_level-1){
+                                    System.out.println("END GAME");
+                                }else{
+                                    drawer = players.get(level % maxPlayers);
+                                    level++;
+                                    System.out.println("\nPLAYER " + drawer.getName() + " will draw for level (" + level + "/" + max_level + ")");
+                                    sendToAll("DRAWER " + drawer.getName() + " ");
+                                    timeUp = 0;
+                                    correctAnswers = 0;
+                                    dictionary = new Dictionary();
+                                    String wordChoices = dictionary.getWords();
+                                    send(drawer, "CHOOSE " + wordChoices);
+                                }
                             }
                         }
                     } else if (data.startsWith("CHOICE")) {
@@ -341,6 +383,7 @@ public class IllusGameServer implements Runnable {
                         System.out.println("\n[!] Drawer chose " + choice);
                         sendToAll("MESSAGE Player " + drawer.getName() + " will draw for this level.");
                         dictionary.setAnswer(choice);
+                        setCurrentWord();
                         sendToAll("WORD " + choice);
 
                         updateScores();
@@ -349,12 +392,16 @@ public class IllusGameServer implements Runnable {
                         if(timer != null){
                             timer.stopTimer();
                         }
-                        timer = new Time(60);
-                        timer.startTimer();
                         sendToAll("CLEAR CANVAS");
-                        sendToAll("START");
+                        timer = new Time(4);
+                        timer.startTimer();
+   
                     }
                     else if(data.startsWith("TIME_UP")){
+                        System.out.println("time up");
+                        for(IllusPlayer player : players){
+                            send(player, "REVEAL " + current_word);
+                        }
                         timeUp++;
                         if(timeUp == maxPlayers -1){
                             if(correctAnswers == 0){
@@ -369,11 +416,15 @@ public class IllusGameServer implements Runnable {
                             correctAnswers = 0;
                             timeUp = 0;
                             //TODO: if level == max levels - 1, end game
-                            System.out.println("\nPLAYER " + drawer.getName() + " will draw for this level");
-                            sendToAll("DRAWER " + drawer.getName() + " ");
-                            dictionary = new Dictionary();
-                            String wordChoices = dictionary.getWords();
-                            send(drawer, "CHOOSE " + wordChoices);
+                            if(level >= max_level-1){
+                                System.out.println("END GAMETIME UP");
+                            }else{ 
+                                System.out.println("\nPLAYER " + drawer.getName() + " will draw for level (" + level + "/" + max_level + ")");
+                                sendToAll("DRAWER " + drawer.getName() + " ");
+                                dictionary = new Dictionary();
+                                String wordChoices = dictionary.getWords();
+                                send(drawer, "CHOOSE " + wordChoices);
+                            }
                         }
                     }
                     break;
