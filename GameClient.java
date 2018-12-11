@@ -50,6 +50,7 @@ public class GameClient {
     private static Boolean initUI = false;
 
     private StartInterface startUI;
+    private static String serverAddress;
 
     protected void setCurrentWord(String word) {
         wordLabel.setText(word.toUpperCase());
@@ -70,7 +71,7 @@ public class GameClient {
         System.out.println(startUI.isSubmit());
 
         String playerName = startUI.getPlayerName();
-        String serverAddress = startUI.getServerAddress();
+        // String serverAddress = startUI.getServerAddress();
 
         try {
             connectToGame(playerName);
@@ -129,8 +130,9 @@ public class GameClient {
 
     private void send(String msg) {
         try {
+            System.out.println(serverAddress);
             byte[] buf = msg.getBytes();
-            InetAddress address = InetAddress.getByName("localhost");
+            InetAddress address = InetAddress.getByName(serverAddress);
             DatagramPacket packet = new DatagramPacket(buf, buf.length, address, Constants.GAME_PORT);
             gameServerSocket.send(packet);
         } catch (Exception e) {
@@ -825,7 +827,7 @@ public class GameClient {
 
     public class StartInterface extends JFrame{
         private String playerName;
-        private String serverAddress = "127.0.0.1";
+        // private String serverAddress = "127.0.0.1";
         private TextField nameInput;
         private TextField addressInput;
         private JButton submitButton;
@@ -858,7 +860,6 @@ public class GameClient {
 
             submitButton = new JButton(new StartInterface.SendAction("SUBMIT", nameInput, addressInput, notif));
             submitButton.setPreferredSize(new Dimension(200, 40));
-            // submitButton.setAlignmentX(Component.CENTER_ALIGNMENT);
             
             JPanel initContent = new JPanel();
             FlowLayout flow = new FlowLayout(FlowLayout.CENTER);
@@ -887,9 +888,9 @@ public class GameClient {
             return this.playerName;
         }
 
-        public String getServerAddress(){
-            return this.serverAddress;
-        }
+        // public String getServerAddress(){
+        //     return this.serverAddress;
+        // }
 
         public Boolean isSubmit(){
             
