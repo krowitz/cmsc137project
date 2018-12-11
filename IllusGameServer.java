@@ -270,22 +270,39 @@ public class IllusGameServer implements Runnable {
             switch (state) {
                 case "WAITING":
                     if (data.startsWith("CONNECT")) {
+                        String connectingPlayerName = "";
                         dataArray = data.split(" ");
                         IllusPlayer player = new IllusPlayer();
+
+
+//                        if(players.size() > 0){
+//                            int sameNameCount = 0;
+//                            for(int i = 0; i < players.size(); i++){
+//                                if(players.get(i).getGivenName().equals(dataArray[1])){
+//                                    sameNameCount++;
+//                                }
+//                            }
+//                            int playerLabel = sameNameCount + 1;
+//                            connectingPlayerName = connectingPlayerName + playerLabel;
+//                        }
+//                        else{
+//                            connectingPlayerName = dataArray[1];
+//                        }
                         player.setName(dataArray[1]);
+                        //player.setGivenName(dataArray[1]);
                         player.setAddress(packet.getAddress());
                         player.setPort(packet.getPort());
                         players.add(player);
                         currentPlayerCount++;
 
-                        String message = "SUCCESS " + lobbyId;
+                        String message = "SUCCESS " + lobbyId + " " + connectingPlayerName;
                         System.out.println("PLAYER " + player.getName() + " is now connected.");
                         send(player, message);
 
                         if (currentPlayerCount == maxPlayers) {
                             state = "INIT_LEVEL";
                             message = "PLAYER_COUNT_MET";
-                            max_level = maxPlayers * 3;
+                            max_level = maxPlayers * 2;
                             sendToAll(message);
                         }
                     }
@@ -333,13 +350,7 @@ public class IllusGameServer implements Runnable {
                             for(IllusPlayer player : players){
                                 if(player.getName().equals(playerName)){
                                     // increment player score
-                                    if(timer.getTime() > 30){
-                                        player.setScore(player.getScore() + 20);
-                                    }
-                                    else{
-                                        player.setScore(player.getScore() + 10);
-                                    }
-
+                                        player.setScore(player.getScore() + timer.getTime());
                                 }
                             }
                             sendToAll("CORRECT_ANSWER " + playerName + " " + dictionary.getAnswer());
@@ -364,8 +375,6 @@ public class IllusGameServer implements Runnable {
                                 timer.stopTimer();
                                 if(level >= max_level-1){
                                     System.out.println("END GAME");
-                                    for(IllusPlayer player : players)
-                                        send(player, "END_GAME " + player.getScore());
                                 }else{
                                     drawer = players.get(level % maxPlayers);
                                     level++;
@@ -420,8 +429,6 @@ public class IllusGameServer implements Runnable {
                             //TODO: if level == max levels - 1, end game
                             if(level >= max_level-1){
                                 System.out.println("END GAMETIME UP");
-                                for(IllusPlayer player : players)
-                                    send(player, "END_GAME " + player.getScore());
                             }else{ 
                                 System.out.println("\nPLAYER " + drawer.getName() + " will draw for level (" + level + "/" + max_level + ")");
                                 sendToAll("DRAWER " + drawer.getName() + " ");

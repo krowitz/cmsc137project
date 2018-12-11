@@ -7,6 +7,16 @@ public class IllusPlayer {
     private InetAddress address;
     private int port;
 
+    public String getGivenName() {
+        return givenName;
+    }
+
+    public void setGivenName(String givenName) {
+        this.givenName = givenName;
+    }
+
+    private String givenName;
+
     public InetAddress getAddress() {
         return address;
     }

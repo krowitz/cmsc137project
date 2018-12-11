@@ -29,11 +29,11 @@ import java.util.Collections;
  */
 
 public class GameClient {
-    private JFrame window;
+
     private Runnable gameServerListener;
     private DataOutputStream outputStream;
     private DataInputStream inputStream;
-    private static String playerName;
+    private String playerName;
     private DatagramSocket gameServerSocket = new DatagramSocket();
     private static ChatSendThread senderThread;
     private static ChatReceiveThread receiveThread;
@@ -41,7 +41,6 @@ public class GameClient {
     private static TextArea chatArea;
     private static TextArea scores;
     private static JLabel wordLabel;
-    
     private static JCheckBox answerCheckbox;
     private String chatLobbyId;
     private MainWindow mainWindow;
@@ -107,7 +106,7 @@ public class GameClient {
         executorService.submit(receiveThread);
         executorService.submit(senderThread);
 
-        window = new JFrame("Illus (Player: " + this.playerName + ")");
+        JFrame window = new JFrame("Illus (Player: " + this.playerName + ")");
         window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         window.setPreferredSize(new Dimension(500, 500));
         window.setLayout(new BorderLayout());
@@ -204,11 +203,15 @@ public class GameClient {
 
             if (connectionStatus.startsWith("SUCCESS")) {
                 connected = true;
-            }
-            System.out.println("Connection Status");
-            System.out.println(connectionStatus);
-            this.chatLobbyId = connectionStatus.split("[^a-zA-Z0-9']+")[1];
 
+                System.out.println("Connection Status");
+                System.out.println(connectionStatus);
+                String[] data = connectionStatus.split("[^a-zA-Z0-9']+");
+                this.chatLobbyId = data[1];
+                //this.playerName = data[2];
+            }else{
+                //TODO: jules to display lobby full message here
+            }
             // count++;
             // if(count == 3) throw new Exception("Failed to connect to game server.");
         }
@@ -336,16 +339,6 @@ public class GameClient {
                                     setCurrentWord(word);
 
 
-                                }
-                                if (serverMessage.startsWith("END_GAME")){
-                                    System.out.println("End game");
-                                    String score = serverMessage.split(" ")[1].trim();
-                                    window.remove(mainWindow);
-                                    
-                                    window.add(new EndGamePanel(playerName, score));
-
-                                    window.repaint();
-                                    window.validate();
                                 }
                             }
 
