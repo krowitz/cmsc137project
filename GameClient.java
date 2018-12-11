@@ -49,6 +49,8 @@ public class GameClient {
 
     private static Boolean initUI = false;
 
+    private StartInterface startUI;
+
     protected void setCurrentWord(String word) {
         wordLabel.setText(word.toUpperCase());
     }
@@ -58,7 +60,17 @@ public class GameClient {
     }
 
 
-    public GameClient(String playerName, String serverAddress, int port) throws Exception {
+    public GameClient(int port) throws Exception {
+        startUI = new StartInterface("CMSC 137 Project");
+
+        while(!startUI.isSubmit()){
+            System.out.print("");
+        }
+
+        System.out.println(startUI.isSubmit());
+
+        String playerName = startUI.getPlayerName();
+        String serverAddress = startUI.getServerAddress();
 
         try {
             connectToGame(playerName);
@@ -88,11 +100,10 @@ public class GameClient {
 
         executorService.submit(gameServerListener);
 
-        System.out.println("Waiting for other players");
-
         while (true) {
             System.out.print("");
             if (getInitUI()) {
+                startUI.dispose();
                 System.out.println("Players completed");
                 System.out.println("[!] Initializing UI");
                 send("START ");
@@ -173,6 +184,7 @@ public class GameClient {
 
     public static void appendMessage(String message) {
         chatArea.append("\n" + message);
+        chatArea.setCaretPosition(chatArea.getText().length() - 1);
     }
 
     public static void setInitUI(Boolean value) {
@@ -546,33 +558,7 @@ public class GameClient {
 
             add(answerCheckbox);
 
-            // enterButton = new JButton(new RightPane.SendAction("Enter", inputField));
-            // enterButton.setAlignmentX(Component.CENTER_ALIGNMENT);
-            // add(enterButton);
-
         }
-
-        // public class SendAction extends AbstractAction{
-        //     private TextField inputField;
-
-        //     private SendAction(String name, TextField inputField){
-        //         if(name != null) putValue(NAME, name);
-        //         this.inputField = inputField;
-        //     }
-
-        //     @Override
-        //     public void actionPerformed(ActionEvent e) {
-        //         String message = inputField.getText();
-
-        //         if(isAnswer){
-        //             sendAnswer(message);
-        //         }else{
-        //             senderThread.sendMessage(message, playerName);
-        //         }
-
-        //         inputField.setText("");
-        //     }
-        // }
     }
 
     //brush options component
@@ -837,16 +823,166 @@ public class GameClient {
         }
     }
 
+    public class StartInterface extends JFrame{
+        private String playerName;
+        private String serverAddress = "127.0.0.1";
+        private TextField nameInput;
+        private TextField addressInput;
+        private JButton submitButton;
+        private JButton howToPlayButton;
+        private JLabel notif;
+        private Boolean didSubmit = false;
+        private JLabel header;
+
+        public StartInterface(String title){
+            super(title);
+
+            this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+            this.setPreferredSize(new Dimension(300, 300));
+            
+            header = new JLabel("Welcome to ILLUS!");
+            header.setHorizontalAlignment(SwingConstants.CENTER);
+            header.setFont(new Font("San-Serif", Font.PLAIN, 25));
+
+            howToPlayButton = new JButton(new StartInterface.HowToPlayAction("How To Play"));
+
+            howToPlayButton.setPreferredSize(new Dimension(200, 40));
+            addressInput = new TextField();
+
+            nameInput = new TextField();
+            nameInput.setPreferredSize(new Dimension(200, 30));
+            addressInput = new TextField();
+            addressInput.setPreferredSize(new Dimension(200, 30));
+
+            notif = new JLabel("");
+
+            submitButton = new JButton(new StartInterface.SendAction("SUBMIT", nameInput, addressInput, notif));
+            submitButton.setPreferredSize(new Dimension(200, 40));
+            // submitButton.setAlignmentX(Component.CENTER_ALIGNMENT);
+            
+            JPanel initContent = new JPanel();
+            FlowLayout flow = new FlowLayout(FlowLayout.CENTER);
+            flow.setVgap(5);
+            initContent.setLayout(flow);
+            
+            initContent.add(header);
+            initContent.add(howToPlayButton);
+            initContent.add(new JLabel("Enter name:"));
+            initContent.add(nameInput);
+
+            initContent.add(new JLabel("Enter server address:"));
+            initContent.add(addressInput);
+            initContent.add(submitButton);
+
+            initContent.add(notif);
+
+            this.add(initContent);
+
+            this.pack();
+            this.setLocationRelativeTo(null);
+            this.setVisible(true);
+        }
+
+        public String getPlayerName(){
+            return this.playerName;
+        }
+
+        public String getServerAddress(){
+            return this.serverAddress;
+        }
+
+        public Boolean isSubmit(){
+            
+            return this.didSubmit;
+        }
+
+        public class HowToPlayAction extends AbstractAction{
+            private JTextArea howToContent;
+
+            private HowToPlayAction(String name){
+                if(name != null) putValue(NAME, name);
+
+                String howTo = "\n\nA. Possible Player Types:\n     1. Player who guesses the word\n     2. Player who draws the image describing the word to be guessed\n\nB. Instructions\n     1. The maximum number of rounds is divisible by the number of players (i.e. rounds = number of players * 3). For each round, assign a player who will draw. The remaining players will try to guess the word being drawn. The first player who is able to guess the word within the shortest amount of time will gain the most points.\n     2. The player who will draw chooses 1 from 3 words. After choosing a word, the player will illustrate the word using the canvas and brush options on the interface.\n     3. The player who will guess will check the 'Answer?' checkbox​​ for the player’s answer to be considered valid.\n\nC. Scoring\n     1. The player who is able to guess the word first will earn a score equivalent to the remaining time in seconds.\n     2. The player who draws will also earn a score based on the number of players who are able to guess the word. The more players who guessed correctly, the higher the additional points (but only of small increments)\n\nD. Endgame\n     1. If all players disconnect or if the maximum number of levels are completed.\n     2. The top 3 scorers will also be displayed at the end of the game";
+
+                this.howToContent = new JTextArea(howTo);
+                this.howToContent.setEditable(false); 
+                this.howToContent.setLineWrap(true);
+                this.howToContent.setWrapStyleWord(true);   
+            }
+            @Override
+            public void actionPerformed(ActionEvent e){
+                JFrame window = new JFrame("How To Play ILLUS");
+                window.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+                window.setPreferredSize(new Dimension(500, 500));
+                window.setLayout(new BorderLayout());
+
+                window.add(this.howToContent);
+               
+                window.pack();
+                window.setLocationRelativeTo(null);
+                window.setVisible(true);
+            }
+        }
+
+        public class SendAction extends AbstractAction {
+            private TextField nameInput;
+            private TextField addressInput;
+            private JLabel notif;
+
+            private SendAction(String name, TextField nameInput, TextField addressInput, JLabel notif){
+                if(name != null) putValue(NAME, name);
+                this.nameInput = nameInput;
+                this.addressInput = addressInput;
+                this.notif = notif;
+            }
+
+            @Override
+            public void actionPerformed(ActionEvent e){
+                playerName = nameInput.getText();
+                serverAddress = addressInput.getText();
+
+                if(playerName.equals("")){
+                    JOptionPane.showMessageDialog(null, "Please enter your name", "Error", JOptionPane.ERROR_MESSAGE);
+                }else if(serverAddress.equals("")){
+                    JOptionPane.showMessageDialog(null, "Please enter a server address", "Error", JOptionPane.ERROR_MESSAGE);
+                }else{
+                    didSubmit = true;
+
+                    submitButton.setEnabled(false);
+                    notif.setText("Waiting for other players...");
+                }
+
+                // byte[] buf = new byte[256];
+                // DatagramPacket packet = new DatagramPacket(buf, buf.length);
+                // try {
+                //     gameServerSocket.receive(packet);
+                // } catch (Exception ex) {
+                //     ex.printStackTrace();
+                //     System.exit(-1);
+                // }      
+
+                // if (packet != null) {
+                //     String serverMessage = new String(packet.getData());
+                //     if (serverMessage.startsWith("SUCCESS")) {
+                //         playerName = nameInput.getText();
+                //         serverAddress = addressInput.getText();
+                //         didSubmit = true;
+
+                //         submitButton.setEnabled(false);
+                //         notif.setText("Waiting for other players...");
+                //     }else if(serverMessage.startsWith("FAIL")){
+
+                //     }
+                // }
+                
+            }
+        }
+    }
+
     public static void main(String[] args) throws Exception {
-        String playerName;
-        String serverAddress = "127.0.0.1";
+        // String serverAddress = "192.168.137.86";
         int port = Constants.GAME_PORT;
 
-        Scanner sc = new Scanner(System.in);
-
-        System.out.print("Enter player name: ");
-        playerName = sc.nextLine();
-
-        new GameClient(playerName, serverAddress, port);
+        new GameClient(port);
     }
 }
